@@ -66,7 +66,7 @@ Route::get('/mig' , function (){
 
 
 
-Route::get('/login', [AuthController::class , 'show_login'])->name('showLogin');
+Route::get('/admin/login', [AuthController::class , 'show_login'])->name('showLogin');
 Route::post('/login', [AuthController::class,'login'])->name('login');
 
 Route::get('auth/google', [UserController::class, 'redirectToGoogle']);

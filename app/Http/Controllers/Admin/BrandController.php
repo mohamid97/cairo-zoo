@@ -7,6 +7,8 @@ use App\Models\Admin\Brand;
 use App\Models\Admin\Lang;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\File;
+
 
 class BrandController extends Controller
 {
@@ -40,14 +42,26 @@ class BrandController extends Controller
     public function store(Request $request){
         $request->validate([
             'name.*'=>'required|string|max:255',
+            'slug.*'=>'required|string|max:255',
+            'des.*'=>'required|string|max:50000',
+            'image'=>'nullable|image|mimes:jpeg,png,webp,jpg,gif,svg|max:2048'
         ]);
+
+        $image_name = null;
+        if($request->has('image')){
+            $image_name = $request->image->getClientOriginalName();
+            $request->image->move(public_path('uploads/images/brands'), $image_name);
+        }
         $brand = new Brand();
         $brand->status = '1';
+        $brand->image = $image_name;
         foreach ($this->langs as $lang) {
             $brand->{'name:'.$lang->code}  = $request->name[$lang->code];
+            $brand->{'des:'.$lang->code}  = $request->des[$lang->code];
+            $brand->{'slug:'.$lang->code}  = $request->slug[$lang->code];
         }
         $brand->save();
-        Alert::success('Success', 'Brand Added Successfully !');
+        Alert::success('Success', __('main.brand_added_successfully'));
         return redirect()->route('admin.brands.index');
     }
     public function edit($id){
@@ -60,15 +74,30 @@ class BrandController extends Controller
 
         $request->validate([
             'name.*'=>'required|string|max:255',
+            'slug.*'=>'required|string|max:255',
+            'des.*'=>'required|string|max:50000',
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:2048'
         ]);
 
         $brand = Brand::findOrFail($id);
+        $image_name = null;
+        if($request->has('image')){
+            $image_name = $request->image->getClientOriginalName();
+            $request->image->move(public_path('uploads/images/brands'), $image_name);
+            if ($brand->image && File::exists(public_path('uploads/images/brands/' . $brand->image))) {
+                File::delete(public_path('uploads/images/brands/' . $brand->image));
+            }
+
+            $brand->image = $image_name;
+        }
         foreach ($this->langs as $lang) {
             $brand->{'name:'.$lang->code}  = $request->name[$lang->code];
+            $brand->{'des:'.$lang->code}  = $request->des[$lang->code];
+            $brand->{'slug:'.$lang->code}  = $request->slug[$lang->code];
         }
 
         $brand->save();
-        Alert::success('Success', 'Brand Updated Successfully !');
+        Alert::success('Success', __('main.brand_updated_successfully'));
         return redirect()->route('admin.brands.index');
 
 
@@ -76,7 +105,7 @@ class BrandController extends Controller
     public function delete($id){
         $brand = Brand::findOrFail($id);
         $brand->delete();
-        Alert::success('Success', 'Brand Deleted Successfully !');
+        Alert::success('Success', __('main.brand_deleted_successfully'));
         return redirect()->route('admin.brands.index');
     }
 }

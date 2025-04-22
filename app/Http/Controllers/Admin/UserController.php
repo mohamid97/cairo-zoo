@@ -27,8 +27,8 @@ class UserController extends Controller
         $accounts = $query->where('type' , '!=' , 'admin')->paginate(10);
 
         return view('admin.users.index' , [
-            'accounts'=>$accounts,
-            'searchTerm'=>$request->search ?? '',
+            'accounts'=> $accounts,
+            'searchTerm'=> $request->search ?? '',
         ]);
 
     }

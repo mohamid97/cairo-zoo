@@ -111,8 +111,13 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-info"> <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.update') }}</button> <!-- Translated Update -->
+                        <button type="submit" class="btn btn-primary">
+                            <i class="nav-icon fas fa-edit"></i>
+                            {{ __('main.update') }}
+                        </button>
                     </div>
+
+
                 </form>
             </div>
         </div>

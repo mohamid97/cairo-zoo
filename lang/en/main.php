@@ -470,6 +470,11 @@ return [
     'delete_user_warning' => 'Are you sure you want to delete this user? This will delete all data related to them.',
     'cancel' => 'Cancel',
     'confirm' => 'Confirm',
+    'delete_brand_warning' => 'Are you sure you want to delete this brand? All related data will be removed.',
+    'brand_added_successfully' => 'Brand Added Successfully!',
+    'brand_updated_successfully' => 'Brand Updated Successfully!',
+    'brand_deleted_successfully' => 'Brand Deleted Successfully!',
+
 
 
 

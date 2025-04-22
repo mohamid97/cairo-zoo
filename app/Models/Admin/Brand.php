@@ -10,8 +10,8 @@ use Astrotomic\Translatable\Translatable;
 class Brand extends Model implements  TranslatableContract
 {
     use HasFactory , Translatable;
-    protected $fillable = ['status'];
-    public $translatedAttributes = [ 'name'];
+    protected $fillable = ['status' , 'image'];
+    public $translatedAttributes = [ 'name' , 'slug' , 'des'];
     public $translationForeignKey = 'brand_id';
     public $translationModel = 'App\Models\Admin\BrandTranslation';
 }

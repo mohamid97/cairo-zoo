@@ -154,34 +154,34 @@
 
 
 
-{{--                        @if($settings->brand)--}}
-{{--                            <li class="nav-item has-treeview">--}}
-{{--                                <a href="#" class="nav-link">--}}
-{{--                                    <i class="fa fa-globe"></i>--}}
-{{--                                    <p>--}}
-{{--                                        {{ __('main.brands') }}--}}
-{{--                                        <i class="right fas fa-angle-left"></i>--}}
-{{--                                    </p>--}}
-{{--                                </a>--}}
-{{--                                <ul class="nav nav-treeview">--}}
-{{--                                    <li class="nav-item">--}}
-{{--                                        <a href="{{ route('admin.brands.index') }}" class="nav-link">--}}
-{{--                                            <i class="fa fa-globe nav-icon"></i>--}}
-{{--                                            <p>{{ __('main.brands') }}</p>--}}
-{{--                                        </a>--}}
-{{--                                    </li>--}}
+                        @if($settings->brand)
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="fa fa-globe"></i>
+                                    <p>
+                                        {{ __('main.brands') }}
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.brands.index') }}" class="nav-link">
+                                            <i class="fa fa-globe nav-icon"></i>
+                                            <p>{{ __('main.brands') }}</p>
+                                        </a>
+                                    </li>
 
-{{--                                    <li class="nav-item">--}}
-{{--                                        <a href="{{ route('admin.brands.add') }}" class="nav-link">--}}
-{{--                                            <i class="fa fa-plus nav-icon"></i>--}}
-{{--                                            <p>{{ __('main.add') }}</p>--}}
-{{--                                        </a>--}}
-{{--                                    </li>--}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.brands.add') }}" class="nav-link">
+                                            <i class="fa fa-plus nav-icon"></i>
+                                            <p>{{ __('main.add') }}</p>
+                                        </a>
+                                    </li>
 
 
-{{--                                </ul>--}}
-{{--                            </li>--}}
-{{--                        @endif--}}
+                                </ul>
+                            </li>
+                        @endif
 
 
 

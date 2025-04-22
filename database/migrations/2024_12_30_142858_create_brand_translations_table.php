@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('locale')->index();
             $table->unique(['brand_id', 'locale']);
             $table->string('name');
+            $table->String('slug')->nullable();
+            $table->text('des')->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->timestamps();
         });
