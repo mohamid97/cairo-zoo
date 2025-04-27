@@ -478,6 +478,27 @@ return [
 
 
 
+    "sales_price"=>'Sales Price',
+    "enter_sales_price"=>"Enter Sales Price",
+    "thumbinal"=>"Thumbinal",
+    "select_brand"=>"Select Brand",
+    "dimenstion"=>"Dimenstion",
+    "enter_width"=>"Enter Width",
+    'enter_length'=>'Enter Length',
+    'enter_height'=>'Enter Height',
+    'enter_weight'=>'Enter Weight',
+    "related_products"=>'Related Products',
+    "select_related_products"=>'Select Related Products',
+    'published'=>'published',
+    'product_added_successfully'=>'Product Added Successfully !',
+    'programer_error'=>'Tell The Programmer To solve Error',
+    'filter_by_brand' => 'Filter by Brand',
+    "delete_Product_warning"=>'Are you sure you want to delete this Product? All related data will be removed.'
+
+
+
+
+
 
 
 

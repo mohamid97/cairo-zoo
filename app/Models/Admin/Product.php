@@ -15,8 +15,8 @@ use Astrotomic\Translatable\Translatable;
 class Product extends Model implements TranslatableContract
 {
     use HasFactory , Translatable , SoftDeletes;
-    public $translatedAttributes = ['des', 'name' , 'meta_des' , 'meta_title' , 'slug'];
-    protected $fillable = ['category_id' , 'sku' , 'price' , 'star' , 'old_price' , 'discount' , 'video'];
+    public $translatedAttributes = ['des', 'name' , 'small_des' , 'meta_des' , 'meta_title' , 'slug'];
+    protected $fillable = ['category_id' , 'brand_id' , 'status' , 'image' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
     public $translationForeignKey = 'product_id';
     public $translationModel = 'App\Models\Admin\ProductTranslation';
 
@@ -48,6 +48,18 @@ class Product extends Model implements TranslatableContract
     {
         return $this->belongsToMany(Order::class, 'order_items', 'product_id', 'order_id');
     }
+
+
+    public function relatedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_product_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class , 'brand_id');
+    }
+
 
 
 }

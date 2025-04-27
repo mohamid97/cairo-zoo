@@ -10,6 +10,9 @@
             margin-top: 26px;
             font-size: .875rem !important;
         }
+        .gap-2{
+            gap: 10px;
+        }
     </style>
 @endsection
 
@@ -78,16 +81,16 @@
                                 <td>
                                     <img class="img-circle" src="{{ asset('uploads/images/brands/' . $brand->image) }}" width="70px" height="70px" alt="{{ __('main.user_avatar') }}">
                                 </td>
-                                <td>
+                                <td class="d-flex align-items-center justify-content-center gap-2">
                                     <a href="{{ route('admin.brands.edit', ['id' => $brand->id]) }}">
                                         <button class="btn btn-sm btn-info">
-                                            <i class="nav-icon fas fa-edit"></i> {{ __('main.edit') }}
+                                            <i class="nav-icon fas fa-edit"></i>
                                         </button>
                                     </a>
 
                                     <!-- Delete With Confirmation -->
                                     <button class="btn btn-sm btn-danger" onclick="showDeleteBrandModal({{ $brand->id }})">
-                                        <i class="nav-icon fas fa-trash"></i> {{ __('main.delete') }}
+                                        <i class="nav-icon fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>

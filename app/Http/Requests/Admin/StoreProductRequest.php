@@ -27,15 +27,23 @@ class StoreProductRequest extends FormRequest
         return [
             'name.*'=>'required|string|max:255',
             'slug.*'=>'required|string|max:255',
-            'des.*' => 'required|string|max:65535',
+            'des.*' => 'nullable|string|max:65535',
             'meta_title.*'=>'nullable|max:65535',
+            'small_des.*'=>'nullable|max:65535',
             'meta_des.*'=>'nullable|max:65535',
-            'category'=>'nullable|integer|exists:categories,id',
-            'discount'=>'nullable|numeric|min:0',
-            'price' => 'nullable|numeric|min:0',
-            'old_price' => 'nullable|numeric|min:0',
+            'category_id'=>'nullable|integer|exists:categories,id',
+            'brand_id'=>'nullable|integer|exists:brands,id',
+            'sales_price' => 'nullable|numeric|min:0',
             'sku'=>'nullable|max:255',
-            'video'=>'nullable|url'
+            'video'=>'nullable|url|max:255',
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'thumbinal'=>'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'weight' => 'nullable|numeric|min:1',
+            'height' => 'nullable|numeric|min:1',
+            'width'  => 'nullable|numeric|min:1',
+            'length' => 'nullable|numeric|min:1',
+            'status' => 'nullable|in:published,pending',
+            'related_products.*' => 'nullable|exists:products,id',
         ];
 
     }

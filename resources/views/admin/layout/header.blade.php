@@ -99,6 +99,10 @@
     /*.navbar-light .navbar-nav .nav-link {*/
     /*    color: rgb(255 255 255);*/
     /*}*/
+
+    .card-body{
+        overflow-x:scroll;
+    }
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

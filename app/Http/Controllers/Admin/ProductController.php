@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
+use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Gallary;
 use App\Models\Admin\Lang;
@@ -24,7 +25,7 @@ class ProductController extends Controller
     //
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::with('brand');
 
         // Search by name
         if ($request->filled('search')) {
@@ -34,6 +35,12 @@ class ProductController extends Controller
             });
         }
 
+        if ($request->filled('brand_id')) {
+            $query->where('brand_id', $request->input('brand_id'));
+        }
+
+
+
         // Filter by category
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
@@ -41,7 +48,7 @@ class ProductController extends Controller
 
         // Get all categories for the filter
         $categories = Category::all();
-
+        $brands = Brand::all();
         // Paginate products
         $products = $query->paginate(10); // Adjust number as needed
 
@@ -49,8 +56,9 @@ class ProductController extends Controller
             'langs' => $this->langs,
             'products' => $products,
             'categories' => $categories,
-            'search' => $request->input('search'), // For keeping search term
-            'selectedCategory' => $request->input('category_id') // For keeping selected category
+            'search' => $request->input('search'),
+            'selectedCategory' => $request->input('category_id'),
+             'brands' => $brands,
         ]);
     }
 
@@ -58,50 +66,77 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.add' , ['categories' => $categories , 'langs'=> $this->langs]);
+        return view('admin.products.add' , ['categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
 
     }
+
 
     public function store(StoreProductRequest $request)
     {
 
-//        if($this->check_sku($request->sku)){
-//            Alert::error('error', 'Sku Already Used Before');
-//            return redirect()->route('admin.products.index');
-//        }
 
         try{
             DB::beginTransaction();
-              $product =  new Product();
-              $product->category_id = ($request->category != '0' ) ? $request->category : null;
-              $product->price = $request->price;
-              $product->old_price = $request->old_price;
-              $product->discount = $request->discount;
-              $product->star = $request->star;
-              $product->sku  = $request->sku;
-              $product->video = $request->video;
+            $imageData = [];
+            if ($request->hasFile('image')) {
+                $imageData['image'] = $this->upload_image($request->file('image'));
+            }
+            if ($request->hasFile('thumbinal')) {
+                $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
+            }
+            $product = Product::create([
+                'weight' => $request->weight,
+                'length' => $request->length,
+                'height' => $request->height,
+                'width'  => $request->width,
+                'status' => $request->status ?? 'pending',
+                'brand_id' => $request->brand,
+                'sales_price' => $request->sales_price,
+                'video' => $request->video,
+                'sku' => $request->sku,
+                'image' => $imageData['image'] ?? null,
+                'thumbinal' => $imageData['thumbinal'] ?? null,
+            ]);
+
             foreach ($this->langs as $lang) {
                 $product->{'name:'.$lang->code}  = $request->name[$lang->code];
                 $product->{'des:'.$lang->code}  = $request->des[$lang->code];
                 $product->{'meta_des:'.$lang->code}  = $request->meta_des[$lang->code];
+                $product->{'small_des:'.$lang->code}  = $request->meta_des[$lang->code];
                 $product->{'meta_title:'.$lang->code}  = $request->meta_title[$lang->code];
                 $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
             }
+
+            $product->relatedProducts()->sync($request->related_products);
             $product->save();
             DB::commit();
-            Alert::success('Success', 'Product Added Successfully !');
+            Alert::success('Success', __('main.product_added_successfully'));
             return redirect()->back();
 
         }catch(\Exception $e){
             dd($e->getLine() , $e->getMessage());
             DB::rollBack();
-            Alert::error('error', 'Tell The Programmer To solve Error');
+            Alert::error('error', __('main.programer_error'));
             return redirect()->route('admin.products.index');
 
         }
 
 
     }
+
+    // upload image and thumbinal
+    private function upload_image($image)
+    {
+        $image_name = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('uploads/images/products'), $image_name);
+        return $image_name;
+    }
+
+
+
+
+
+
 
     public function update(StoreProductRequest $request , $id)
     {
@@ -156,10 +191,19 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.products.update' , ['langs'=>$this->langs , 'categories'=> $categories , 'product'=>$product]);
+        $product = Product::with(['relatedProducts', 'translations'])->findOrFail($id);
 
+        $categories = Category::all();
+        $brands = Brand::all();
+        $products = Product::where('id', '!=', $id)->get(); // Exclude current product from related products
+
+        return view('admin.products.update', [
+            'langs' => $this->langs,
+            'categories' => $categories,
+            'brands' => $brands,
+            'products' => $products,
+            'product' => $product
+        ]);
     }
 
     public function gallery($id){

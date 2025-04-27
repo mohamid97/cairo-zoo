@@ -139,32 +139,32 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start points
-    Route::prefix('points')->group(function(){
-        Route::get('index' , [PointsController::class , 'get'])->name('admin.points.index');
-        Route::post('/update/points_price' ,[PointsController::class , 'update_price'])->name('admin.points_pirce.update');
-    });
+//    Route::prefix('points')->group(function(){
+//        Route::get('index' , [PointsController::class , 'get'])->name('admin.points.index');
+//        Route::post('/update/points_price' ,[PointsController::class , 'update_price'])->name('admin.points_pirce.update');
+//    });
 
 
     //sales tool
-    Route::prefix('sales_tool')->group(function (){
-        Route::get('/sales' , [SalesToolController::class , 'index'])->name('admin.sales_tool.index');
-        Route::get('/points' , [SalesToolController::class , 'points'])->name('admin.sales_tool.points');
-        Route::post('/get-order-comparison', [SalesToolController::class, 'getOrderComparison'])->name('admin.sales_tool.order_comparison');
-        Route::post('/products-comparison', [SalesToolController::class, 'productsComparison'])->name('admin.sales_tool.products_comparison');
-
-    });
+//    Route::prefix('sales_tool')->group(function (){
+//        Route::get('/sales' , [SalesToolController::class , 'index'])->name('admin.sales_tool.index');
+//        Route::get('/points' , [SalesToolController::class , 'points'])->name('admin.sales_tool.points');
+//        Route::post('/get-order-comparison', [SalesToolController::class, 'getOrderComparison'])->name('admin.sales_tool.order_comparison');
+//        Route::post('/products-comparison', [SalesToolController::class, 'productsComparison'])->name('admin.sales_tool.products_comparison');
+//
+//    });
 
 
 
      // start Tags
-    Route::prefix('tags')->group(function (){
-        Route::get('/'  , [TagsController::class , 'index'])->name('admin.tags.index');
-        Route::get('/create' , [TagsController::class , 'create'])->name('admin.tags.create');
-        Route::post('/store' , [TagsController::class , 'store'])->name('admin.tags.store');
-        Route::get('/edit/{id}' , [TagsController::class , 'edit'])->name('admin.tags.edit');
-        Route::post('/update/{id}' , [TagsController::class , 'update'])->name('admin.tags.update');
-        Route::get('/delete/{id}' , [TagsController::class , 'delete'])->name('admin.tags.delete');
-    });
+//    Route::prefix('tags')->group(function (){
+//        Route::get('/'  , [TagsController::class , 'index'])->name('admin.tags.index');
+//        Route::get('/create' , [TagsController::class , 'create'])->name('admin.tags.create');
+//        Route::post('/store' , [TagsController::class , 'store'])->name('admin.tags.store');
+//        Route::get('/edit/{id}' , [TagsController::class , 'edit'])->name('admin.tags.edit');
+//        Route::post('/update/{id}' , [TagsController::class , 'update'])->name('admin.tags.update');
+//        Route::get('/delete/{id}' , [TagsController::class , 'delete'])->name('admin.tags.delete');
+//    });
 
 
 
@@ -177,38 +177,39 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     });
 
 
+
     // offers
-    Route::prefix('offers')->group(function(){
-        Route::get('/' , [OffersController::class , 'index'])->name('admin.offers.index');
-        Route::get('/add' , [OffersController::class , 'add'])->name('admin.offers.add');
-        Route::post('/store' , [OffersController::class , 'store'])->name('admin.offers.store');
-        Route::get('delete/{id}',[OffersController::class , 'delete'])->name('admin.offers.delete');
-
-
-    });
+//    Route::prefix('offers')->group(function(){
+//        Route::get('/' , [OffersController::class , 'index'])->name('admin.offers.index');
+//        Route::get('/add' , [OffersController::class , 'add'])->name('admin.offers.add');
+//        Route::post('/store' , [OffersController::class , 'store'])->name('admin.offers.store');
+//        Route::get('delete/{id}',[OffersController::class , 'delete'])->name('admin.offers.delete');
+//
+//
+//    });
 
 
     // start cards
-    Route::prefix('cards')->group(function(){
-        Route::get('/get' , [CardController::class , 'get'])->name('admin.cards.index');
-        Route::get('delete/{id}', [CardController::class, 'delete'])->name('admin.cards.delete');
-        Route::get('/show_details/{id}', [CardController::class, 'showDetails'])->name('admin.cards.show_details');
-    });
+//    Route::prefix('cards')->group(function(){
+//        Route::get('/get' , [CardController::class , 'get'])->name('admin.cards.index');
+//        Route::get('delete/{id}', [CardController::class, 'delete'])->name('admin.cards.delete');
+//        Route::get('/show_details/{id}', [CardController::class, 'showDetails'])->name('admin.cards.show_details');
+//    });
 
     // start slider
-    Route::prefix('slider')->group(function (){
-        Route::get('/' , [SlidersController::class , 'index'])->name('admin.sliders.index');
-        Route::get('/add' , [SlidersController::class , 'create'])->name('admin.sliders.add');
-        Route::post('/store' , [SlidersController::class , 'store'])->name('admin.sliders.store');
-        Route::get('/edit/{id}' , [SlidersController::class , 'edit'])->name('admin.sliders.edit');
-        Route::post('/update/{id}' , [SlidersController::class , 'update'])->name('admin.sliders.update');
-        Route::get('/destroy/{id}' , [SlidersController::class , 'destroy'])->name('admin.sliders.destroy');
-        Route::get('/soft_delete/{id}' , [SlidersController::class , 'soft_delete'])->name('admin.sliders.soft_delete');
-        Route::get('/restore/{id}' , [SlidersController::class , 'restore'])->name('admin.sliders.restore');
-        Route::get('/slider/setting' , [SlidersController::class , 'setting'])->name('admin.sliders.setting');
-        Route::post('/slider/setting/update' , [SlidersController::class , 'update_setting'])->name('admin.sliders.setting_update');
-
-    }); // end slider
+//    Route::prefix('slider')->group(function (){
+//        Route::get('/' , [SlidersController::class , 'index'])->name('admin.sliders.index');
+//        Route::get('/add' , [SlidersController::class , 'create'])->name('admin.sliders.add');
+//        Route::post('/store' , [SlidersController::class , 'store'])->name('admin.sliders.store');
+//        Route::get('/edit/{id}' , [SlidersController::class , 'edit'])->name('admin.sliders.edit');
+//        Route::post('/update/{id}' , [SlidersController::class , 'update'])->name('admin.sliders.update');
+//        Route::get('/destroy/{id}' , [SlidersController::class , 'destroy'])->name('admin.sliders.destroy');
+//        Route::get('/soft_delete/{id}' , [SlidersController::class , 'soft_delete'])->name('admin.sliders.soft_delete');
+//        Route::get('/restore/{id}' , [SlidersController::class , 'restore'])->name('admin.sliders.restore');
+//        Route::get('/slider/setting' , [SlidersController::class , 'setting'])->name('admin.sliders.setting');
+//        Route::post('/slider/setting/update' , [SlidersController::class , 'update_setting'])->name('admin.sliders.setting_update');
+//
+//    }); // end slider
 
 
 
@@ -218,59 +219,59 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start messages
-    Route::prefix('messages')->group(function (){
-        Route::get('/' , [MessageController::class , 'index'])->name('admin.messages.index');
-        Route::get('/show/{id}' , [MessageController::class , 'show'])->name('admin.messages.show');
-        Route::get('/destroy/{id}' , [MessageController::class , 'destroy'])->name('admin.messages.destroy');
-    });
+//    Route::prefix('messages')->group(function (){
+//        Route::get('/' , [MessageController::class , 'index'])->name('admin.messages.index');
+//        Route::get('/show/{id}' , [MessageController::class , 'show'])->name('admin.messages.show');
+//        Route::get('/destroy/{id}' , [MessageController::class , 'destroy'])->name('admin.messages.destroy');
+//    });
 
 
     // start about us
-    Route::prefix('about')->group(function (){
-       Route::get('/' , [AboutController::class , 'index'])->name('admin.about.index');
-       Route::post('/update' , [AboutController::class , 'update'])->name('admin.about.update');
-    });
+//    Route::prefix('about')->group(function (){
+//       Route::get('/' , [AboutController::class , 'index'])->name('admin.about.index');
+//       Route::post('/update' , [AboutController::class , 'update'])->name('admin.about.update');
+//    });
 
 
     // start contact us
-    Route::prefix('contact-us')->group(function (){
-        Route::get('/' , [ContactUsController::class , 'index'])->name('admin.contact.index');
-        Route::post('/update' , [ContactUsController::class , 'update'])->name('admin.contact.update');
-    });
+//    Route::prefix('contact-us')->group(function (){
+//        Route::get('/' , [ContactUsController::class , 'index'])->name('admin.contact.index');
+//        Route::post('/update' , [ContactUsController::class , 'update'])->name('admin.contact.update');
+//    });
 
 
     // start social media
-    Route::prefix('social-media')->group(function (){
-        Route::get('/' , [SocialMediaController::class , 'index'])->name('admin.social_media.index');
-        Route::post('/update' , [SocialMediaController::class , 'update'])->name('admin.social_media.update');
-    });
+//    Route::prefix('social-media')->group(function (){
+//        Route::get('/' , [SocialMediaController::class , 'index'])->name('admin.social_media.index');
+//        Route::post('/update' , [SocialMediaController::class , 'update'])->name('admin.social_media.update');
+//    });
 
 
 
-    Route::prefix('ourteam')->group(function(){
-        Route::get('/get' , [OurteamController::class , 'get'])->name('admin.ourteam.index');
-        Route::get('/edit/{id}' , [OurteamController::class , 'edit'])->name('admin.ourteam.edit');
-        Route::post('/update/{id}' , [OurteamController::class , 'update'])->name('admin.ourteam.update');
-        Route::get('/create' , [OurteamController::class , 'create'])->name('admin.ourteam.add');
-        Route::post('/store' , [OurteamController::class , 'store'])->name('admin.ourteam.store');
-        Route::get('/soft_delete/{id}' , [OurteamController::class , 'soft_delete'])->name('admin.ourteam.soft_delete');
-        Route::get('/restore/{id}' , [OurteamController::class , 'restore'])->name('admin.ourteam.restore');
-        Route::get('/destroy/{id}' , [OurteamController::class , 'destroy'])->name('admin.ourteam.destroy');
-    });
+//    Route::prefix('ourteam')->group(function(){
+//        Route::get('/get' , [OurteamController::class , 'get'])->name('admin.ourteam.index');
+//        Route::get('/edit/{id}' , [OurteamController::class , 'edit'])->name('admin.ourteam.edit');
+//        Route::post('/update/{id}' , [OurteamController::class , 'update'])->name('admin.ourteam.update');
+//        Route::get('/create' , [OurteamController::class , 'create'])->name('admin.ourteam.add');
+//        Route::post('/store' , [OurteamController::class , 'store'])->name('admin.ourteam.store');
+//        Route::get('/soft_delete/{id}' , [OurteamController::class , 'soft_delete'])->name('admin.ourteam.soft_delete');
+//        Route::get('/restore/{id}' , [OurteamController::class , 'restore'])->name('admin.ourteam.restore');
+//        Route::get('/destroy/{id}' , [OurteamController::class , 'destroy'])->name('admin.ourteam.destroy');
+//    });
 
 
 
     // start our clients
-    Route::prefix('our_clients')->group(function (){
-       Route::get('/' , [OurClientController::class , 'index'])->name('admin.our_clients.index');
-       Route::get('/create' , [OurClientController::class , 'create'])->name('admin.our_clients.add');
-       Route::post('/store' , [OurClientController::class , 'store'])->name('admin.our_clients.store');
-       Route::get('/edit/{id}' , [OurClientController::class , 'edit'])->name('admin.our_clients.edit');
-       Route::get('/soft_delete/{id}' , [OurClientController::class , 'soft_delete'])->name('admin.our_clients.soft_delete');
-       Route::get('/restore/{id}' , [OurClientController::class , 'restore'])->name('admin.our_clients.restore');
-       Route::get('/destroy/{id}' , [OurClientController::class , 'destroy'])->name('admin.our_clients.destroy');
-       Route::post('/update/{id}' , [OurClientController::class , 'update'])->name('admin.our_clients.update');
-    });
+//    Route::prefix('our_clients')->group(function (){
+//       Route::get('/' , [OurClientController::class , 'index'])->name('admin.our_clients.index');
+//       Route::get('/create' , [OurClientController::class , 'create'])->name('admin.our_clients.add');
+//       Route::post('/store' , [OurClientController::class , 'store'])->name('admin.our_clients.store');
+//       Route::get('/edit/{id}' , [OurClientController::class , 'edit'])->name('admin.our_clients.edit');
+//       Route::get('/soft_delete/{id}' , [OurClientController::class , 'soft_delete'])->name('admin.our_clients.soft_delete');
+//       Route::get('/restore/{id}' , [OurClientController::class , 'restore'])->name('admin.our_clients.restore');
+//       Route::get('/destroy/{id}' , [OurClientController::class , 'destroy'])->name('admin.our_clients.destroy');
+//       Route::post('/update/{id}' , [OurClientController::class , 'update'])->name('admin.our_clients.update');
+//    });
 
 
     // start our brands
@@ -285,66 +286,66 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start our weight
-    Route::prefix('weights')->group(function (){
-        Route::get('/' , [WeightController::class , 'index'])->name('admin.weights.index');
-        Route::get('/create' , [WeightController::class , 'create'])->name('admin.weights.add');
-        Route::post('/store' , [WeightController::class , 'store'])->name('admin.weights.store');
-        Route::get('/edit/{id}' , [WeightController::class , 'edit'])->name('admin.weights.edit');
-        Route::get('/delete/{id}' , [WeightController::class , 'delete'])->name('admin.weights.delete');
-        Route::post('/update/{id}' , [WeightController::class , 'update'])->name('admin.weights.update');
-    });
+//    Route::prefix('weights')->group(function (){
+//        Route::get('/' , [WeightController::class , 'index'])->name('admin.weights.index');
+//        Route::get('/create' , [WeightController::class , 'create'])->name('admin.weights.add');
+//        Route::post('/store' , [WeightController::class , 'store'])->name('admin.weights.store');
+//        Route::get('/edit/{id}' , [WeightController::class , 'edit'])->name('admin.weights.edit');
+//        Route::get('/delete/{id}' , [WeightController::class , 'delete'])->name('admin.weights.delete');
+//        Route::post('/update/{id}' , [WeightController::class , 'update'])->name('admin.weights.update');
+//    });
 
 
         // start events
-        Route::prefix('events')->group(function (){
-            Route::get('/' , [EventController::class , 'index'])->name('admin.events.index');
-            Route::get('/create' , [EventController::class , 'create'])->name('admin.events.add');
-            Route::post('/store' , [EventController::class , 'store'])->name('admin.events.store');
-            Route::get('/edit/{id}' , [EventController::class , 'edit'])->name('admin.events.edit');
-            Route::get('/delete/{id}' , [EventController::class , 'delete'])->name('admin.events.delete');
-            Route::post('/update/{id}' , [EventController::class , 'update'])->name('admin.events.update');
-        });
+//        Route::prefix('events')->group(function (){
+//            Route::get('/' , [EventController::class , 'index'])->name('admin.events.index');
+//            Route::get('/create' , [EventController::class , 'create'])->name('admin.events.add');
+//            Route::post('/store' , [EventController::class , 'store'])->name('admin.events.store');
+//            Route::get('/edit/{id}' , [EventController::class , 'edit'])->name('admin.events.edit');
+//            Route::get('/delete/{id}' , [EventController::class , 'delete'])->name('admin.events.delete');
+//            Route::post('/update/{id}' , [EventController::class , 'update'])->name('admin.events.update');
+//        });
 
 
     // start payment integeration
 
-    Route::prefix('payments')->group(function(){
-        Route::get('get' , [PaymentController::class , 'get'])->name('admin.payments.index');
-        Route::post('settings' , [PaymentController::class , 'settings'])->name('admin.payments.settings');
-        Route::get('status' , [PaymentController::class , 'get_status'])->name('admin.payments.status');
-        Route::post('/edit/status' , [PaymentController::class, 'edit_status'])->name('admin.payments.edit_status');
-
-
-    });
+//    Route::prefix('payments')->group(function(){
+//        Route::get('get' , [PaymentController::class , 'get'])->name('admin.payments.index');
+//        Route::post('settings' , [PaymentController::class , 'settings'])->name('admin.payments.settings');
+//        Route::get('status' , [PaymentController::class , 'get_status'])->name('admin.payments.status');
+//        Route::post('/edit/status' , [PaymentController::class, 'edit_status'])->name('admin.payments.edit_status');
+//
+//
+//    });
 
 
 
 
     // route of shimpments
 
-    Route::prefix('shimpments')->group(function(){
-
-        Route::get('get' , [ShimpmentsController::class , 'index'])->name('admin.shimpments.index');
-        Route::post('update' , [ShimpmentsController::class , 'update' ])->name('admin.shimpments.update');
-        Route::get('/show_zone' , [ShimpmentsController::class , 'show_zone'])->name('admin.shimpments.Show_zone');
-        Route::get('/add_zone' , [ShimpmentsController::class , 'add_zone'])->name('admin.shimpments.add_zone');
-        Route::post('store_zone' , [ShimpmentsController::class , 'store_zone'])->name('admin.shimpments.store_zone');
-        Route::get('/edit_zone/{id}' , [ShimpmentsController::class , 'edit_zone'])->name('admin.shimpments.edit_zone');
-        Route::post('/update_zone/{id}' , [ShimpmentsController::class , 'update_zone'])->name('admin.shimpments.update_zone');
-        Route::get('/soft_delete_zone/{id}' , [ShimpmentsController::class , 'soft_delete_zone'])->name('admin.shimpments.soft_delete_zone');
-        Route::get('/restore_zone/{id}' , [ShimpmentsController::class , 'restore_zone'])->name('admin.shimpments.restore_zone');
-        Route::get('/destroy_zone/{id}' , [ShimpmentsController::class , 'destroy_zone'])->name('admin.shimpments.destroy_zone');
-
-        // start company shipment
-        Route::get('/show_company' , [ShimpmentsController::class , 'show_company'])->name('admin.shimpments.Show_company');
-        Route::get('/add_company' , [ShimpmentsController::class , 'add_company'])->name('admin.shimpments.add_company');
-        Route::post('store_company' , [ShimpmentsController::class , 'store_company'])->name('admin.shimpments.store_company');
-        Route::get('/edit_company/{id}' , [ShimpmentsController::class , 'edit_company'])->name('admin.shimpments.edit_company');
-        Route::post('/update_company/{id}' , [ShimpmentsController::class , 'update_company'])->name('admin.shimpments.update_company');
-        Route::get('/soft_delete_company/{id}' , [ShimpmentsController::class , 'soft_delete_company'])->name('admin.shimpments.soft_delete_company');
-        Route::get('/restore_company/{id}' , [ShimpmentsController::class , 'restore_company'])->name('admin.shimpments.restore_company');
-        Route::get('/destroy_company/{id}' , [ShimpmentsController::class , 'destroy_company'])->name('admin.shimpments.destroy_company');
-    });
+//    Route::prefix('shimpments')->group(function(){
+//
+//        Route::get('get' , [ShimpmentsController::class , 'index'])->name('admin.shimpments.index');
+//        Route::post('update' , [ShimpmentsController::class , 'update' ])->name('admin.shimpments.update');
+//        Route::get('/show_zone' , [ShimpmentsController::class , 'show_zone'])->name('admin.shimpments.Show_zone');
+//        Route::get('/add_zone' , [ShimpmentsController::class , 'add_zone'])->name('admin.shimpments.add_zone');
+//        Route::post('store_zone' , [ShimpmentsController::class , 'store_zone'])->name('admin.shimpments.store_zone');
+//        Route::get('/edit_zone/{id}' , [ShimpmentsController::class , 'edit_zone'])->name('admin.shimpments.edit_zone');
+//        Route::post('/update_zone/{id}' , [ShimpmentsController::class , 'update_zone'])->name('admin.shimpments.update_zone');
+//        Route::get('/soft_delete_zone/{id}' , [ShimpmentsController::class , 'soft_delete_zone'])->name('admin.shimpments.soft_delete_zone');
+//        Route::get('/restore_zone/{id}' , [ShimpmentsController::class , 'restore_zone'])->name('admin.shimpments.restore_zone');
+//        Route::get('/destroy_zone/{id}' , [ShimpmentsController::class , 'destroy_zone'])->name('admin.shimpments.destroy_zone');
+//
+//        // start company shipment
+//        Route::get('/show_company' , [ShimpmentsController::class , 'show_company'])->name('admin.shimpments.Show_company');
+//        Route::get('/add_company' , [ShimpmentsController::class , 'add_company'])->name('admin.shimpments.add_company');
+//        Route::post('store_company' , [ShimpmentsController::class , 'store_company'])->name('admin.shimpments.store_company');
+//        Route::get('/edit_company/{id}' , [ShimpmentsController::class , 'edit_company'])->name('admin.shimpments.edit_company');
+//        Route::post('/update_company/{id}' , [ShimpmentsController::class , 'update_company'])->name('admin.shimpments.update_company');
+//        Route::get('/soft_delete_company/{id}' , [ShimpmentsController::class , 'soft_delete_company'])->name('admin.shimpments.soft_delete_company');
+//        Route::get('/restore_company/{id}' , [ShimpmentsController::class , 'restore_company'])->name('admin.shimpments.restore_company');
+//        Route::get('/destroy_company/{id}' , [ShimpmentsController::class , 'destroy_company'])->name('admin.shimpments.destroy_company');
+//    });
 
 
 
@@ -367,20 +368,20 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     });
 
 
-    Route::prefix('our-works')->group(function (){
-        Route::get('/' , [OurworkController::class , 'index'])->name('admin.our_works.index');
-        Route::get('/create' , [OurworkController::class , 'create'])->name('admin.our_works.add');
-        Route::get('/edit/{id}' , [OurworkController::class , 'edit'])->name('admin.our_works.edit');
-        Route::post('/store' , [OurworkController::class , 'store'])->name('admin.our_works.store');
-        Route::post('/update/{id}' , [OurworkController::class , 'update'])->name('admin.our_works.update');
-        Route::get('/soft_delete/{id}' , [OurworkController::class , 'soft_delete'])->name('admin.our_works.soft_delete');
-        Route::get('/restore/{id}' , [OurworkController::class , 'restore'])->name('admin.our_works.restore');
-        Route::get('/destroy/{id}' , [OurworkController::class , 'destroy'])->name('admin.our_works.destroy');
-        Route::get('/gallery/{id}' , [OurworkController::class , 'gallery'])->name('admin.our_works.gallery');
-        Route::get('/delete/{id}' , [OurworkController::class , 'delete_gallery'])->name('admin.our_works.delete_gallery');
-        Route::post('/store/{id}/gallery' , [OurworkController::class , 'store_gallery'])->name('admin.our_works.save_gallery');
-
-    });
+//    Route::prefix('our-works')->group(function (){
+//        Route::get('/' , [OurworkController::class , 'index'])->name('admin.our_works.index');
+//        Route::get('/create' , [OurworkController::class , 'create'])->name('admin.our_works.add');
+//        Route::get('/edit/{id}' , [OurworkController::class , 'edit'])->name('admin.our_works.edit');
+//        Route::post('/store' , [OurworkController::class , 'store'])->name('admin.our_works.store');
+//        Route::post('/update/{id}' , [OurworkController::class , 'update'])->name('admin.our_works.update');
+//        Route::get('/soft_delete/{id}' , [OurworkController::class , 'soft_delete'])->name('admin.our_works.soft_delete');
+//        Route::get('/restore/{id}' , [OurworkController::class , 'restore'])->name('admin.our_works.restore');
+//        Route::get('/destroy/{id}' , [OurworkController::class , 'destroy'])->name('admin.our_works.destroy');
+//        Route::get('/gallery/{id}' , [OurworkController::class , 'gallery'])->name('admin.our_works.gallery');
+//        Route::get('/delete/{id}' , [OurworkController::class , 'delete_gallery'])->name('admin.our_works.delete_gallery');
+//        Route::post('/store/{id}/gallery' , [OurworkController::class , 'store_gallery'])->name('admin.our_works.save_gallery');
+//
+//    });
 
 
 
@@ -397,35 +398,35 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start meta
-    Route::prefix('meta')->group(function (){
-        Route::get('/' , [MetaController::class , 'index'])->name('admin.meta.index');
-        Route::post('/update' , [MetaController::class , 'update'])->name('admin.meta.update');
-        Route::get('/products' , [MetaController::class , 'products'])->name('admin.meta.products');
-        Route::get('/blogs' , [MetaController::class , 'blogs'])->name('admin.meta.blogs');
-        Route::get('/services' , [MetaController::class , 'services'])->name('admin.meta.services');
-        Route::get('/projects' , [MetaController::class , 'projects'])->name('admin.meta.projects');
-        Route::get('/categories' , [MetaController::class , 'categories'])->name('admin.meta.categories');
-        Route::post('/update/products' , [MetaController::class , 'update_products'])->name('admin.meta.update_products');
-        Route::post('/update/categories' , [MetaController::class , 'update_categories'])->name('admin.meta.update_categories');
-        Route::post('/update/blogs' , [MetaController::class , 'update_blogs'])->name('admin.meta.update_blogs');
-        Route::post('/update/services' , [MetaController::class , 'update_services'])->name('admin.meta.update_services');
-        Route::post('/update/projects' , [MetaController::class , 'update_projects'])->name('admin.meta.update_projects');
-
-    });
+//    Route::prefix('meta')->group(function (){
+//        Route::get('/' , [MetaController::class , 'index'])->name('admin.meta.index');
+//        Route::post('/update' , [MetaController::class , 'update'])->name('admin.meta.update');
+//        Route::get('/products' , [MetaController::class , 'products'])->name('admin.meta.products');
+//        Route::get('/blogs' , [MetaController::class , 'blogs'])->name('admin.meta.blogs');
+//        Route::get('/services' , [MetaController::class , 'services'])->name('admin.meta.services');
+//        Route::get('/projects' , [MetaController::class , 'projects'])->name('admin.meta.projects');
+//        Route::get('/categories' , [MetaController::class , 'categories'])->name('admin.meta.categories');
+//        Route::post('/update/products' , [MetaController::class , 'update_products'])->name('admin.meta.update_products');
+//        Route::post('/update/categories' , [MetaController::class , 'update_categories'])->name('admin.meta.update_categories');
+//        Route::post('/update/blogs' , [MetaController::class , 'update_blogs'])->name('admin.meta.update_blogs');
+//        Route::post('/update/services' , [MetaController::class , 'update_services'])->name('admin.meta.update_services');
+//        Route::post('/update/projects' , [MetaController::class , 'update_projects'])->name('admin.meta.update_projects');
+//
+//    });
 
 
 
     // start categories
-    Route::prefix('categories')->group(function (){
-        Route::get('/' , [CategoryController::class , 'index'])->name('admin.category.index');
-        Route::get('/add' , [CategoryController::class , 'create'])->name('admin.category.add');
-        Route::get('/edit/{id}' , [CategoryController::class , 'edit'])->name('admin.category.edit');
-        Route::post('/store' , [CategoryController::class , 'store'])->name('admin.category.store');
-        Route::post('/update/{id}' , [CategoryController::class , 'update'])->name('admin.category.update');
-        Route::get('/soft_delete/{id}' , [CategoryController::class , 'soft_delete'])->name('admin.category.soft_delete');
-        Route::get('/restore/{id}' , [CategoryController::class , 'restore'])->name('admin.category.restore');
-        Route::get('/destroy/{id}' , [CategoryController::class , 'destroy'])->name('admin.category.destroy');
-    });
+//    Route::prefix('categories')->group(function (){
+//        Route::get('/' , [CategoryController::class , 'index'])->name('admin.category.index');
+//        Route::get('/add' , [CategoryController::class , 'create'])->name('admin.category.add');
+//        Route::get('/edit/{id}' , [CategoryController::class , 'edit'])->name('admin.category.edit');
+//        Route::post('/store' , [CategoryController::class , 'store'])->name('admin.category.store');
+//        Route::post('/update/{id}' , [CategoryController::class , 'update'])->name('admin.category.update');
+//        Route::get('/soft_delete/{id}' , [CategoryController::class , 'soft_delete'])->name('admin.category.soft_delete');
+//        Route::get('/restore/{id}' , [CategoryController::class , 'restore'])->name('admin.category.restore');
+//        Route::get('/destroy/{id}' , [CategoryController::class , 'destroy'])->name('admin.category.destroy');
+//    });
 
 
     // start product routes

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->longText('des')->nullable();
             $table->longText('meta_title')->nullable();
+            $table->longText('small_des')->nullable();
             $table->longText('meta_des')->nullable();
             $table->string('slug');
             $table->unique(['product_id', 'locale']);
