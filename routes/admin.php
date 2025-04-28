@@ -417,16 +417,16 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start categories
-//    Route::prefix('categories')->group(function (){
-//        Route::get('/' , [CategoryController::class , 'index'])->name('admin.category.index');
-//        Route::get('/add' , [CategoryController::class , 'create'])->name('admin.category.add');
-//        Route::get('/edit/{id}' , [CategoryController::class , 'edit'])->name('admin.category.edit');
-//        Route::post('/store' , [CategoryController::class , 'store'])->name('admin.category.store');
-//        Route::post('/update/{id}' , [CategoryController::class , 'update'])->name('admin.category.update');
-//        Route::get('/soft_delete/{id}' , [CategoryController::class , 'soft_delete'])->name('admin.category.soft_delete');
-//        Route::get('/restore/{id}' , [CategoryController::class , 'restore'])->name('admin.category.restore');
-//        Route::get('/destroy/{id}' , [CategoryController::class , 'destroy'])->name('admin.category.destroy');
-//    });
+    Route::prefix('categories')->group(function (){
+        Route::get('/' , [CategoryController::class , 'index'])->name('admin.category.index');
+        Route::get('/add' , [CategoryController::class , 'create'])->name('admin.category.add');
+        Route::get('/edit/{id}' , [CategoryController::class , 'edit'])->name('admin.category.edit');
+        Route::post('/store' , [CategoryController::class , 'store'])->name('admin.category.store');
+        Route::post('/update/{id}' , [CategoryController::class , 'update'])->name('admin.category.update');
+        Route::get('/soft_delete/{id}' , [CategoryController::class , 'soft_delete'])->name('admin.category.soft_delete');
+        Route::get('/restore/{id}' , [CategoryController::class , 'restore'])->name('admin.category.restore');
+        Route::get('/destroy/{id}' , [CategoryController::class , 'destroy'])->name('admin.category.destroy');
+    });
 
 
     // start product routes
@@ -446,6 +446,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         // add stock
         Route::get('add_stock' , [ProductController::class , 'add_stock'])->name('admin.products.add_stock');
         Route::post('store_stock' , [ProductController::class , 'store_stock'])->name('admin.products.store_stock');
+        Route::get('show_stock_movement/{id}' , [ProductController::class , 'stock_movement'])->name('admin.products.show_stock_movement');
 
         // start gallary
 

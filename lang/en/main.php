@@ -493,7 +493,21 @@ return [
     'product_added_successfully'=>'Product Added Successfully !',
     'programer_error'=>'Tell The Programmer To solve Error',
     'filter_by_brand' => 'Filter by Brand',
-    "delete_Product_warning"=>'Are you sure you want to delete this Product? All related data will be removed.'
+    "delete_Product_warning"=>'Are you sure you want to delete this Product? All related data will be removed.',
+    'product_updated_successfully'=>'Product Updated Successfully !',
+    'category_added_successfully'=>'Category Added Successfully !',
+    'delete_category_warning'=>'Are you sure you want to delete this Category? All related data will be removed.',
+    'update_product'=>'Update Product',
+    'category_updated_successfully'=>'Category Updated Successfully',
+    'product_image'=>'Product Image',
+    'search_product'=>'Search Product',
+    'enter_quantity'=>'Enter Quantity',
+    'cost_price'=>'Cost Price',
+    'enter_cost_price'=>'Enter Cost Price',
+    'product_stock_added'=>'Product Stock Added Successfully !',
+    'store_stock'=>'Store Stock',
+    'stocks'=>'Stocks'
+
 
 
 

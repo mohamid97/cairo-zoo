@@ -2,6 +2,10 @@
 
 @section('content')
 
+
+
+
+
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -208,8 +212,6 @@
                                         <div class="text-danger">{{ $errors->first('image') }}</div>
                                         @enderror
                                     </div>
-
-
 
                                     <div class="form-group col-md-6">
                                         <label for="thumbinal">{{ __('main.thumbinal') }}</label>

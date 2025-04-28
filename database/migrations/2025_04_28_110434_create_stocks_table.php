@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->enum('type' , [0,1])->default(0);
-            $table->integer('parent_id')->nullable();
-            $table->string('photo')->nullable();
-            $table->string('thumbinal')->nullable();
-            $table->string('star')->nullable();
-            $table->softDeletes();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->integer('quantity');
+            $table->decimal('cost_price');
+            $table->decimal('sales_price');
             $table->timestamps();
+
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('stocks');
     }
 };

@@ -108,6 +108,7 @@
                             <th>{{ __('main.brand') }}</th>
                             <th>{{ __('main.sales_price')}}</th>
                             <th>{{ __('main.sku') }}</th>
+                            <th>{{ __('main.stock') }}</th>
 
                             <th>{{ __('main.action') }}</th>
                         </tr>
@@ -116,7 +117,7 @@
                         @forelse($products as $index => $pro)
                             <tr>
                                 <td>{{ $products->firstItem() + $index }}</td>
-                                <td>{{ $pro->name }}</td>
+
                                 <td>
                                     <a target="_blank" href="{{ asset('uploads/images/products/' . $pro->image) }}">
                                         <img class="img-circle" src="{{ asset('uploads/images/products/' . $pro->image) }}" width="40px" height="40px" alt="{{ __('main.product_image') }}">
@@ -129,6 +130,7 @@
 
                                     </a>
                                 </td>
+                                <td>{{ $pro->name }}</td>
                                 <td>
                                     @forelse($categories as $cat)
                                         @if($cat->id == $pro->category_id)
@@ -137,9 +139,10 @@
                                     @empty
                                     @endforelse
                                 </td>
-                                <td>{{ ($pro->brand) ? $pro->brand->name  : null }}</td>
+                                <td>{{ ($pro->brand) ? $pro->brand->name  : 'N/A' }}</td>
                                 <td>{{ $pro->sales_price }}</td>
                                 <td>{{ $pro->sku }}</td>
+                                <td>{{ $pro->stock }}</td>
                                 <td>
                                     <div class="d-flex align-items-center justify-content-center gap-2">
                                         <a href="{{ route('admin.products.edit', ['id' => $pro->id]) }}">
@@ -153,11 +156,25 @@
                                             <button class="btn btn-sm btn-success"><i class="fas fa-cog"></i>
                                             </button>
                                         </a>
+
+
+                                        <a href="{{ route('admin.products.show_stock_movement', ['id' => $pro->id]) }}">
+                                            <button class="btn btn-sm btn-info">
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </button>
+                                        </a>
+
+
                                         <a href="{{ route('admin.products.gallery', ['id' => $pro->id]) }}">
                                             <button class="btn btn-sm btn-success">
                                                 <i class="fas fa-images"></i>
                                             </button>
                                         </a>
+
+
+
+
+
 
 
                                         <button class="btn btn-sm btn-danger" onclick="showDeleteProductModal({{ $pro->id }})">

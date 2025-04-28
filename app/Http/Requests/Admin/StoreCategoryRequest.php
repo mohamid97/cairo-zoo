@@ -31,6 +31,7 @@ class StoreCategoryRequest extends FormRequest
             'des.*' => 'nullable|string|max:65535',
             'small_des.*'=>'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            'thumbinal' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'meta_title.*'=>'nullable|max:65535',
             'meta_des.*'=>'nullable|max:65535',
             'alt_image.*'=>'nullable|string|max:255',

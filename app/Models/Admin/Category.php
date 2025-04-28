@@ -14,7 +14,7 @@ class Category extends Model implements TranslatableContract
     use HasFactory ,Translatable, SoftDeletes;
 
     public $translatedAttributes = ['des', 'name' , 'small_des' , 'alt_image' , 'title_image' , 'slug' , 'meta_des' , 'meta_title'];
-    protected $fillable = ['type' , 'parent_id' , 'star'];
+    protected $fillable = ['type' , 'parent_id' , 'star' , 'photo' , 'thumbinal'];
     public $translationForeignKey = 'category_id';
     public $translationModel = 'App\Models\Admin\CategoryTranslation';
 

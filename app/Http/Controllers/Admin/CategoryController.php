@@ -49,28 +49,27 @@ class CategoryController extends Controller
 
     }
 
-    public function edit($id)
-    {
-        $cat = Category::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.category.update' , ['cat' => $cat , 'langs' => $this->langs , 'categories'=>$categories]);
 
-    }
 
     public function store(StoreCategoryRequest $request)
     {
         try {
             DB::beginTransaction();
-            $image_name = null;
-            if($request->has('photo')){
-                $image_name = $request->photo->getClientOriginalName();
-                $request->photo->move(public_path('uploads/images/category'), $image_name);
+
+            $imageData = [];
+            if ($request->hasFile('photo')) {
+                $imageData['photo'] = $this->upload_image($request->file('photo'));
             }
-            $categry = new Category();
-            $categry->type = $request->type;
-            $categry->parent_id = ($request->type == 1) ? $request->parent_id  : null;
-            $categry->photo = $image_name;
-            $categry->star = $request->star;
+            if ($request->hasFile('thumbinal')) {
+                $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
+            }
+
+            $categry = Category::create([
+                'type'       => $request->type,
+                'parent_id'  => ($request->type == 1) ? $request->parent_id  : null,
+                'photo'      => $imageData['photo'] ?? null,
+                'thumbinal'  => $imageData['thumbinal'] ?? null
+            ]);
             foreach ($this->langs as $lang) {
                 $categry->{'name:'.$lang->code}  = $request->name[$lang->code];
                 $categry->{'des:'.$lang->code}  = $request->des[$lang->code];
@@ -83,14 +82,22 @@ class CategoryController extends Controller
             }
             $categry->save();
             DB::commit();
-            Alert::success('Success', 'Category Added Successfully !');
+            Alert::success('Success', __('main.category_added_successfully'));
             return redirect()->route('admin.category.index');
         }catch (\Exception $e){
             dd($e->getLine() , $e->getMessage());
             DB::rollBack();
-            Alert::error('error', 'Tell The Programmer To solve Error');
+            Alert::error('error', __('main.programer_error'));
             return redirect()->route('admin.category.index');
         }
+    }
+
+    public function edit($id)
+    {
+        $cat = Category::findOrFail($id);
+        $categories = Category::all();
+        return view('admin.category.update' , ['cat' => $cat , 'langs' => $this->langs , 'categories'=>$categories]);
+
     }
 
     public function update(UpdateCategoryRequest $request , $id)
@@ -99,14 +106,19 @@ class CategoryController extends Controller
            $cat = Category::findOrFail($id);
            DB::beginTransaction();
            $image_name = null;
-           if($request->has('photo')){
-               $image_name = $request->photo->getClientOriginalName();
-               $request->photo->move(public_path('uploads/images/category'), $image_name);
+           $imageData = [];
+           if ($request->hasFile('photo')) {
+               $imageData['photo'] = $this->upload_image($request->file('photo'));
            }
-           $cat->type = $request->type;
-           $cat->parent_id = ($request->type == 1) ? $request->parent_id : null;
-           $cat->photo = ($image_name != null) ? $image_name : $cat->photo;
-           $cat->star = isset($request->star) ? $request->star : null;
+           if ($request->hasFile('thumbinal')) {
+               $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
+           }
+           $cat->update([
+               'type'=>$request->type,
+               'parent_id'=>($request->type == 1) ? $request->parent_id : null,
+               'photo'=> $imageData['photo'] ?? $cat->photo,
+               'thumbinal'=>$imageData['thumbinal'] ?? $cat->thumbinal
+           ]);
            foreach ($this->langs as $lang) {
                $cat->{'name:'.$lang->code}  = $request->name[$lang->code];
                $cat->{'des:'.$lang->code}  = $request->des[$lang->code];
@@ -119,15 +131,25 @@ class CategoryController extends Controller
            }
            $cat->save();
            DB::commit();
-           Alert::success('Success', 'Category Updated Successfully !');
+           Alert::success('Success', __('main.category_updated_successfully'));
            return redirect()->route('admin.category.index');
        }catch (\Exception $e){
-           dd($e->getMessage() , $e->getLine());
-           Alert::error('error', 'Tell The Programmer To solve Error');
+           Alert::error('error', __('main.programer_error'));
            DB::rollBack();
        }
 
     } // end update category
+
+
+    private function upload_image($image)
+    {
+        $image_name = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('uploads/images/category'), $image_name);
+        return $image_name;
+    }
+
+
+
 
     public function destroy($id)
     {

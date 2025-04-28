@@ -27,7 +27,7 @@
                 <!-- form start -->
                 <form role="form" method="post" action="{{ route('admin.products.update', ['id' => $product->id]) }}" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
+                    @method('POST')
                     <div class="card-body">
                         <div class="border p-3">
                             <div class="row">
@@ -174,7 +174,7 @@
 
                                     @if($product->image)
                                         <div class="mt-3">
-                                            <img src="{{ asset($product->image) }}" alt="Current Image" class="img-thumbnail" style="max-width: 200px;">
+                                            <img src="{{ asset('uploads/images/products/' . $product->image) }}" alt="Image" class="img-thumbnail" style="max-width: 200px;">
                                         </div>
                                     @endif
 
@@ -205,7 +205,7 @@
 
                                     @if($product->thumbinal)
                                         <div class="mt-3">
-                                            <img src="{{ asset($product->thumbinal) }}" alt="Current Thumbnail" class="img-thumbnail" style="max-width: 200px;">
+                                            <img src="{{ asset('uploads/images/products/' . $product->thumbinal) }}" alt="Thumbnail" class="img-thumbnail" style="max-width: 200px;">
                                         </div>
                                     @endif
 

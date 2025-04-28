@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('sales_price')->nullable();
 //            $table->string('old_price')->nullable();
 //            $table->string('discount')->nullable();
-//            $table->integer('stock')->default(0);
+            $table->integer('stock')->default(0);
             $table->string('sku')->nullable();
             $table->string('image')->nullable();
             $table->string('thumbinal')->nullable();

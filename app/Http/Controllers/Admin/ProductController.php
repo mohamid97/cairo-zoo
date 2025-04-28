@@ -124,6 +124,76 @@ class ProductController extends Controller
 
     }
 
+
+
+    public function edit($id)
+    {
+        $product = Product::with(['relatedProducts', 'translations'])->findOrFail($id);
+
+        $categories = Category::all();
+        $brands = Brand::all();
+        $products = Product::where('id', '!=', $id)->get();
+
+        return view('admin.products.update', [
+            'langs' => $this->langs,
+            'categories' => $categories,
+            'brands' => $brands,
+            'products' => $products,
+            'product' => $product
+        ]);
+    }
+
+
+    public function update(StoreProductRequest $request , $id)
+    {
+
+        try {
+            DB::beginTransaction();
+            $product = Product::findOrFail($id);
+            $imageData = [];
+            if ($request->hasFile('image')) {
+                $imageData['image'] = $this->upload_image($request->file('image'));
+            }
+            if ($request->hasFile('thumbinal')) {
+                $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
+            }
+
+
+            $product->update([
+                'weight' => $request->weight,
+                'length' => $request->length,
+                'height' => $request->height,
+                'width'  => $request->width,
+                'status' => $request->status,
+                'brand_id' => $request->brand,
+                'sales_price' => $request->sales_price,
+                'video' => $request->video,
+                'sku' => $request->sku,
+                'image' => $imageData['image'] ?? $product->image,
+                'thumbinal' => $imageData['thumbinal'] ?? $product->thumbinal,
+            ]);
+            foreach ($this->langs as $lang) {
+                $product->{'name:'.$lang->code}  = $request->name[$lang->code];
+                $product->{'des:'.$lang->code}  = $request->des[$lang->code];
+                $product->{'meta_des:'.$lang->code}  = $request->meta_des[$lang->code];
+                $product->{'small_des:'.$lang->code}  = $request->meta_des[$lang->code];
+                $product->{'meta_title:'.$lang->code}  = $request->meta_title[$lang->code];
+                $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
+            }
+
+            $product->save();
+            DB::commit();
+            Alert::success('Success', __('main.product_updated_successfully'));
+            return redirect()->back();
+
+        }catch (\Exception $e){
+            DB::rollBack();
+            Alert::error('error', __('main.delete_Product_warning'));
+            return redirect()->route('admin.products.index');
+        }
+
+    }
+
     // upload image and thumbinal
     private function upload_image($image)
     {
@@ -134,49 +204,6 @@ class ProductController extends Controller
 
 
 
-
-
-
-
-    public function update(StoreProductRequest $request , $id)
-    {
-
-//        if($this->check_sku($request->sku , $id)){
-//            Alert::error('error', 'Sku Already Used Before');
-//            return redirect()->route('admin.products.index');
-//        }
-        try {
-            DB::beginTransaction();
-            $product = Product::findOrFail($id);
-            $product->update([
-                'price'       =>        $request->price,
-                'category_id' => $request->category,
-                'star'       => $request->star,
-                'old_price' => $request->old_price,
-                'discount' => $request->discount,
-                'sku'      =>$request->sku,
-                'video'=>$request->video
-            ]);
-            foreach ($this->langs as $lang) {
-                $product->{'name:'.$lang->code}  = $request->name[$lang->code];
-                $product->{'des:'.$lang->code}  = $request->des[$lang->code];
-                $product->{'meta_des:'.$lang->code}  = $request->meta_des[$lang->code];
-                $product->{'meta_title:'.$lang->code}  = $request->meta_title[$lang->code];
-                $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
-            }
-
-            $product->save();
-            DB::commit();
-            Alert::success('Success', 'Product Updated Successfully !');
-            return redirect()->back();
-
-        }catch (\Exception $e){
-            DB::rollBack();
-            Alert::error('error', 'Tell The Programmer To solve Error');
-            return redirect()->route('admin.products.index');
-        }
-
-    }
 
     private function check_sku($sku , $id = null){
         // Check if SKU exists in the database, excluding the current product's ID if provided
@@ -189,22 +216,6 @@ class ProductController extends Controller
     }
 
 
-    public function edit($id)
-    {
-        $product = Product::with(['relatedProducts', 'translations'])->findOrFail($id);
-
-        $categories = Category::all();
-        $brands = Brand::all();
-        $products = Product::where('id', '!=', $id)->get(); // Exclude current product from related products
-
-        return view('admin.products.update', [
-            'langs' => $this->langs,
-            'categories' => $categories,
-            'brands' => $brands,
-            'products' => $products,
-            'product' => $product
-        ]);
-    }
 
     public function gallery($id){
         $product = Product::with('gallery')->findOrFail($id);
@@ -275,23 +286,29 @@ class ProductController extends Controller
 
         $request->validate([
             'product_id'=>'required|integer|exists:products,id',
-            'stock'=>'required|numeric|min:0'
+            'quantity'=>'required|numeric|min:1',
+            'cost_price'=>'required|numeric|min:1',
+            'sales_price'=>'required|numeric|min:1'
 
         ]);
 
         try{
             DB::beginTransaction();
             $product = Product::findOrFail($request->product_id);
-            $product->stock += $request->stock;
-            $product->save();
+            $product->update(['sales_price'=>$request->sales_price , 'stock'=> $product->stock + $request->quantity ]);
+            $product->stocks()->create([
+                'quantity'    => $request->quantity,
+                'cost_price'  => $request->cost_price,
+                'sales_price' => $request->sales_price
+            ]);
             DB::commit();
-            Alert::success('Success', 'Product Gallery Added Successfully !');
+            Alert::success('Success', __('main.product_stock_added'));
             return redirect()->back();
 
         }catch(\Exception $e){
             dd($e->getLine() , $e->getMessage());
             DB::rollBack();
-            Alert::error('error', 'Tell The Programmer To solve Error');
+            Alert::error('error', __('main.programer_error'));
             return redirect()->back();
         }
 
@@ -354,7 +371,7 @@ class ProductController extends Controller
         // Delete the file record from the database
         $file->delete();
 
-        Alert::success('Success', 'ile deleted successfully.');
+        Alert::success('Success', 'File deleted successfully.');
 
         // Redirect back with a success message
         return redirect()->back();
@@ -438,6 +455,11 @@ class ProductController extends Controller
         Alert::error('Success', 'Soft Deleted Successfully !.');
         return redirect()->back();
 
+    }
+
+    public function stock_movement($id){
+        $product = Product::with('stocks')->findOrFail($id);
+        return view('admin.products.stock_movement' , ['product'=>$product]);
     }
 
 

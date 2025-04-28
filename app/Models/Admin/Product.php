@@ -16,7 +16,7 @@ class Product extends Model implements TranslatableContract
 {
     use HasFactory , Translatable , SoftDeletes;
     public $translatedAttributes = ['des', 'name' , 'small_des' , 'meta_des' , 'meta_title' , 'slug'];
-    protected $fillable = ['category_id' , 'brand_id' , 'status' , 'image' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
+    protected $fillable = ['category_id' , 'brand_id' , 'status' , 'image' , 'stock' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
     public $translationForeignKey = 'product_id';
     public $translationModel = 'App\Models\Admin\ProductTranslation';
 
@@ -58,6 +58,11 @@ class Product extends Model implements TranslatableContract
     public function brand()
     {
         return $this->belongsTo(Brand::class , 'brand_id');
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
     }
 
 
