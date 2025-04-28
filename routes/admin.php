@@ -449,7 +449,6 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('show_stock_movement/{id}' , [ProductController::class , 'stock_movement'])->name('admin.products.show_stock_movement');
 
         // start gallary
-
         Route::get('/gallery/{id}' , [ProductController::class , 'gallery'])->name('admin.products.gallery');
         Route::get('/delete/{id}' , [ProductController::class , 'delete_gallery'])->name('admin.products.delete_gallery');
         Route::post('/store/{id}/gallery' , [ProductController::class , 'store_gallery'])->name('admin.products.save_gallery');

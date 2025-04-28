@@ -67,4 +67,6 @@ class Product extends Model implements TranslatableContract
 
 
 
+
+
 }
