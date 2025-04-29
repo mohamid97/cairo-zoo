@@ -44,7 +44,13 @@ class StoreProductRequest extends FormRequest
             'length' => 'nullable|numeric|min:1',
             'status' => 'nullable|in:published,pending',
             'related_products.*' => 'nullable|exists:products,id',
+            'barcode' => 'required|string|max:255',
         ];
 
+
+
     }
+
+
+
 }

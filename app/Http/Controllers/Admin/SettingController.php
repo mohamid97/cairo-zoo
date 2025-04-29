@@ -73,6 +73,8 @@ class SettingController extends Controller
                 $setting->parteners = $request->parteners;
                 $setting->pages = $request->pages;
                 $setting->ourteam  = $request->ourteam;
+                $setting->discounts  = $request->discounts;
+                $setting->coupons  = $request->coupons;
 
                 foreach ($this->files as $file){
                   $image_name = $this->uploadFile($request , $file);

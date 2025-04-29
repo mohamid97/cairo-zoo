@@ -254,7 +254,8 @@
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-info">
-                            <i class="nav-icon fas fa-paper-plane"></i>  {{ __('main.update') }}
+                            <i class="nav-icon fas fa-edit"></i>
+                            {{ __('main.update') }}
                         </button>
                     </div>
                 </form>

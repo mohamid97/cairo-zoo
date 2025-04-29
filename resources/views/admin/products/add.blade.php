@@ -66,29 +66,40 @@
                         <br>
                         <div class="border p-3">
                             <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label for="price">{{ __('main.sales_price') }}</label> <!-- Translated Label -->
+                                    <div class="form-group col-md-3">
+                                        <label for="price">{{ __('main.sales_price') }}</label>
                                         <input type="number" name="sales_price" class="form-control" id="price" placeholder="{{ __('main.enter_sales_price') }}" value="{{ old('sales_price') }}">
                                         @error('sales_price')
                                         <div class="text-danger">{{ $errors->first('sales_price') }}</div>
                                         @enderror
                                     </div>
 
-                                    <div class="form-group col-md-4">
-                                        <label for="sku">{{ __('main.sku') }}</label> <!-- Translated Label -->
+                                    <div class="form-group col-md-3">
+                                        <label for="sku">{{ __('main.sku') }}</label>
                                         <input type="text" name="sku" class="form-control" id="sku" placeholder="{{ __('main.enter_sku') }}" value="{{ old('sku') }}">
                                         @error('sku')
                                         <div class="text-danger">{{ $errors->first('sku') }}</div>
                                         @enderror
                                     </div>
 
-                                <div class="form-group col-md-4">
-                                    <label for="video">{{ __('main.video') }}</label> <!-- Translated Label -->
+                                <div class="form-group col-md-3">
+                                    <label for="video">{{ __('main.video') }}</label>
                                     <input type="url" name="video" class="form-control" id="video" placeholder="{{ __('main.enter_video') }}" value="{{ old('video') }}">
                                     @error('video')
                                     <div class="text-danger">{{ $errors->first('video') }}</div>
                                     @enderror
                                 </div>
+
+
+                                <div class="form-group col-md-3">
+                                    <label for="barcode">{{ __('main.barcode') }}</label>
+                                    <input type="text" name="barcode" class="form-control" id="barcode" placeholder="{{ __('main.enter_barcode') }}" value="{{ old('barcode') }}">
+                                    @error('barcode')
+                                    <div class="text-danger">{{ $errors->first('barcode') }}</div>
+                                    @enderror
+                                </div>
+
+
                             </div>
                         </div>
 

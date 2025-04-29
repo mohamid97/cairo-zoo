@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('parteners')->nullable();
             $table->string('pages')->nullable();
             $table->string('ourteam')->nullable();
+            $table->string('discounts')->nullable();
 
 
             $table->timestamps();

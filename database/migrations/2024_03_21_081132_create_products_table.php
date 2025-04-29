@@ -31,6 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->string('star')->nullable();
             $table->text('video')->nullable();
+            $table->text('barcode')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

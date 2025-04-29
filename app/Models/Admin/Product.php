@@ -16,7 +16,7 @@ class Product extends Model implements TranslatableContract
 {
     use HasFactory , Translatable , SoftDeletes;
     public $translatedAttributes = ['des', 'name' , 'small_des' , 'meta_des' , 'meta_title' , 'slug'];
-    protected $fillable = ['category_id' , 'brand_id' , 'status' , 'image' , 'stock' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
+    protected $fillable = ['category_id' , 'barcode' ,'brand_id' , 'status' , 'image' , 'stock' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
     public $translationForeignKey = 'product_id';
     public $translationModel = 'App\Models\Admin\ProductTranslation';
 
@@ -64,6 +64,79 @@ class Product extends Model implements TranslatableContract
     {
         return $this->hasMany(Stock::class);
     }
+
+
+
+    public function getBestDiscount()
+    {
+        // Global discount takes absolute priority
+        $global = Discounts::where('type', 'global')->first();
+        if ($global) {
+            return $this->formatDiscount($global);
+        }
+
+        $discounts = [];
+
+        // Product-specific discount
+        $product = Discounts::where('type', 'product')
+            ->where('target_id', $this->id)
+            ->first();
+        if ($product) {
+            $discounts[] = $this->formatDiscount($product);
+        }
+
+        // Brand-specific discount
+        $brand = Discounts::where('type', 'brand')
+            ->where('target_id', $this->brand_id)
+            ->first();
+        if ($brand) {
+            $discounts[] = $this->formatDiscount($brand);
+        }
+
+        // Nearest category-based discount
+        $categoryDiscount = $this->getNearestCategoryDiscount();
+        if ($categoryDiscount) {
+            $discounts[] = $categoryDiscount;
+        }
+
+        // Return highest-value discount (amount or percentage)
+        return collect($discounts)->sortByDesc('value')->first();
+    }
+
+    protected function formatDiscount($discount)
+    {
+        return [
+            'type' => $discount->percentage === 'YES' ? 'percentage' : 'amount',
+            'value' => $discount->percentage === 'YES'
+                ? $discount->discount_percentage
+                : $discount->discount_amount,
+        ];
+    }
+
+    public function getNearestCategoryDiscount()
+    {
+        $category = $this->category;
+
+        while ($category) {
+            $discount = Discounts::where('type', 'category')
+                ->where('target_id', $category->id)
+                ->first();
+
+            if ($discount) {
+                return $this->formatDiscount($discount);
+            }
+
+            $category = $category->parent;
+        }
+
+        return null;
+    }
+
+
+
+
+
+
 
 
 

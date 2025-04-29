@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-info">
                             <i class="nav-icon fas fa-edit"></i>
                             {{ __('main.update') }}
                         </button>

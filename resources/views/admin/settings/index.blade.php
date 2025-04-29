@@ -817,6 +817,53 @@
 
 
 
+
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <lable class="pointer" onclick="toggleCheckbox('discounts')">Show/Hide - Discounts</lable>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            <input {{($settings->discounts ?'checked':'')}} name="discounts" type="checkbox" class="custom-control-input" id="discounts">
+                                            <label class="custom-control-label" for="discounts"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('discounts')
+                                <div class="text-danger">{{ $errors->first('discounts') }}</div>
+                                @enderror
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <lable class="coupons" onclick="toggleCheckbox('coupons')"> Show/Hide - Coupons </lable>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            <input {{($settings->coupons ?'checked':'')}} name="coupons" type="checkbox" class="custom-control-input" id="coupons">
+                                            <label class="custom-control-label" for="coupons"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @error('coupons')
+                                <div class="text-danger">{{ $errors->first('coupons') }}</div>
+                                @enderror
+
+
+                            </div>
+
+
+
+
+
+
                         <div class="form-group">
 
                             <div class="row">

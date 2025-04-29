@@ -96,6 +96,7 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? null,
                 'thumbinal' => $imageData['thumbinal'] ?? null,
+                'barcode'=>$request->barcode
             ]);
 
             foreach ($this->langs as $lang) {
@@ -171,6 +172,7 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? $product->image,
                 'thumbinal' => $imageData['thumbinal'] ?? $product->thumbinal,
+                'barcode'=>$request->barcode
             ]);
             foreach ($this->langs as $lang) {
                 $product->{'name:'.$lang->code}  = $request->name[$lang->code];

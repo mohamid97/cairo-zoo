@@ -46,6 +46,8 @@ use App\Http\Controllers\Admin\WeightController;
 use App\Http\Controllers\Admin\PartenerController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\OurteamController;
+use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\CouponController;
 
 
 Route::get('/mig' , function (){
@@ -475,6 +477,26 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
 
+    });
+
+
+    // route for admin discount
+    Route::prefix('discounts')->group(function (){
+        Route::get('index' , [DiscountController::class , 'index'])->name('admin.discounts.index');
+        Route::get('/add' , [DiscountController::class , 'add'])->name('admin.discounts.add');
+        Route::post('store' , [DiscountController::class , 'store'])->name('admin.discounts.store');
+        Route::get('targets/{type}' , [DiscountController::class , 'target'] )->name('admin.discounts.target');
+        Route::get('delete/{id}' , [DiscountController::class , 'delete'])->name('admin.discounts.delete');
+    });
+
+    // route for coupons
+    Route::prefix('coupons')->group(function (){
+        Route::get('index' ,  [CouponController::class , 'index'])->name('admin.coupons.index');
+        Route::get('add' , [CouponController::class , 'add'])->name('admin.coupons.add');
+        Route::post('store' , [CouponController::class , 'store'])->name('admin.coupons.store');
+        Route::post('update/{id}' , [CouponController::class , 'update'])->name('admin.coupons.update');
+        Route::get('edit/{id}' , [CouponController::class , 'edit'])->name('admin.coupons.edit');
+        Route::get('delete/{id}' , [CouponController::class , 'delete'])->name('admin.coupons.delete');
     });
 
 
