@@ -26,10 +26,10 @@ class StoreCouponRequest extends FormRequest
         return [
             'code'            => 'required|unique:coupons,code|max:50',
             'type'            => 'required|in:percentage,fixed',
-            'discount_value'  => 'required|numeric|min:0.01',
-            'start_date'      => 'nullable|date',
-            'end_date'        => 'nullable|date|after_or_equal:start_date',
-            'usage_limit'     => 'nullable|integer|min:1',
+            'discount_value'  => 'required|numeric|min:1',
+            'start_date'      => 'required|date',
+            'end_date'        => 'required|date|after_or_equal:start_date',
+            'usage_limit'     => 'required|integer|min:1',
             'is_active' => 'nullable|in:on,1,true,0,false,off',
 
         ];
