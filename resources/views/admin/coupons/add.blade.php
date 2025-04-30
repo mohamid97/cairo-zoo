@@ -29,14 +29,19 @@
                     @csrf
                     <div class="card-body">
 
-                        <div class="form-group">
-                            <label>{{ __('main.coupon_code') }}</label>
-                            <input type="text" name="code" class="form-control" placeholder="{{ __('main.enter_coupon_code') }}" value="{{ old('code') }}">
-                            @error('code')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="border p-3">
+                            <div class="form-group">
+                                <label>{{ __('main.coupon_code') }}</label>
+                                <input type="text" name="code" class="form-control" placeholder="{{ __('main.enter_coupon_code') }}" value="{{ old('code') }}">
+                                @error('code')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
+                        <br>
+
+                        <div class="border p-3">
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>{{ __('main.discount_type') }}</label>
@@ -58,46 +63,52 @@
                             </div>
 
                         </div>
-
-
-
-                        <div class="row">
-
-                            <div class="form-group col-md-6">
-                                <label>{{ __('main.start_date') }}</label>
-                                <input type="date" name="start_date" class="form-control" value="{{ old('start_date') }}">
-                                @error('start_date')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label>{{ __('main.end_date') }}</label>
-                                <input type="date" name="end_date" class="form-control" value="{{ old('end_date') }}">
-                                @error('end_date')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-
                         </div>
+                        <br>
 
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>{{ __('main.usage_limit') }}</label>
-                                <input type="number" step="1"  value="1" name="usage_limit" class="form-control" value="{{ old('usage_limit') }}">
-                                @error('usage_limit')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
+
+                        <div class="border p-3">
+                            <div class="row">
+
+                                <div class="form-group col-md-6">
+                                    <label>{{ __('main.start_date') }}</label>
+                                    <input type="date" name="start_date" class="form-control" value="{{ old('start_date') }}">
+                                    @error('start_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>{{ __('main.end_date') }}</label>
+                                    <input type="date" name="end_date" class="form-control" value="{{ old('end_date') }}">
+                                    @error('end_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
                             </div>
+                        </div>
+<br>
 
-                            <div class="form-group form-check mb-3 col-md-6 d-flex  align-items-center pt-3 pl-4" >
-                                <input type="checkbox" name="is_active" class="form-check-input" id="activeCheck" {{ old('is_active', true) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="activeCheck">{{ __('main.is_active') }}</label>
-                                <br>
-                                @error('is_active')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                        <div class="border p-3">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>{{ __('main.usage_limit') }}</label>
+                                    <input type="number" step="1"  value="1" name="usage_limit" class="form-control" value="{{ old('usage_limit') }}">
+                                    @error('usage_limit')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group form-check mb-3 col-md-6 d-flex  align-items-center pt-3 pl-4" >
+                                    <input type="checkbox" name="is_active" class="form-check-input" id="activeCheck" {{ old('is_active', true) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="activeCheck">{{ __('main.is_active') }}</label>
+                                    <br>
+                                    @error('is_active')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -105,7 +116,7 @@
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-info">
-                            <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.add') }}
+                            <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.save') }}
                         </button>
                     </div>
                 </form>

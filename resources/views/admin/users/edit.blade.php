@@ -28,90 +28,115 @@
                 <form role="form" method="post" action="{{ route('admin.users.update', ['id' => $user->id]) }}" enctype="multipart/form-data">
                 @csrf <!-- Laravel CSRF token helper -->
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="first_name">{{ __('main.first_name') }}</label> <!-- Translated First Name -->
-                            <input type="text" name="first_name" class="form-control" id="first_name" placeholder="{{ __('main.enter_first_name') }}" value="{{ $user->first_name }}">
-                            @error('first_name')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last_name">{{ __('main.last_name') }}</label> <!-- Translated Last Name -->
-                            <input type="text" name="last_name" class="form-control" id="last_name" placeholder="{{ __('main.enter_last_name') }}" value="{{ $user->last_name }}">
-                            @error('last_name')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">{{ __('main.email') }}</label> <!-- Translated Email -->
-                            <input type="text" name="email" class="form-control" id="email" placeholder="{{ __('main.enter_email') }}" value="{{ $user->email }}">
-                            @error('email')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">{{ __('main.phone') }}</label> <!-- Translated Phone -->
-                            <input type="text" name="phone" class="form-control" id="phone" placeholder="{{ __('main.enter_phone') }}" value="{{ $user->phone }}">
-                            @error('phone')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
 
 
-                        <!-- Password Field -->
-                        <div class="form-group">
-                            <label for="password">{{ __('main.password') }}</label> <!-- Translated Password -->
-                            <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('main.enter_password') }}">
-                            @error('password')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Password Confirmation Field -->
-                        <div class="form-group">
-                            <label for="password_confirmation">{{ __('main.confirm_password') }}</label> <!-- Translated Password Confirmation -->
-                            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="{{ __('main.confirm_password') }}">
-                            @error('password_confirmation')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-
-
-
-                        <div class="form-group">
-                            <label for="avatar">{{ __('main.avatar') }}</label> <!-- Translated Avatar -->
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input name="avatar" type="file" class="custom-file-input" id="avatar" onchange="showProgressBar()">
-                                    <label class="custom-file-label" for="avatar">{{ __('main.choose_image') }}</label>
+                        <div class="border p-3">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="first_name">{{ __('main.first_name') }}</label> <!-- Translated First Name -->
+                                    <input type="text" name="first_name" class="form-control" id="first_name" placeholder="{{ __('main.enter_first_name') }}" value="{{ $user->first_name }}">
+                                    @error('first_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">{{ __('main.upload') }}</span>
+
+                                <div class="form-group col-md-6">
+                                    <label for="last_name">{{ __('main.last_name') }}</label> <!-- Translated Last Name -->
+                                    <input type="text" name="last_name" class="form-control" id="last_name" placeholder="{{ __('main.enter_last_name') }}" value="{{ $user->last_name }}">
+                                    @error('last_name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+                        </div>
+                        <br>
+
+
+                        <div class="border p-3">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="email">{{ __('main.email') }}</label> <!-- Translated Email -->
+                                    <input type="text" name="email" class="form-control" id="email" placeholder="{{ __('main.enter_email') }}" value="{{ $user->email }}">
+                                    @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="phone">{{ __('main.phone') }}</label> <!-- Translated Phone -->
+                                    <input type="text" name="phone" class="form-control" id="phone" placeholder="{{ __('main.enter_phone') }}" value="{{ $user->phone }}">
+                                    @error('phone')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
-
-                            <div id="progress-bar-container" style="display: none;">
-                                <div class="progress">
-                                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                </div>
-                            </div>
-
-                            <img src="{{ asset('uploads/images/users/' . $user->avatar) }}" width="150px" height="150px" alt="{{ __('main.user_avatar') }}">
-                            @error('avatar')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
                         </div>
+                        <br>
+
+
+
+                        <div class="border p-3">
+                            <div class="row">
+                                <!-- Password Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="password">{{ __('main.password') }}</label> <!-- Translated Password -->
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('main.enter_password') }}">
+                                    @error('password')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Password Confirmation Field -->
+                                <div class="form-group col-md-6">
+                                    <label for="password_confirmation">{{ __('main.confirm_password') }}</label> <!-- Translated Password Confirmation -->
+                                    <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="{{ __('main.confirm_password') }}">
+                                    @error('password_confirmation')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <br>
+
+                        <div class="border p-3">
+                                <div class="form-group">
+                                    <label for="avatar">{{ __('main.avatar') }}</label> <!-- Translated Avatar -->
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input name="avatar" type="file" class="custom-file-input" id="avatar" onchange="showProgressBar()">
+                                            <label class="custom-file-label" for="avatar">{{ __('main.choose_image') }}</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">{{ __('main.upload') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div id="progress-bar-container" style="display: none;">
+                                        <div class="progress">
+                                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+
+                                    @if($user->avatar)
+                                    <img src="{{ asset('uploads/images/users/' . $user->avatar) }}" width="150px" height="150px" alt="{{ __('main.user_avatar') }}">
+                                    @endif
+                                    @error('avatar')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                        </div>
+
 
 
 
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-info">
                             <i class="nav-icon fas fa-edit"></i>
                             {{ __('main.update') }}
                         </button>

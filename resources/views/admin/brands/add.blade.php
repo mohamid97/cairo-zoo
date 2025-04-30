@@ -32,35 +32,40 @@
 
 
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="name">{{ __('main.name') }} ({{ $lang->name }})</label>
-                                    <input type="text" name="name[{{$lang->code}}]" class="form-control" id="name" placeholder="{{ __('main.enter_name') }}" value="{{ old('name.' . $lang->code) }}">
-                                    @error('name.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('name.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="name">{{ __('main.name') }} ({{ $lang->name }})</label>
+                                        <input type="text" name="name[{{$lang->code}}]" class="form-control" id="name" placeholder="{{ __('main.enter_name') }}" value="{{ old('name.' . $lang->code) }}">
+                                        @error('name.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('name.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
 
 
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="slug">{{ __('main.slug') }} ({{ $lang->name }})</label>
-                                    <input type="text" name="slug[{{$lang->code}}]" class="form-control" id="slug" placeholder="{{ __('main.enter_slug') }}" value="{{ old('slug.' . $lang->code) }}">
-                                    @error('slug.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('slug.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="slug">{{ __('main.slug') }} ({{ $lang->name }})</label>
+                                        <input type="text" name="slug[{{$lang->code}}]" class="form-control" id="slug" placeholder="{{ __('main.enter_slug') }}" value="{{ old('slug.' . $lang->code) }}">
+                                        @error('slug.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('slug.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
 
 
 
                         <div class="border p-3">
+
                             @foreach($langs as $lang)
                                 <div class="form-group">
                                     <label>{{ __('main.des') }} ({{ $lang->name }})</label>

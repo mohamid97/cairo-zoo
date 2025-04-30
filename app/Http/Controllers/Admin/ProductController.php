@@ -59,6 +59,7 @@ class ProductController extends Controller
             'search' => $request->input('search'),
             'selectedCategory' => $request->input('category_id'),
              'brands' => $brands,
+            'selectedBrand' => $request->input('brand_id'),
         ]);
     }
 

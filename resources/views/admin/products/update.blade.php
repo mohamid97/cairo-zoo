@@ -189,7 +189,7 @@
                                     </div>
 
                                     @if($product->image)
-                                        <div class="mt-3">
+                                        <div class="mt-3" id="old-image-container">
                                             <img src="{{ asset('uploads/images/products/' . $product->image) }}" alt="Image" class="img-thumbnail" style="max-width: 200px;">
                                         </div>
                                     @endif
@@ -220,7 +220,7 @@
                                     </div>
 
                                     @if($product->thumbinal)
-                                        <div class="mt-3">
+                                        <div class="mt-3"  id="old-thum-container">
                                             <img src="{{ asset('uploads/images/products/' . $product->thumbinal) }}" alt="Thumbnail" class="img-thumbnail" style="max-width: 200px;">
                                         </div>
                                     @endif
@@ -369,9 +369,10 @@
                 placeholder: "{{ __('main.select_related_products') }}",
                 allowClear: true
             });
-
+        });
             // Image preview for main image
             document.getElementById("image").addEventListener("change", function (event) {
+
                 const input = event.target;
                 const file = input.files[0];
 
@@ -379,6 +380,12 @@
                     const preview = document.getElementById("avatar-preview");
                     preview.src = URL.createObjectURL(file);
                     preview.classList.remove("d-none");
+
+
+                    const oldImageContainer = document.getElementById("old-image-container");
+                    if (oldImageContainer) {
+                        oldImageContainer.classList.add("d-none");
+                    }
 
                     const progressBar = document.getElementById("upload-progress-bar");
                     const progressContainer = document.getElementById("upload-progress");
@@ -407,6 +414,12 @@
                     preview.src = URL.createObjectURL(file);
                     preview.classList.remove("d-none");
 
+                    const oldThumContainer = document.getElementById("old-thum-container");
+                    if (oldThumContainer) {
+                        oldThumContainer.classList.add("d-none");
+                    }
+
+
                     const progressBar = document.getElementById("upload-progress-bar-thumbinal");
                     const progressContainer = document.getElementById("upload-progress-thumbinal");
                     progressContainer.classList.remove("d-none");
@@ -423,6 +436,6 @@
                     }, 100);
                 }
             });
-        });
+
     </script>
 @endsection

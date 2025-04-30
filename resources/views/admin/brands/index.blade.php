@@ -66,9 +66,9 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>{{ __('main.image') }}</th>
                             <th>{{ __('main.name') }}</th>
                             <th>{{ __('main.slug') }}</th>
-                            <th>{{ __('main.image') }}</th>
                             <th>{{ __('main.action') }}</th>
                         </tr>
                         </thead>
@@ -76,22 +76,29 @@
                         @forelse($brands as $index => $brand)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $brand->name }}</td>
-                                <td>{{ $brand->slug }}</td>
                                 <td>
-                                    <img class="img-circle" src="{{ asset('uploads/images/brands/' . $brand->image) }}" width="70px" height="70px" alt="{{ __('main.user_avatar') }}">
-                                </td>
-                                <td class="d-flex align-items-center justify-content-center gap-2">
-                                    <a href="{{ route('admin.brands.edit', ['id' => $brand->id]) }}">
-                                        <button class="btn btn-sm btn-info">
-                                            <i class="nav-icon fas fa-edit"></i>
-                                        </button>
+                                    <a href="{{ asset('uploads/images/brands/' . $brand->image) }}" target="_blank">
+                                        <img class="img-circle" src="{{ asset('uploads/images/brands/' . $brand->image) }}" width="40px" height="40px" alt="{{ __('main.user_avatar') }}">
                                     </a>
 
-                                    <!-- Delete With Confirmation -->
-                                    <button class="btn btn-sm btn-danger" onclick="showDeleteBrandModal({{ $brand->id }})">
-                                        <i class="nav-icon fas fa-trash"></i>
-                                    </button>
+                                </td>
+                                <td>{{ $brand->name }}</td>
+                                <td>{{ $brand->slug }}</td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a href="{{ route('admin.brands.edit', ['id' => $brand->id]) }}">
+                                            <button class="btn btn-sm btn-info">
+                                                <i class="nav-icon fas fa-edit"></i>
+                                            </button>
+                                        </a>
+
+                                        <!-- Delete With Confirmation -->
+                                        <button class="btn btn-sm btn-danger" onclick="showDeleteBrandModal({{ $brand->id }})">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
                                 </td>
                             </tr>
                         @empty

@@ -407,7 +407,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-info"> <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.submit') }}</button> <!-- Translated Button -->
+                        <button type="submit" class="btn btn-info"> <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.save') }}</button> <!-- Translated Button -->
                     </div>
 
                 </form>
