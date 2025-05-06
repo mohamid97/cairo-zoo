@@ -28,7 +28,7 @@ class EditUserRequest extends FormRequest
            'last_name'=>'required|string|max:255',
            'email'=>'required|email',
            'avatar'=>'nullable|image|mimes:jpeg,webp,png,jpg,gif|max:2048',
-           'user_type'       => 'nullable|in:admin,cashier,user,data_entry',
+           'user_type'       => 'nullable|in:admin,data_entry,user,data_entry',
             'password' => [
                 'nullable',
                 'string',

@@ -459,7 +459,7 @@ return [
     "add_new_user"=>'Add New User',
     'user_type' => 'User Type',
     'admin' => 'Admin',
-    'cashier' => 'Cashier',
+    'data_entry' => 'Cashier',
     'data_entry' => 'Data Entry',
     'confirm_password' => 'Confirm Password',
     'enter_password'=>'Enter Password',

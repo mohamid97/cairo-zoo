@@ -140,7 +140,7 @@
                                     <label for="user_type">{{ __('main.user_type') }}</label>
                                     <select name="user_type" id="user_type" class="form-control">
                                         <option value="admin" {{ old('user_type') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                        <option value="cashier" {{ old('user_type') == 'cashier' ? 'selected' : '' }}>Cashier</option>
+                                        <option value="cashier" {{ old('user_type') == 'data_entry' ? 'selected' : '' }}>Cashier</option>
                                         <option value="user" {{ old('user_type') == 'user' ? 'selected' : '' }}>User</option>
                                         <option value="data_entry" {{ old('user_type') == 'data_entry' ? 'selected' : '' }}>Data Entry</option>
                                     </select>

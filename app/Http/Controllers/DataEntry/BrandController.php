@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
-use App\Helpers\LoggerHelper;
+namespace App\Http\Controllers\DataEntry;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Brand;
 use App\Models\Admin\Lang;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\File;
-
+use App\Helpers\LoggerHelper;
 
 class BrandController extends Controller
 {
@@ -30,7 +28,7 @@ class BrandController extends Controller
             });
         }
         $brands = $query->paginate(10);
-        return view('admin.brands.index' ,[
+        return view('data_entry.brands.index' ,[
             'brands'=>$brands,
             'searchTerm' => $request->search ?? ''
         ]);
@@ -38,7 +36,7 @@ class BrandController extends Controller
 
     }
     public function create(){
-        return view('admin.brands.add' , ['langs'=>$this->langs]);
+        return view('data_entry.brands.add' , ['langs'=>$this->langs]);
     }
     public function store(Request $request){
         $request->validate([
@@ -66,12 +64,12 @@ class BrandController extends Controller
         LoggerHelper::logAction('create', $brand, $brand->toArray());
 
         Alert::success('Success', __('main.brand_added_successfully'));
-        return redirect()->route('admin.brands.index');
+        return redirect()->route('data_entry.brands.index');
     }
     public function edit($id){
 
         $brand = Brand::findOrFail($id);
-        return view('admin.brands.update', ['langs'=>$this->langs , 'brand'=>$brand]);
+        return view('data_entry.brands.update', ['langs'=>$this->langs , 'brand'=>$brand]);
 
     }
     public function update(Request $request , $id){
@@ -101,22 +99,19 @@ class BrandController extends Controller
         }
 
         $brand->save();
-
         LoggerHelper::logAction('update', $brand, $brand->toArray());
 
-
         Alert::success('Success', __('main.brand_updated_successfully'));
-        return redirect()->route('admin.brands.index');
+        return redirect()->route('data_entry.brands.index');
 
 
     }
     public function delete($id){
         $brand = Brand::findOrFail($id);
         $brand->delete();
-
         LoggerHelper::logAction('delete', $brand, $brand->toArray());
 
         Alert::success('Success', __('main.brand_deleted_successfully'));
-        return redirect()->route('admin.brands.index');
+        return redirect()->route('data_entry.brands.index');
     }
 }

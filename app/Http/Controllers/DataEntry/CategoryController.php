@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\DataEntry;
 
-use App\Helpers\LoggerHelper;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\Admin\StoreCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Models\Admin\Category;
 use App\Models\Admin\Lang;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Helpers\LoggerHelper;
 
 class CategoryController extends Controller
 {
@@ -35,7 +35,7 @@ class CategoryController extends Controller
 
         // Paginate the results
         $categories = $categoriesQuery->paginate(10); // 10 items per page
-        return view('admin.category.index', [
+        return view('data_entry.category.index', [
             'categories' => $categories,
             'langs' => $this->langs,
             'search' => $search
@@ -46,7 +46,7 @@ class CategoryController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.category.add' , ['langs' => $this->langs , 'categories' => $categories]);
+        return view('data_entry.category.add' , ['langs' => $this->langs , 'categories' => $categories]);
 
     }
 
@@ -82,16 +82,18 @@ class CategoryController extends Controller
                 $categry->{'meta_des:'.$lang->code}  = $request->meta_des[$lang->code];
             }
             $categry->save();
+
             LoggerHelper::logAction('create', $categry, $categry->toArray());
+
 
             DB::commit();
             Alert::success('Success', __('main.category_added_successfully'));
-            return redirect()->route('admin.category.index');
+            return redirect()->route('data_entry.category.index');
         }catch (\Exception $e){
             dd($e->getLine() , $e->getMessage());
             DB::rollBack();
             Alert::error('error', __('main.programer_error'));
-            return redirect()->route('admin.category.index');
+            return redirect()->route('data_entry.category.index');
         }
     }
 
@@ -99,7 +101,7 @@ class CategoryController extends Controller
     {
         $cat = Category::findOrFail($id);
         $categories = Category::all();
-        return view('admin.category.update' , ['cat' => $cat , 'langs' => $this->langs , 'categories'=>$categories]);
+        return view('data_entry.category.update' , ['cat' => $cat , 'langs' => $this->langs , 'categories'=>$categories]);
 
     }
 
@@ -133,11 +135,14 @@ class CategoryController extends Controller
                $cat->{'meta_des:'.$lang->code}  = $request->meta_des[$lang->code];
            }
            $cat->save();
+
            LoggerHelper::logAction('update', $cat, $cat->toArray());
+
+
 
            DB::commit();
            Alert::success('Success', __('main.category_updated_successfully'));
-           return redirect()->route('admin.category.index');
+           return redirect()->route('data_entry.category.index');
        }catch (\Exception $e){
            Alert::error('error', __('main.programer_error'));
            DB::rollBack();
@@ -161,7 +166,7 @@ class CategoryController extends Controller
         $cat = Category::findOrFail($id);
         $cat->forceDelete();
         Alert::success('success', 'Category Deleted Successfully !');
-        return redirect()->route('admin.category.index');
+        return redirect()->route('data_entry.category.index');
     }
 
     public function soft_delete($id)
@@ -169,7 +174,7 @@ class CategoryController extends Controller
         $cat = Category::findOrFail($id);
         $cat->delete();
         Alert::success('success', 'Category Soft Deleted Successfully !');
-        return redirect()->route('admin.category.index');
+        return redirect()->route('data_entry.category.index');
 
     }
 
@@ -177,9 +182,10 @@ class CategoryController extends Controller
     {
         $cat = Category::withTrashed()->findOrFail($id);
         $cat->restore();
-        LoggerHelper::logAction('delete', $cat, $cat->toArray());
+        LoggerHelper::logAction('delete', $categry, $categry->toArray());
+
         Alert::success('success', 'Category Restored Successfully !');
-        return redirect()->route('admin.category.index');
+        return redirect()->route('data_entry.category.index');
 
     }
 }

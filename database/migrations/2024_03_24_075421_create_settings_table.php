@@ -60,6 +60,7 @@ return new class extends Migration
             $table->string('pages')->nullable();
             $table->string('ourteam')->nullable();
             $table->string('discounts')->nullable();
+            $table->string('coupons')->nullable();
 
 
             $table->timestamps();

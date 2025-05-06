@@ -103,7 +103,7 @@ class SettingController extends Controller
             Alert::error('error', 'Tell The Programmer To solve Error');
             return redirect()->route('admin.settings.index');
         }catch (\Exception $e){
-            //dd($e->getMessage() , $e->getLine());
+            dd($e->getMessage() , $e->getLine());
             // If an exception occurs, rollback the transaction
             DB::rollBack();
             Alert::error('error', 'Tell The Programmer To solve Error');
