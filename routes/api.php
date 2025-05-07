@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CashierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -202,9 +203,20 @@ Route::middleware('checkLang')->group(function (){
     });
 
 
+    // cashier login 
+    Route::prefix('cashier')->group(function(){
+        Route::post('login' , [CashierController::class , 'login']);
+    });
     // authincation with sanctum
 
     Route::middleware('auth:sanctum')->group(function (){
+
+        // start router for cahsier
+        Route::prefix('cashier')->middleware(['checkcashier'])->group(function(){
+            Route::post('logout' , [CashierController::class , 'logout']);
+            Route::post('info' , [CashierController::class , 'getCashierInfo']);
+
+        });
 
 
 
@@ -269,6 +281,18 @@ Route::middleware('checkLang')->group(function (){
 
 
     });
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 

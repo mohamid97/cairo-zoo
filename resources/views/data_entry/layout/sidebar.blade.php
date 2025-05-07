@@ -20,8 +20,8 @@
             </button>
             <ul class="dropdown-menu" style="left:30px !important">
 
-                <li class="dropdown-item" {{ ( app()->getLocale() ) == 'en' ? 'selected':'' }}> <a href="{{ route('change_direction' , ['lang'=>'en']) }}" >English</a></li>
-                <li class="dropdown-item" {{ ( app()->getLocale() ) == 'ar' ? 'selected':'' }}><a href="{{ route('change_direction' , ['lang'=>'ar']) }}" >العربيه</a></li>
+                <li class="dropdown-item" {{ ( app()->getLocale() ) == 'en' ? 'selected':'' }}> <a href="{{ route('change_direction_data_entry' , ['lang'=>'en']) }}" >English</a></li>
+                <li class="dropdown-item" {{ ( app()->getLocale() ) == 'ar' ? 'selected':'' }}><a href="{{ route('change_direction_data_entry' , ['lang'=>'ar']) }}" >العربيه</a></li>
             </ul>
         </div>
 

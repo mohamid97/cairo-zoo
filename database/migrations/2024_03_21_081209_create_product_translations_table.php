@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('small_des')->nullable();
             $table->longText('meta_des')->nullable();
             $table->string('slug');
+            $table->string('taste')->nullable();
             $table->unique(['product_id', 'locale']);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();

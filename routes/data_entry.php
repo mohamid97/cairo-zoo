@@ -32,7 +32,7 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
     Route::get('chang_lang/{lang}' , function($lang){
         \Illuminate\Support\Facades\Session::put('locale', $lang);
         return redirect()->back();
-    })->name('change_direction');
+    })->name('change_direction_data_entry');
 
     // home page at controller
     Route::prefix('home')->controller(HomeController::class)->group(function (){

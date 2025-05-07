@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->enum('type' , ['user' , 'admin','data_entry','data_entry'])->default('user');
+            $table->enum('type' , ['user' , 'admin','data_entry','cashier'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('google_id')->nullable();

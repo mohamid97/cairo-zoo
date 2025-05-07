@@ -17,11 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-          $this->call(AboutSeeder::class);
-          $this->call(ContactusSeeder::class);
-          $this->call(LangSeeder::class);
-          $this->call(SettingSeeder::class);
-          $this->call(SocialMediaSeeder::class);
+
+
+
 //        $this->call(AchivementSeeder::class);
        // $this->call(SliderSeeder::class);
 //        $this->call(CategorySeeder::class);
@@ -30,11 +28,27 @@ class DatabaseSeeder extends Seeder
 //        $this->call(ServicesSeeder::class);
 //        $this->call(SescriptionSeeder::class);
 //        $this->call(ProjectsSeeder::class);
-          $this->call(UserSeeder::class);
+
 //        $this->call(MissionVissionSeeder::class);
 //        $this->call(ShimpmentSeeder::class);
 //        $this->call(GovsSeeder::class);
 //        $this->call(CitySeeder::class);
+
+
+        $this->call([
+            UserSeeder::class,
+            SocialMediaSeeder::class,
+            SettingSeeder::class,
+            LangSeeder::class,
+            ContactusSeeder::class,
+            AboutSeeder::class,
+            BrandSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class,
+        ]);
+
+
+
 
     }
 }
