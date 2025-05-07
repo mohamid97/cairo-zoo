@@ -47,6 +47,46 @@ class CashierController extends Controller
     }
 
 
+    public function getProduct(Request $request)
+    {
+        if (!$request->has('barcode')) {
+            return $this->res(false, 'Barcode is required', 400);
+        }
+        $barcode = $request->input('barcode');
+        $product = Product::where('barcode', $barcode)->first();
+
+        if (!$product) {
+            return $this->res(false, 'Product not found', 404);
+        }
+
+        return $this->res(true, 'Product found', 200, ['product' => new ProductResource($product)]);
+    }
+
+
+    public function StoreOrder(Request $request)
+    {
+        $user = $request->user();
+        $order = new Order();
+        $order->cashier_id = $user->id;
+        $order->total_price = $request->input('total_price');
+        $order->save();
+
+        foreach ($request->input('products') as $productData) {
+            $product = Product::find($productData['id']);
+            if ($product) {
+                $orderProduct = new OrderProduct();
+                $orderProduct->order_id = $order->id;
+                $orderProduct->product_id = $product->id;
+                $orderProduct->quantity = $productData['quantity'];
+                $orderProduct->save();
+            }
+        }       
+        
+        return $this->res(true, 'Order submitted successfully', 200, ['order' => new OrderResource($order)]);
+        
+    }
+
+
 
 
 

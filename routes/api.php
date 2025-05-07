@@ -215,6 +215,8 @@ Route::middleware('checkLang')->group(function (){
         Route::prefix('cashier')->middleware(['checkcashier'])->group(function(){
             Route::post('logout' , [CashierController::class , 'logout']);
             Route::post('info' , [CashierController::class , 'getCashierInfo']);
+            Route::post('get_product' , [CashierController::class , 'getProduct']);
+            Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
 
         });
 
