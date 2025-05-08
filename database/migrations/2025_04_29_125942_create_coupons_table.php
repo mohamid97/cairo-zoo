@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('discount_value');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->unsignedInteger('usage_limit')->nullable();
+            $table->unsignedInteger('usage_limit')->default(0);
             $table->unsignedInteger('times_used')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();

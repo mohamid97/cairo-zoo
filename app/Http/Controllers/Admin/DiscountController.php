@@ -22,11 +22,12 @@ class DiscountController extends Controller
     }
 
     public function store(StoreDiscountRequest $request){
+
          Discounts::create([
             'type'=>$request->type,
             'target_id'=>$request->type === 'global' ? null : $request->target_id,
             'percentage'=>$request->percentage,
-            'discount_percentage' => $request->percentage == 'YES' ? $request->discount_value : null,
+            'discount_percentage' => $request->percentage == 'YES' ? $request->discount_value_percentage : null,
             'discount_amount' => $request->percentage == 'NO' ? $request->discount_value : null,
 
         ]);

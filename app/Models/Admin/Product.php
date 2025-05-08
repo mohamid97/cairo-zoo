@@ -90,6 +90,7 @@ class Product extends Model implements TranslatableContract
             ->where('target_id', $this->brand_id)
             ->first();
         if ($brand) {
+            
             $discounts[] = $this->formatDiscount($brand);
         }
 
@@ -105,12 +106,24 @@ class Product extends Model implements TranslatableContract
 
     protected function formatDiscount($discount)
     {
+
+        $salesPrice = $this->sales_price;
+
+        if ($discount->percentage === 'YES') {
+            $value = ($salesPrice * $discount->discount_percentage) / 100;
+        } else {
+            $value = $discount->discount_amount;
+        }
+
+       
+
         return [
             'type' => $discount->percentage === 'YES' ? 'percentage' : 'amount',
-            'value' => $discount->percentage === 'YES'
-                ? $discount->discount_percentage
-                : $discount->discount_amount,
+            'value' => ceil($value),
+            'raw' => $discount, 
         ];
+
+
     }
 
     public function getNearestCategoryDiscount()
@@ -131,6 +144,23 @@ class Product extends Model implements TranslatableContract
 
         return null;
     }
+
+
+    // wtite getPriceAfterDiscount function
+    public function getPriceAfterDiscount()
+    {
+        $discount = $this->getBestDiscount();
+
+        if ($discount) {
+            if (isset($discount['value'])) {
+                return $this->sales_price - $discount['value'];
+            } 
+        }
+
+        return $this->sales_price;
+    }
+
+
 
 
 

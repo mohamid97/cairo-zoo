@@ -539,7 +539,22 @@ return [
     'expired'=>'Expired',
     'delete_Coupon_warning'=>'Are you sure you want to delete this Coupon? All related data will be removed.',
     'coupon_deleted_successfully'=>'Coupon Deleted Successfully !',
-    'coupon_updated_successfully'=>'Coupon Updated Successfully !'
+    'coupon_updated_successfully'=>'Coupon Updated Successfully !',
+    'access_denied'=>'Access denied. You do not have cashier permissions.',
+    'login_succeess'=>'Login successful',  
+    'logout_success'=>'Logout successful',
+    'invalid_credentials'=>'Invalid credentials',
+    'cashier_info'=>'Cashier info',
+    'barcode_requried'=>'Barcode is required',
+    'product_not_found'=>'Product not found',
+    'product_found'=>'Product found',
+    'invalid_coupon_code'=>'Invalid coupon code',
+    'coupon_code_expired'=>'Coupon code expired',
+    'coupon_limit'=>'Coupon code usage limit reached',
+    'not_enough_stock'=>'Not enough stock for product:',
+    'order_submitted_successfully'=>'Order submitted successfully',
+    'coupon_code_is_valid'=>'Coupon code is valid',
+
 
 
 

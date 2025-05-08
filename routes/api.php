@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\CashierController;
+use App\Http\Controllers\Api\Cashier\CashierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -217,6 +217,7 @@ Route::middleware('checkLang')->group(function (){
             Route::post('info' , [CashierController::class , 'getCashierInfo']);
             Route::post('get_product' , [CashierController::class , 'getProduct']);
             Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
+            Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
 
         });
 

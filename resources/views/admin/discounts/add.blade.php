@@ -71,7 +71,7 @@
 
                         <div class="form-group" id="percentageInput">
                             <label>{{ __('main.discount_percentage') }} %</label>
-                            <input type="number" name="discount_value" step=".5" min="1" class="form-control" required value="1">
+                            <input type="number" name="discount_value_percentage" step=".5" min="1" class="form-control" required value="1">
                         </div>
 
                         <div class="form-group" id="amountInput" style="display: none;">
