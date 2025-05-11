@@ -4,7 +4,7 @@ namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class ParentChildCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -26,10 +26,9 @@ class CategoryResource extends JsonResource
             'parent_id' => $this->parent_id,
             'small_des' => $this->small_des,
 //            'meta_title' => $this->meta_title,
-//            'meta_des'   => $this->meta_des,
+//            'meta_des'   => $this->meta_des,          
             'slug'=>$this->slug,
-            // 'products' => $this->when($this->products->isNotEmpty(), ProductResource::collection($this->products)),
-
+            'children' => ParentChildCategoryResource::collection($this->whenLoaded('children')),
         ];
     }
 }

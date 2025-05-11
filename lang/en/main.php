@@ -554,6 +554,8 @@ return [
     'not_enough_stock'=>'Not enough stock for product:',
     'order_submitted_successfully'=>'Order submitted successfully',
     'coupon_code_is_valid'=>'Coupon code is valid',
+    'delete_Slider_warning'=>'Are you sure you want to delete this Slider? All related data will be removed.',
+    'delete_Message_warning'=>'Are you sure you want to delete this Message? All related data will be removed.',
 
 
 

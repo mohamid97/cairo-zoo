@@ -81,7 +81,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     <a target="_blank" href="{{ asset('uploads/images/category/' . $cat->photo) }}">
-                                       <img src="{{ asset('uploads/images/category/' . $cat->photo) }}"width="40px" height="40px">
+                                       <img src="{{ asset('uploads/images/category/' . $cat->photo) }}" width="40px" height="40px">
                                     </a>
                                 </td>
                                 <td>

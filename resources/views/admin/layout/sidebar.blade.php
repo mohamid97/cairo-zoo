@@ -58,59 +58,63 @@
 
                 @if($settings->finish )
 
+                @if($settings->messages)
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-comments nav-icon"></i>
+                        <p>
+                            {{ __('main.messages') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.messages.index') }}" class="nav-link">
+                                <i class="fa fa-comments nav-icon"></i>
+                                <p>{{ __('main.all') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+            
 
 
-{{--                    @if($settings->slider)--}}
-{{--                        <li class="nav-item has-treeview">--}}
-{{--                            <a href="#" class="nav-link">--}}
-{{--                                <i class="nav-icon fas fa-image"></i>--}}
-{{--                                <p>--}}
-{{--                                    {{ __('main.sliders') }}--}}
-{{--                                    <i class="right fas fa-angle-left"></i>--}}
-{{--                                </p>--}}
-{{--                            </a>--}}
-{{--                            <ul class="nav nav-treeview">--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="{{ route('admin.sliders.index') }}" class="nav-link">--}}
-{{--                                        <i class="far fa-circle nav-icon"></i>--}}
-{{--                                        <p>{{ __('main.sliders') }}</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="{{ route('admin.sliders.add') }}" class="nav-link">--}}
-{{--                                        <i class="far fa-circle nav-icon"></i>--}}
-{{--                                        <p>{{ __('main.add') }}</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="{{ route('admin.sliders.setting') }}" class="nav-link">--}}
-{{--                                        <i class="fa fa-cog nav-icon"></i>--}}
-{{--                                        <p>{{ __('main.setting') }}</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                            </ul>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
+                @if($settings->slider)
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-image"></i>
+                            <p>
+                                {{ __('main.sliders') }}
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.sliders.index') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-image"></i>
+                                    <p>{{ __('main.sliders') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.sliders.add') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-plus"></i>
+                                    <p>{{ __('main.add') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.sliders.setting') }}" class="nav-link">
+                                    <i class="fa fa-cog nav-icon"></i>
+                                    <p>{{ __('main.setting') }}</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+            @endif
+            
 
-{{--                    @if($settings->messages)--}}
-{{--                        <li class="nav-item has-treeview">--}}
-{{--                            <a href="#" class="nav-link">--}}
-{{--                                <i class="fa fa-comments nav-icon"></i>--}}
-{{--                                <p>--}}
-{{--                                    {{ __('main.messages') }}--}}
-{{--                                    <i class="right fas fa-angle-left"></i>--}}
-{{--                                </p>--}}
-{{--                            </a>--}}
-{{--                            <ul class="nav nav-treeview">--}}
-{{--                                <li class="nav-item">--}}
-{{--                                    <a href="{{ route('admin.messages.index') }}" class="nav-link">--}}
-{{--                                        <i class="fa fa-language nav-icon"></i>--}}
-{{--                                        <p>{{ __('main.all') }}</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                            </ul>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
+
 
 {{--                    @if($settings->about_us)--}}
 {{--                        <li class="nav-item has-treeview">--}}
@@ -151,6 +155,9 @@
 {{--                            </ul>--}}
 {{--                        </li>--}}
 {{--                    @endif--}}
+
+
+
 
 
 

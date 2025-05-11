@@ -10,6 +10,9 @@
             margin-top: 26px;
             font-size: .875rem !important;
         }
+        .gap-2{
+            gap: 10px;
+        }
     </style>
 @endsection
 
@@ -66,6 +69,7 @@
                             <th>{{ __('main.index') }}</th>
                             <th style="width: 100px">{{ __('main.image') }}</th>
                             <th>{{ __('main.name') }}</th>
+                            <th>{{ __('main.small_des') }}</th>
                             <th>{{ __('main.action') }}</th>
                         </tr>
                         </thead>
@@ -74,25 +78,37 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('uploads/images/sliders/' . $slider->image) }}" width="150px" height="150px" alt="{{ $slider->translate($langs[0]->code)->name }}">
+                                    <a href="{{ asset('uploads/images/sliders/' . $slider->image) }}" target="__blank">
+                                        <img src="{{ asset('uploads/images/sliders/' . $slider->image) }}" width="40px" height="40px" alt="{{ $slider->translate($langs[0]->code)->name }}">
+
+                                    </a>
                                 </td>
-                                <td>{{ $slider->translate($langs[0]->code)->name }}</td>
+                                <td>{{ $slider->name }}</td>
+                                <td>{{ $slider->small_des }}</td>
                                 <td>
-                                    <a href="{{ route('admin.sliders.edit', ['id' => $slider->id]) }}" class="btn btn-sm btn-info">
-                                        <i class="nav-icon fas fa-edit"></i> {{ __('main.edit') }}
-                                    </a>
-                                    @if($slider->deleted_at == null)
-                                        <a href="{{ route('admin.sliders.soft_delete', ['id' => $slider->id]) }}" class="btn btn-sm btn-info">
-                                            <i class="nav-icon fas fa-trash"></i> {{ __('main.soft_delete') }}
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <a href="{{ route('admin.sliders.edit', ['id' => $slider->id]) }}" class="btn btn-sm btn-info">
+                                            <i class="nav-icon fas fa-edit"></i>
                                         </a>
-                                    @else
-                                        <a href="{{ route('admin.sliders.restore', ['id' => $slider->id]) }}" class="btn btn-sm btn-success">
-                                            <i class="nav-icon fas fa-trash-restore"></i> {{ __('main.restore') }}
-                                        </a>
-                                    @endif
-                                    <a href="{{ route('admin.sliders.destroy', ['id' => $slider->id]) }}" class="btn btn-sm btn-danger">
-                                        <i class="nav-icon fas fa-trash"></i> {{ __('main.remove') }}
-                                    </a>
+                                        @if($slider->deleted_at == null)
+                                            <a href="{{ route('admin.sliders.soft_delete', ['id' => $slider->id]) }}" class="btn btn-sm btn-info">
+                                                <i class="nav-icon fas fa-trash"></i> 
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.sliders.restore', ['id' => $slider->id]) }}" class="btn btn-sm btn-success">
+                                                <i class="nav-icon fas fa-trash-restore"></i> 
+                                            </a>
+                                        @endif
+
+
+                                        <button class="btn btn-sm btn-danger" onclick="showDeleteSliderModal({{ $slider->id }})">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                        </button>
+                                        {{-- <a href="{{ route('admin.sliders.destroy', ['id' => $slider->id]) }}" class="btn btn-sm btn-danger">
+                                            <i class="nav-icon fas fa-trash"></i> 
+                                        </a> --}}
+                                    </div>
+
                                 </td>
                             </tr>
                         @empty
@@ -111,4 +127,43 @@
             </div>
         </div>
     </section>
+
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="confirmDeleteSliderModal" tabindex="-1" role="dialog" aria-labelledby="confirmSliderDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="confirmSliderDeleteLabel">{{ __('main.confirm_delete') }}</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>   
+                    </div>
+                    <div class="modal-body">
+                        {{ __('main.delete_Slider_warning') ?? 'Are you sure you want to delete this Slider? All related data will be removed.' }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('main.cancel') }}</button>
+                        <a id="confirmDeleteSliderBtn" href="#" class="btn btn-danger">{{ __('main.confirm') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 @endsection
+
+
+@section('scripts')
+    <script>
+        function showDeleteSliderModal(sliderId) {
+            const url = `{{ url('admin/slider/destroy') }}/${sliderId}`;
+            document.getElementById('confirmDeleteSliderBtn').setAttribute('href', url);
+            $('#confirmDeleteSliderModal').modal('show');
+        }
+    </script>
+@endsection
+
+
+

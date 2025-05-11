@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\CategoryDetailsResource;
 use App\Http\Resources\Admin\CategoryResource;
+use App\Http\Resources\Admin\ParentChildCategoryResource;
 use App\Models\Admin\Category;
 use App\Trait\ResponseTrait;
 use Illuminate\Http\Request;
@@ -72,4 +73,31 @@ class CategoryController extends Controller
         return $this->res(true , 'Categories with products' , 200 , CategoryResource::collection($categories));
 
     }
+
+
+    // get parent categories
+    public function get_parent_categories(){
+        $categories = Category::where('parent_id' , null)->get();
+        return $this->res(true , 'Parent Categories' , 200 , CategoryResource::collection($categories));
+
+    }
+
+    // get child categories
+    public function get_sub_categories(){
+        $categories = Category::where('parent_id' , '!=' , null)->get();
+        return $this->res(true , 'Child Categories' , 200 , CategoryResource::collection($categories));
+
+    }
+
+
+    // get parent categories with child categories with unlimtied depth
+    public function get_parent_categories_with_child(){
+        $categories = Category::where('parent_id' , null)->with('children')->get();
+        return $this->res(true , 'Parent Categories with child categories' , 200 , ParentChildCategoryResource::collection($categories));
+
+    }
+
+
+
+
 }

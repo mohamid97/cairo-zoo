@@ -109,20 +109,19 @@ class SlidersController extends Controller
             if($request->has('image')){
                 $image_name = $request->image->getClientOriginalName();
                 $request->image->move(public_path('uploads/images/sliders'), $image_name);
-                if (file_exists(public_path('uploads/images/sliders/' .$slider->image))) {
-                    unlink(public_path('uploads/images/sliders/' .$slider->image));
-                }
+                // if (file_exists(public_path('uploads/images/sliders/' .$slider->image))) {
+                //     unlink(public_path('uploads/images/sliders/' .$slider->image));
+                // }   
             }
 
 
             if ($request->has('video')) {
                 $video_name = $request->video->getClientOriginalName();
                 $request->video->move(public_path('uploads/videos/sliders'), $video_name);
-
-                // Delete the old video if it exists
-                if (file_exists(public_path('uploads/videos/sliders/' . $slider->video))) {
-                    unlink(public_path('uploads/videos/sliders/' . $slider->video));
-                }
+              
+                // if (file_exists(public_path('uploads/videos/sliders/' . $slider->video))) {
+                //     unlink(public_path('uploads/videos/sliders/' . $slider->video));
+                // }
             }
 
 
@@ -150,6 +149,7 @@ class SlidersController extends Controller
         }catch (\Exception $e){
             // If an exception occurs, rollback the transaction
             DB::rollBack();
+            //dd($e->getMessage() , $e->getLine());
             Alert::error('error', 'Tell The Programmer To solve Error');
             return redirect()->route('admin.sliders.index');
         }

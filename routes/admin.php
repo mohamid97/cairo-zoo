@@ -199,19 +199,19 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 //    });
 
     // start slider
-//    Route::prefix('slider')->group(function (){
-//        Route::get('/' , [SlidersController::class , 'index'])->name('admin.sliders.index');
-//        Route::get('/add' , [SlidersController::class , 'create'])->name('admin.sliders.add');
-//        Route::post('/store' , [SlidersController::class , 'store'])->name('admin.sliders.store');
-//        Route::get('/edit/{id}' , [SlidersController::class , 'edit'])->name('admin.sliders.edit');
-//        Route::post('/update/{id}' , [SlidersController::class , 'update'])->name('admin.sliders.update');
-//        Route::get('/destroy/{id}' , [SlidersController::class , 'destroy'])->name('admin.sliders.destroy');
-//        Route::get('/soft_delete/{id}' , [SlidersController::class , 'soft_delete'])->name('admin.sliders.soft_delete');
-//        Route::get('/restore/{id}' , [SlidersController::class , 'restore'])->name('admin.sliders.restore');
-//        Route::get('/slider/setting' , [SlidersController::class , 'setting'])->name('admin.sliders.setting');
-//        Route::post('/slider/setting/update' , [SlidersController::class , 'update_setting'])->name('admin.sliders.setting_update');
-//
-//    }); // end slider
+   Route::prefix('slider')->group(function (){
+       Route::get('/' , [SlidersController::class , 'index'])->name('admin.sliders.index');
+       Route::get('/add' , [SlidersController::class , 'create'])->name('admin.sliders.add');
+       Route::post('/store' , [SlidersController::class , 'store'])->name('admin.sliders.store');
+       Route::get('/edit/{id}' , [SlidersController::class , 'edit'])->name('admin.sliders.edit');
+       Route::post('/update/{id}' , [SlidersController::class , 'update'])->name('admin.sliders.update');
+       Route::get('/destroy/{id}' , [SlidersController::class , 'destroy'])->name('admin.sliders.destroy');
+       Route::get('/soft_delete/{id}' , [SlidersController::class , 'soft_delete'])->name('admin.sliders.soft_delete');
+       Route::get('/restore/{id}' , [SlidersController::class , 'restore'])->name('admin.sliders.restore');
+       Route::get('/slider/setting' , [SlidersController::class , 'setting'])->name('admin.sliders.setting');
+       Route::post('/slider/setting/update' , [SlidersController::class , 'update_setting'])->name('admin.sliders.setting_update');
+
+   }); // end slider
 
 
 
@@ -221,11 +221,11 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start messages
-//    Route::prefix('messages')->group(function (){
-//        Route::get('/' , [MessageController::class , 'index'])->name('admin.messages.index');
-//        Route::get('/show/{id}' , [MessageController::class , 'show'])->name('admin.messages.show');
-//        Route::get('/destroy/{id}' , [MessageController::class , 'destroy'])->name('admin.messages.destroy');
-//    });
+   Route::prefix('messages')->group(function (){
+       Route::get('/' , [MessageController::class , 'index'])->name('admin.messages.index');
+       Route::get('/show/{id}' , [MessageController::class , 'show'])->name('admin.messages.show');
+       Route::get('/destroy/{id}' , [MessageController::class , 'destroy'])->name('admin.messages.destroy');
+   });
 
 
     // start about us

@@ -27,11 +27,11 @@
                 </div>
             </div>
         </div>
-        <div class="text-right p-4" style="line-height: 2">
+        <div class="p-4" style="line-height: 2">
             <p>{{ $msg->message }}</p>
 
             <button class="btn btn-danger ms-auto">
-                <a href="" style="color: #FFF;"> <i class="nav-icon fas fa-trash"></i> {{ __('main.remove') }}</a> <!-- Translation key for "Remove" -->
+                <a href="" style="color: #FFF;"> <i class="nav-icon fas fa-trash"></i> </a>     
             </button>
         </div>
 
