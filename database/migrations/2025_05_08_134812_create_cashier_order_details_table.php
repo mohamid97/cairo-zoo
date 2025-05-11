@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price_before_discount');
             $table->decimal('price_after_discount');
             $table->decimal('total_price_before_discount');
-            $table->decimal('ptotal_rice_after_discount');
+            $table->decimal('total_price_after_discount');
             $table->decimal('quantity');
             $table->enum ('discount_type', ['amount', 'percentage'])->nullable();
             $table->decimal('discount_percentage')->nullable();

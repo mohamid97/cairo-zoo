@@ -10,20 +10,21 @@ use App\Http\Resources\Cashier\ProductResource;
 use App\Models\Admin\Product;
 use App\Models\Admin\Coupon;
 use App\Models\Admin\CashierOrder;
-use App\Http\Resources\Admin\CashierOrderDetail;
 use App\Http\Resources\Cashier\CouponResource;
+use App\Http\Resources\Cashier\OrderResource;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Cashier\StoreOrderRequest;
 
 
 
 class CashierController extends Controller
 {
     use ResponseTrait;
+    
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
         
         if (auth()->attempt($credentials)) {
 
@@ -37,6 +38,7 @@ class CashierController extends Controller
 
         return $this->res(false, __('main.invalid_credentials'), 401);        
     }
+
     // logout cashier
     public function logout(Request $request)
     {
@@ -74,77 +76,89 @@ class CashierController extends Controller
     }
 
 
-    public function StoreOrder(Request $request)
+    public function StoreOrder(StoreOrderRequest $request)
     {
-
         
-        $user = $request->user();
+        try{
+            $user = $request->user();
+            // if ($request->has('coupon_code')) {
+            //     $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
+            //     ->whereDate('end_date', '>=', Carbon::now())->first();
+            //     if (!$coupon) {
+            //         return $this->res(false, __('main.invalid_coupon_code'), 400);
+            //     }
+            //     if ($coupon->times_used >= $coupon->usage_limit) {
+            //         return $this->res(false, __('main.coupon_limit'), 400);
+                    
+            //     }
+            // }
 
-        $request->validate([
-            'products' => 'required|array',
-            'products.*.product_id' => 'required|exists:products,id',
-            'products.*.quantity' => 'required|integer|min:1',
-            'coupon_code' => 'nullable|string',
-        ]);
-        if ($request->has('coupon_code')) {
-            // check time is valid coupon has start date and end date
-            $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
-            ->whereDate('end_date', '>=', Carbon::now())->first();
-            if (!$coupon) {
-                return $this->res(false, __('main.invalid_coupon_code'), 400);
-            }
-            if ($coupon->times_used >= $coupon->usage_limit) {
-                return $this->res(false, __('main.coupon_limit'), 400);
-                
-            }
-        }
-        $products = $request->input('products');
-        $cahier_order = CashierOrder::create([
-            'user_id' => $user->id,
-            'coupon_code' => $request->input('coupon_code'),
-        ]);
- 
-        $total_before_discount = 0;
-        $total_after_discount = 0;
-        foreach ($products as $product) {
-            $productModel = Product::find($product['product_id']);
-            $discount = $productModel->getBestDiscount();
-            if (!$productModel) {
-                return $this->res(false, __('main.product_not_found'), 404);
-            }
-            $quantity = $product['quantity'];
-            if ($productModel->stock < $quantity) {
-                return $this->res(false, __('main.not_enough_stock') . $productModel->name, 400);
-            }
-            // create order item
-            $orderItem = $cahier_order->items()->create([
-                'product_id' => $productModel->id,
-                'quantity' => $quantity,
-                'price_before_discount' => $productModel->sales_price,
-                'price_after_discount' => $productModel->sales_price - $discount['value'],
-                'total_price_before_discount' => ceil($quantity * $productModel->sales_price),
-                'total_price_after_discount' => ceil( $quantity *  ($productModel->sales_price - $discount['value'] )),
-                'discount_type' => $discount['type'],
-                'discount_percentage'=> $discount['type'] === 'percentage' ? $discount['value'] : null,
-                'discount_amount'=> $discount['type'] === 'amount' ? $discount['value'] : null,
-                
+            DB::beginTransaction();
+            $products = $request->input('products');
+            $cahier_order = CashierOrder::create([
+                'user_id' => $user->id,
+                'coupon_code' => $request->input('coupon_code'),
             ]);
-            // update product stock
-            $productModel->stock -= $quantity;
-            $productModel->save();
-
+     
+            $total_before_discount = 0;
+            $total_after_discount = 0;
+            foreach ($products as $product) {
+                $productModel = Product::find($product['product_id']);
+                
+                if (!$productModel) {
+                    return $this->res(false, __('main.product_not_found'), 404);
+                }
             
-            // calculate total
-            $total_before_discount += $orderItem->total_price_before_discount;
-            $total_after_discount += $orderItem->total_price_after_discount;
-        }
-        $cahier_order->total_amount_before_discount  = $total_before_discount;
-        $cahier_order->total_amount_after_discount  = $total_after_discount;
-        $cahier_order->total_discount = $total_before_discount - $total_after_discount;
-        $cahier_order->save();
+                $discount = $productModel->getBestDiscount();
+                $discount_value = $discount['value'] ?? 0;
+                $discount_type = $discount['type'] ?? null;
+            
+                $quantity = $product['quantity'];
+                if ($productModel->stock < $quantity) {
+                    return $this->res(false, __('main.not_enough_stock') . $productModel->name, 400);
+                }
+            
+                $price_before_discount = $productModel->sales_price;
+                $price_after_discount = $price_before_discount - $discount_value;
+    
+                
+                $total_price_before_discount = ceil($quantity * $price_before_discount);
+                $total_price_after_discount = ceil($quantity * $price_after_discount);
+                // dd($total_price_before_discount  , $total_price_after_discount);
+    
+            
+                $orderItem = $cahier_order->items()->create([
+                    'product_id' => $productModel->id,
+                    'quantity' => $quantity,
+                    'price_before_discount' => $price_before_discount,
+                    'price_after_discount' => $price_after_discount,
+                    'total_price_before_discount' => $total_price_before_discount,
+                    'total_price_after_discount' => $total_price_after_discount,
+                    'discount_type' => $discount_type,
+                    'discount_percentage'=> $discount_type === 'percentage' ? $discount_value : null,
+                    'discount_amount'=> $discount_type === 'amount' ? $discount_value : null,
+                ]);
+            
+                $productModel->stock -= $quantity;
+                $productModel->save();
+            
+                $total_before_discount += $total_price_before_discount;
+                $total_after_discount += $total_price_after_discount;
+            }
+            
+            $cahier_order->total_amount_before_discount  = $total_before_discount;
+            $cahier_order->total_amount_after_discount  = $total_after_discount;
+            $cahier_order->total_discount = $total_before_discount - $total_after_discount;
+            $cahier_order->save();
+    
+            DB::commit();
+            return $this->res(true, __('main.order_submitted_successfully'), 200, ['cahier_order' => new OrderResource($cahier_order)]);
 
-        
-        return $this->res(true, __('main.order_submitted_successfully'), 200, ['order' => new OrderResource($order)]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return $this->res(false, __('main.something_went_wrong'), 500);
+        }
+
 
     }
 
