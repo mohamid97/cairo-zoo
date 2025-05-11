@@ -5,6 +5,7 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Admin\CashierOrderDetail;
+use App\Models\User;
 
 class CashierOrder extends Model
 {

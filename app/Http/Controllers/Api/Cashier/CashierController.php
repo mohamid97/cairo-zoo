@@ -81,17 +81,17 @@ class CashierController extends Controller
         
         try{
             $user = $request->user();
-            // if ($request->has('coupon_code')) {
-            //     $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
-            //     ->whereDate('end_date', '>=', Carbon::now())->first();
-            //     if (!$coupon) {
-            //         return $this->res(false, __('main.invalid_coupon_code'), 400);
-            //     }
-            //     if ($coupon->times_used >= $coupon->usage_limit) {
-            //         return $this->res(false, __('main.coupon_limit'), 400);
+            if ($request->has('coupon_code')) {
+                $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
+                ->whereDate('end_date', '>=', Carbon::now())->first();
+                if (!$coupon) {
+                    return $this->res(false, __('main.invalid_coupon_code'), 400);
+                }
+                if ($coupon->times_used >= $coupon->usage_limit) {
+                    return $this->res(false, __('main.coupon_limit'), 400);
                     
-            //     }
-            // }
+                }
+            }
 
             DB::beginTransaction();
             $products = $request->input('products');
