@@ -126,12 +126,10 @@ class UsersController extends Controller
             $user = auth()->user();
             $token = $user->createToken('API Token')->plainTextToken;
             return  $this->res(true ,'User Details' , 200 ,['user'=> new UserDetailsResource($user) , 'token'=>$token]);
-
         }catch (ValidationException $e) {
             DB::rollBack();
-           // Handle validation exceptions
+            // Handle validation exceptions
             return  $this->res(false , 'Validation failed: '  ,  422 ,   ['errors' => $e->errors()]);
-
        }catch(\Exception $e){
             return  $this->res(false ,'Error Happend' , 500, $e->getMessage());
         }
@@ -141,13 +139,10 @@ class UsersController extends Controller
 
 
 
-
     // get user data
-        // Get authenticated user data
     public function user(Request $request)
     {
         return  $this->res(true ,'User Details' , 200 ,['user'=> new UserDetailsResource($request->user())]);
-
     }
 
     // logout

@@ -14,7 +14,7 @@
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
     <section class="content">
@@ -24,81 +24,97 @@
                 <div class="card-header">
                     <h3 class="card-title">{{ __('main.our_mission_and_vision') }}</h3>
                 </div>
-                <!-- /.card-header -->
-                <!-- form start -->
+
                 <form role="form" method="post" action="{{ route('admin.mission_vission.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
 
+                        {{-- Mission --}}
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="mission">{{ __('main.mission') }} ({{ $lang->name }}) </label>
-                                    <input type="text" name="mission[{{$lang->code}}]" class="form-control" id="mission" placeholder="{{ __('main.enter_mission') }}" value="{{ isset($mission) && isset($mission->translate($lang->code)->mission) ? $mission->translate($lang->code)->mission : '' }}">
-                                    @error('mission.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('mission.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="mission">{{ __('main.mission') }} ({{ $lang->name }})</label>
+                                        <textarea name="mission[{{$lang->code}}]" class="form-control ckeditor" id="mission" placeholder="{{ __('main.enter_mission') }}">{{ isset($mission) && isset($mission->translate($lang->code)->mission) ? $mission->translate($lang->code)->mission : '' }}</textarea>
+                                        @error('mission.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('mission.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <br>
 
+                        {{-- Vision --}}
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="vission">{{ __('main.vision') }} ({{ $lang->name }}) </label>
-                                    <input type="text" name="vission[{{$lang->code}}]" class="form-control" id="vission" placeholder="{{ __('main.enter_vision') }}" value="{{ isset($mission) && isset($mission->translate($lang->code)->vission) ? $mission->translate($lang->code)->vission : '' }}">
-                                    @error('vission.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('vission.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="vission">{{ __('main.vision') }} ({{ $lang->name }})</label>
+                                        <textarea name="vission[{{$lang->code}}]" class="form-control ckeditor" id="vission" placeholder="{{ __('main.enter_vision') }}">{{ isset($mission) && isset($mission->translate($lang->code)->vission) ? $mission->translate($lang->code)->vission : '' }}</textarea>
+                                        @error('vission.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('vission.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <br>
 
+                        {{-- Services --}}
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="services">{{ __('main.services') }} ({{ $lang->name }}) </label>
-                                    <input type="text" name="services[{{$lang->code}}]" class="form-control" id="services" placeholder="{{ __('main.enter_services') }}" value="{{ isset($mission) && isset($mission->translate($lang->code)->services) ? $mission->translate($lang->code)->services : '' }}">
-                                    @error('services.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('services.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="services">{{ __('main.services') }} ({{ $lang->name }})</label>
+                                        <textarea name="services[{{$lang->code}}]" class="form-control ckeditor" id="services" placeholder="{{ __('main.enter_services') }}">{{ isset($mission) && isset($mission->translate($lang->code)->services) ? $mission->translate($lang->code)->services : '' }}</textarea>
+                                        @error('services.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('services.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <br>
 
+                        {{-- Brief --}}
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="breif">{{ __('main.brief') }} ({{ $lang->name }}) </label>
-                                    <input type="text" name="breif[{{$lang->code}}]" class="form-control" id="breif" placeholder="{{ __('main.enter_brief') }}" value="{{ isset($mission) && isset($mission->translate($lang->code)->breif) ? $mission->translate($lang->code)->breif : '' }}">
-                                    @error('breif.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('breif.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="breif">{{ __('main.brief') }} ({{ $lang->name }})</label>
+                                        <textarea name="breif[{{$lang->code}}]" class="form-control ckeditor" id="breif" placeholder="{{ __('main.enter_brief') }}">{{ isset($mission) && isset($mission->translate($lang->code)->breif) ? $mission->translate($lang->code)->breif : '' }}</textarea>
+                                        @error('breif.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('breif.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <br>
 
+                        {{-- About --}}
                         <div class="border p-3">
-                            @foreach($langs as $lang)
-                                <div class="form-group">
-                                    <label for="about">{{ __('main.about') }} ({{ $lang->name }}) </label>
-                                    <input type="text" name="about[{{$lang->code}}]" class="form-control" id="about" placeholder="{{ __('main.enter_about') }}" value="{{ isset($mission) && isset($mission->translate($lang->code)->about) ? $mission->translate($lang->code)->about : '' }}">
-                                    @error('about.' . $lang->code)
-                                    <div class="text-danger">{{ $errors->first('about.' . $lang->code) }}</div>
-                                    @enderror
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach($langs as $lang)
+                                    <div class="form-group col-md-6">
+                                        <label for="about">{{ __('main.about') }} ({{ $lang->name }})</label>
+                                        <textarea name="about[{{$lang->code}}]" class="form-control ckeditor" id="about" placeholder="{{ __('main.enter_about') }}">{{ isset($mission) && isset($mission->translate($lang->code)->about) ? $mission->translate($lang->code)->about : '' }}</textarea>
+                                        @error('about.' . $lang->code)
+                                        <div class="text-danger">{{ $errors->first('about.' . $lang->code) }}</div>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                         <br>
 
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-info"> <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.update') }}</button>
+                        <button type="submit" class="btn btn-info">
+                            <i class="nav-icon fas fa-paper-plane"></i> {{ __('main.update') }}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -106,3 +122,5 @@
         </div>
     </section>
 @endsection
+
+

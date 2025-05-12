@@ -23,6 +23,16 @@ class DiscountController extends Controller
 
     public function store(StoreDiscountRequest $request){
 
+        // check if the discount already exists
+        $existingDiscount = Discounts::where('type', $request->type)
+            ->where('target_id', $request->type == 'global' ? null : $request->target_id)
+            ->first();
+
+        if ($existingDiscount) {
+            Alert::error('error', __('main.discount_already_exists'));
+            return redirect()->back();  
+        }
+
          Discounts::create([
             'type'=>$request->type,
             'target_id'=>$request->type === 'global' ? null : $request->target_id,

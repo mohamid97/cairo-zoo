@@ -556,6 +556,9 @@ return [
     'coupon_code_is_valid'=>'Coupon code is valid',
     'delete_Slider_warning'=>'Are you sure you want to delete this Slider? All related data will be removed.',
     'delete_Message_warning'=>'Are you sure you want to delete this Message? All related data will be removed.',
+    'brief'=>'Brief',
+    'discount_already_exists'=>'Discount already exists for this target.',
+    'product_details_not_found'=>'product details not found. Maybe there is no data with this slug or no data in this language.'
 
 
 

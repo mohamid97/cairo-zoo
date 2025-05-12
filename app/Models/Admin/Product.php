@@ -65,6 +65,11 @@ class Product extends Model implements TranslatableContract
         return $this->hasMany(Stock::class);
     }
 
+    public function discounts()
+    {
+        return $this->hasOne(Discounts::class, 'target_id');
+    }
+
 
 
     public function getBestDiscount()

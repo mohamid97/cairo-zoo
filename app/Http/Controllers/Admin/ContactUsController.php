@@ -45,7 +45,8 @@ class ContactUsController extends Controller
             $contact->phone2 = isset($request->phone2)?$request->phone2:null;
             $contact->phone3 = isset($request->phone3)?$request->phone3:null;
             $contact->email = isset($request->email)?$request->email:null;
-            $contact->location = isset($request->location)?$request->location:null;
+            $contact->location1 = isset($request->location1)?$request->location1:null;
+            $contact->location2 = isset($request->location2)?$request->location2:null;
             foreach ($this->langs as $lang) {
                 $contact->{'address:'.$lang->code}  = $request->address[$lang->code];
                 $contact->{'des:'.$lang->code}  = $request->des[$lang->code];

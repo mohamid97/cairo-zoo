@@ -39,6 +39,8 @@ class CashierController extends Controller
         return $this->res(false, __('main.invalid_credentials'), 401);        
     }
 
+    
+
     // logout cashier
     public function logout(Request $request)
     {

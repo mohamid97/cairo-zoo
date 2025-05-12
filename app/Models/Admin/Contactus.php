@@ -11,7 +11,7 @@ class Contactus extends Model implements TranslatableContract
 {
     use HasFactory , Translatable;
 
-    protected $fillable = ['email' , 'location' ,'phone1' , 'phone2' , 'phone3' , 'photo'];
+    protected $fillable = ['email' , 'location1' , 'location2','phone1' , 'phone2' , 'phone3' , 'photo'];
 
     public $translatedAttributes = ['des', 'address' , 'name' , 'meta_title' , 'meta_des' ,'title_image' , 'alt_image'];
     public $translationForeignKey = 'contact_id';

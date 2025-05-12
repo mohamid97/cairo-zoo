@@ -64,6 +64,32 @@ Route::middleware('checkLang')->group(function (){
     });
 
 
+    Route::prefix('about-us')->group(function (){
+        Route::post('/get' , [\App\Http\Controllers\Api\AboutController::class , 'get']);
+    });
+
+
+    
+    Route::prefix('mission_vission')->group(function(){
+        Route::post('/get' , [MissionVisionController::class , 'get']);
+    });
+
+    Route::prefix('contact-us')->group(function (){
+        Route::post('/get' , [\App\Http\Controllers\Api\ContactusController::class , 'get']);
+    });
+
+    Route::prefix('products')->group(function (){
+        Route::post('/paginate' , [\App\Http\Controllers\Api\ProductController::class , 'paginate']);
+        Route::post('/product_details' , [\App\Http\Controllers\Api\ProductController::class , 'get_product_details']);
+        // Route::post('/' , [\App\Http\Controllers\Api\ProductController::class , 'get']);
+        // Route::post('/filter' , [\App\Http\Controllers\Api\ProductController::class , 'getFilteredProducts']);
+        // Route::post('/filter_product_name_category' , [\App\Http\Controllers\Api\ProductController::class , 'filter_product_name_category']);
+        // Route::post('/cateory_slug' , [\App\Http\Controllers\Api\ProductController::class , 'products_category']);
+
+    });
+
+
+
 
 
     
@@ -81,9 +107,7 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // Route::prefix('about-us')->group(function (){
-    //     Route::post('/get' , [\App\Http\Controllers\Api\AboutController::class , 'get']);
-    // });
+
 
 
 
@@ -112,9 +136,7 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // Route::prefix('contact')->group(function (){
-    //     Route::post('/get' , [\App\Http\Controllers\Api\ContactusController::class , 'get']);
-    // });
+
 
     // Route::prefix('clients')->group(function (){
     //    Route::post('/get'  , [\App\Http\Controllers\Api\OurClientController::class , 'get']);
@@ -156,15 +178,7 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // Route::prefix('products')->group(function (){
-    //     Route::get('/paginate' , [\App\Http\Controllers\Api\ProductController::class , 'paginate']);
-    //     Route::post('/' , [\App\Http\Controllers\Api\ProductController::class , 'get']);
-    //     Route::post('/product_details' , [\App\Http\Controllers\Api\ProductController::class , 'get_product_details']);
-    //     Route::post('/filter' , [\App\Http\Controllers\Api\ProductController::class , 'getFilteredProducts']);
-    //     Route::post('/filter_product_name_category' , [\App\Http\Controllers\Api\ProductController::class , 'filter_product_name_category']);
-    //     Route::post('/cateory_slug' , [\App\Http\Controllers\Api\ProductController::class , 'products_category']);
 
-    // });
 
 
 
@@ -188,9 +202,6 @@ Route::middleware('checkLang')->group(function (){
 
 //     });
 
-    // Route::prefix('mission_vission')->group(function(){
-    //     Route::get('/get' , [MissionVisionController::class , 'get']);
-    // });
 
 
     // Route::prefix('mdeia')->group(function(){
@@ -331,4 +342,3 @@ Route::middleware('checkLang')->group(function (){
 
 
 });
-

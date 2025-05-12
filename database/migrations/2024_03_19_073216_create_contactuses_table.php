@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('phone3')->nullable();
             $table->string('photo')->nullable();
             $table->string('email')->nullable();
-            $table->text('location')->nullable();
+            $table->text('location1')->nullable();
+            $table->text('location2')->nullable();
+
             $table->timestamps();
         });
     }
