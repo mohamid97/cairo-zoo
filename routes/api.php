@@ -240,86 +240,86 @@ Route::middleware('checkLang')->group(function (){
 
 
     // cashier login 
-    // Route::prefix('cashier')->group(function(){
-    //     Route::post('login' , [CashierController::class , 'login']);
-    // });
+    Route::prefix('cashier')->group(function(){
+        Route::post('login' , [CashierController::class , 'login']);
+    });
     // authincation with sanctum
 
-        // Route::middleware('auth:sanctum')->group(function (){
+        Route::middleware('auth:sanctum')->group(function (){
 
-        //     // start router for cahsier
-        //     Route::prefix('cashier')->middleware(['checkcashier'])->group(function(){
-        //         Route::post('logout' , [CashierController::class , 'logout']);
-        //         Route::post('info' , [CashierController::class , 'getCashierInfo']);
-        //         Route::post('get_product' , [CashierController::class , 'getProduct']);
-        //         Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
-        //         Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
+            // start router for cahsier
+            Route::prefix('cashier')->middleware(['checkcashier'])->group(function(){
+                Route::post('logout' , [CashierController::class , 'logout']);
+                Route::post('info' , [CashierController::class , 'getCashierInfo']);
+                Route::post('get_product' , [CashierController::class , 'getProduct']);
+                Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
+                Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
 
-        //     });
-
-
-
-        //     // start orders auth
-        //     Route::prefix('orders_auth')->group(function(){
-        //         Route::post('store' , [OrderController::class , 'store_auth']);
-        //         Route::post('orders' , [OrderController::class , 'get_user_ordes']);
-        //     });
+            });
 
 
 
-        //     // start wishlist
-        //     Route::prefix('wishlists')->group(function(){
-        //         Route::post('/wishlist', [WishlistController::class, 'index']);
-        //         Route::post('/store', [WishlistController::class, 'store']);
-        //         Route::post('/delete', [WishlistController::class, 'delete']);
-        //     });
-        //     // start wishlist
-        //     Route::prefix('compares')->group(function(){
-        //         Route::post('/compare', [ComparisonController::class, 'index']);
-        //         Route::post('/store', [ComparisonController::class, 'store']);
-        //         Route::post('/delete', [ComparisonController::class, 'delete']);
-        //     });
+         
+            // Route::prefix('orders_auth')->group(function(){
+            //     Route::post('store' , [OrderController::class , 'store_auth']);
+            //     Route::post('orders' , [OrderController::class , 'get_user_ordes']);
+            // });
 
 
 
-        //     // start users
-        //     Route::prefix('users')->group(function(){
-
-
-        //         Route::post('user', [\App\Http\Controllers\Api\UsersController::class, 'user']);
-        //         Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
-        //         Route::post('logout', [\App\Http\Controllers\Api\UsersController::class, 'logout']);
-        //         Route::post('change_password', [\App\Http\Controllers\Api\UsersController::class, 'change_password']);
-        //         Route::post('/card', [CardController::class, 'get_user_card']);
-        //         Route::post('cart_update' , [CardController::class, 'update']);
-        //         Route::delete('cart/clear', [CardController::class, 'delete']);
-        //         Route::post('cart/item/delete', [CardController::class, 'delete_card_item']);
-
-
-        //         // address of user
-        //         Route::prefix('address')->group(function(){
-        //             Route::post('/' , [\App\Http\Controllers\Api\UsersController::class , 'all_address']);
-        //             Route::post('store' , [\App\Http\Controllers\Api\UsersController::class , 'store_address']);
-        //             Route::post('update' , [\App\Http\Controllers\Api\UsersController::class , 'update_address']);
-        //             Route::post('delete' ,[\App\Http\Controllers\Api\UsersController::class , 'delete_address'] );
-        //             Route::post('special_address',[\App\Http\Controllers\Api\UsersController::class , 'special_address']);
+       
+            // Route::prefix('wishlists')->group(function(){
+            //     Route::post('/wishlist', [WishlistController::class, 'index']);
+            //     Route::post('/store', [WishlistController::class, 'store']);
+            //     Route::post('/delete', [WishlistController::class, 'delete']);
+            // });
+         
+            // Route::prefix('compares')->group(function(){
+            //     Route::post('/compare', [ComparisonController::class, 'index']);
+            //     Route::post('/store', [ComparisonController::class, 'store']);
+            //     Route::post('/delete', [ComparisonController::class, 'delete']);
+            // });
 
 
 
-        //         });
+            // start users
+            // Route::prefix('users')->group(function(){
 
 
-        //     });
+            //     Route::post('user', [\App\Http\Controllers\Api\UsersController::class, 'user']);
+            //     Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
+            //     Route::post('logout', [\App\Http\Controllers\Api\UsersController::class, 'logout']);
+            //     Route::post('change_password', [\App\Http\Controllers\Api\UsersController::class, 'change_password']);
+            //     Route::post('/card', [CardController::class, 'get_user_card']);
+            //     Route::post('cart_update' , [CardController::class, 'update']);
+            //     Route::delete('cart/clear', [CardController::class, 'delete']);
+            //     Route::post('cart/item/delete', [CardController::class, 'delete_card_item']);
 
-        //     Route::prefix('cards')->group(function(){
-        //         Route::post('add_item',[CardController::class , 'add_item']);
 
-        //     });
+            //     // address of user
+            //     Route::prefix('address')->group(function(){
+            //         Route::post('/' , [\App\Http\Controllers\Api\UsersController::class , 'all_address']);
+            //         Route::post('store' , [\App\Http\Controllers\Api\UsersController::class , 'store_address']);
+            //         Route::post('update' , [\App\Http\Controllers\Api\UsersController::class , 'update_address']);
+            //         Route::post('delete' ,[\App\Http\Controllers\Api\UsersController::class , 'delete_address'] );
+            //         Route::post('special_address',[\App\Http\Controllers\Api\UsersController::class , 'special_address']);
+
+
+
+            //     });
+
+
+            // });
+
+            // Route::prefix('cards')->group(function(){
+            //     Route::post('add_item',[CardController::class , 'add_item']);
+
+            // });
 
 
 
 
-        // });
+        });
 
 
 
