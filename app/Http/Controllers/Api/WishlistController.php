@@ -28,18 +28,13 @@ class WishlistController extends Controller
         ]);
         try {
             DB::beginTransaction();
-            // Get authenticated user
             $user = $request->user();
-            // Find or create the wishlist for the user
             $wishlist = Wishlist::firstOrCreate(['user_id' => $user->id]);
-
-            // Check if the product is already in the wishlist
             $wishlistItem = WishlistItems::where('wishlist_id', $wishlist->id)
                 ->where('product_id', $request->product_id)
                 ->first();
 
             if (!$wishlistItem) {
-                // Add the product to the wishlist if it doesn't exist
                 WishlistItems::create([
                     'wishlist_id' => $wishlist->id,
                     'product_id' => $request->product_id,
@@ -66,7 +61,7 @@ class WishlistController extends Controller
        
 
         if (!$wishlist) {
-            return  $this->res(true , 'No Wishlist For This User' , 404);
+            return  $this->res(true , __('main.no_wishlist') , 404);
         }
 
     
@@ -77,10 +72,10 @@ class WishlistController extends Controller
     
         if ($wishlistItem) {
             $wishlistItem->delete();
-            return  $this->res(true , 'WishList Item Delete Successfully ' , 200 ,  new WishlistResource($wishlist->load(['user' , 'items.product'])));
+            return  $this->res(true , __('main.wishlist_deleted') , 200 ,  new WishlistResource($wishlist->load(['user' , 'items.product'])));
         }
     
-        return  $this->res(true , ' Wishlist Item Not Founded' , 404);
+        return  $this->res(true , __('main.wishlist_not_found') , 404);
     }
     
 }

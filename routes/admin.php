@@ -486,6 +486,22 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     });
 
 
+
+    // route for blog cms
+    Route::prefix('cms')->group(function (){
+        Route::get('/' , [CMSController::class , 'index'])->name('admin.cms.index');
+        Route::get('/edit/{id}' , [CMSController::class , 'edit'])->name('admin.cms.edit');
+        Route::post('/update/{id}' , [CMSController::class , 'update'])->name('admin.cms.update');
+        Route::get('/create' , [CMSController::class , 'create'])->name('admin.cms.add');
+        Route::post('/store' , [CMSController::class , 'store'])->name('admin.cms.store');
+        Route::get('/soft_delete/{id}' , [CMSController::class , 'soft_delete'])->name('admin.cms.soft_delete');
+        Route::get('/restore/{id}' , [CMSController::class , 'restore'])->name('admin.cms.restore');
+        Route::get('/destroy/{id}' , [CMSController::class , 'destroy'])->name('admin.cms.destroy');
+        });
+
+         
+
+
     // route for admin discount
     Route::prefix('discounts')->group(function (){
         Route::get('index' , [DiscountController::class , 'index'])->name('admin.discounts.index');
@@ -515,36 +531,26 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start services
-    Route::prefix('services')->group(function (){
-        Route::get('/' , [ServiceController::class , 'index'])->name('admin.services.index');
-        Route::get('/edit/{id}' , [ServiceController::class , 'edit'])->name('admin.services.edit');
-        Route::get('/create' , [ServiceController::class , 'create'])->name('admin.services.add');
-        Route::post('/store' , [ServiceController::class , 'store'])->name('admin.services.store');
-        Route::post('/update/{id}' , [ServiceController::class , 'update'])->name('admin.services.update');
-        Route::get('/soft_delete/{id}' , [ServiceController::class , 'soft_delete'])->name('admin.services.soft_delete');
-        Route::get('/restore/{id}' , [ServiceController::class , 'restore'])->name('admin.services.restore');
-        Route::get('/destroy/{id}' , [ServiceController::class , 'destroy'])->name('admin.services.destroy');
+    // Route::prefix('services')->group(function (){
+    //     Route::get('/' , [ServiceController::class , 'index'])->name('admin.services.index');
+    //     Route::get('/edit/{id}' , [ServiceController::class , 'edit'])->name('admin.services.edit');
+    //     Route::get('/create' , [ServiceController::class , 'create'])->name('admin.services.add');
+    //     Route::post('/store' , [ServiceController::class , 'store'])->name('admin.services.store');
+    //     Route::post('/update/{id}' , [ServiceController::class , 'update'])->name('admin.services.update');
+    //     Route::get('/soft_delete/{id}' , [ServiceController::class , 'soft_delete'])->name('admin.services.soft_delete');
+    //     Route::get('/restore/{id}' , [ServiceController::class , 'restore'])->name('admin.services.restore');
+    //     Route::get('/destroy/{id}' , [ServiceController::class , 'destroy'])->name('admin.services.destroy');
 
 
-        Route::get('/gallery/{id}' , [ServiceController::class , 'gallery'])->name('admin.services.gallery');
-        Route::get('/delete/{id}' , [ServiceController::class , 'delete_gallery'])->name('admin.services.delete_gallery');
-        Route::post('/store/{id}/gallery' , [ServiceController::class , 'store_gallery'])->name('admin.services.save_gallery');
+    //     Route::get('/gallery/{id}' , [ServiceController::class , 'gallery'])->name('admin.services.gallery');
+    //     Route::get('/delete/{id}' , [ServiceController::class , 'delete_gallery'])->name('admin.services.delete_gallery');
+    //     Route::post('/store/{id}/gallery' , [ServiceController::class , 'store_gallery'])->name('admin.services.save_gallery');
 
 
-    });
+    // });
 
 
-    // route for blog cms
-    Route::prefix('cms')->group(function (){
-       Route::get('/' , [CMSController::class , 'index'])->name('admin.cms.index');
-       Route::get('/edit/{id}' , [CMSController::class , 'edit'])->name('admin.cms.edit');
-       Route::post('/update/{id}' , [CMSController::class , 'update'])->name('admin.cms.update');
-       Route::get('/create' , [CMSController::class , 'create'])->name('admin.cms.add');
-       Route::post('/store' , [CMSController::class , 'store'])->name('admin.cms.store');
-       Route::get('/soft_delete/{id}' , [CMSController::class , 'soft_delete'])->name('admin.cms.soft_delete');
-       Route::get('/restore/{id}' , [CMSController::class , 'restore'])->name('admin.cms.restore');
-       Route::get('/destroy/{id}' , [CMSController::class , 'destroy'])->name('admin.cms.destroy');
-    });
+
 
 
 
@@ -552,109 +558,109 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     // start gallery and videos and files
-    Route::prefix('media')->group(function (){
+    // Route::prefix('media')->group(function (){
 
-        // create global media group
-        Route::get('/group_media' , [MediaGroupcontroller::class , 'index'])->name('admin.group_media.index');
-        Route::get('/group_media/create' , [MediaGroupcontroller::class , 'create'])->name('admin.media_group.add');
-        Route::post('/group_media/store' , [MediaGroupcontroller::class , 'store'])->name('admin.group_media.store');
-        Route::get('/group_media/edit/{id}' , [MediaGroupcontroller::class , 'edit'])->name('admin.group_media.edit');
-        Route::post('/group_media/update/{id}' , [MediaGroupcontroller::class , 'update'])->name('admin.group_media.update');
-        Route::get('/group_media/soft_delete/{id}' , [MediaGroupcontroller::class , 'soft_delete'])->name('admin.group_media.soft_delete');
-        Route::get('/group_media/restore/{id}' , [MediaGroupcontroller::class , 'restore'])->name('admin.group_media.restore');
-        Route::get('/group_media/destroy/{id}' , [MediaGroupcontroller::class , 'destroy'])->name('admin.group_media.destroy');
-
-
-        // show all file belongs to media group
-
-        Route::get('/group_media/files/{id}' , [MediaGroupcontroller::class , 'show_files'])->name('admin.group_media.files');
-
-        //images
-        Route::get('/gallery' , [GalleryController::class , 'gallery'])->name('admin.media.gallery');
-        Route::get('/gallery/create' , [GalleryController::class , 'create'])->name('admin.gallery.add');
-        Route::get('/gallery/edit/{id}' , [GalleryController::class , 'edit'])->name('admin.gallery.edit');
-        Route::post('/gallery/store' , [GalleryController::class , 'store'])->name('admin.gallery.store');
-        Route::post('/gallery/update/{id}' , [GalleryController::class , 'update'])->name('admin.gallery.update');
-        Route::get('/gallery/soft_delete/{id}' , [GalleryController::class , 'soft_delete'])->name('admin.gallery.soft_delete');
-        Route::get('/gallery/restore/{id}' , [GalleryController::class , 'restore'])->name('admin.gallery.restore');
-        Route::get('/gallery/destroy/{id}' , [GalleryController::class , 'destroy'])->name('admin.gallery.destroy');
+    //     // create global media group
+    //     Route::get('/group_media' , [MediaGroupcontroller::class , 'index'])->name('admin.group_media.index');
+    //     Route::get('/group_media/create' , [MediaGroupcontroller::class , 'create'])->name('admin.media_group.add');
+    //     Route::post('/group_media/store' , [MediaGroupcontroller::class , 'store'])->name('admin.group_media.store');
+    //     Route::get('/group_media/edit/{id}' , [MediaGroupcontroller::class , 'edit'])->name('admin.group_media.edit');
+    //     Route::post('/group_media/update/{id}' , [MediaGroupcontroller::class , 'update'])->name('admin.group_media.update');
+    //     Route::get('/group_media/soft_delete/{id}' , [MediaGroupcontroller::class , 'soft_delete'])->name('admin.group_media.soft_delete');
+    //     Route::get('/group_media/restore/{id}' , [MediaGroupcontroller::class , 'restore'])->name('admin.group_media.restore');
+    //     Route::get('/group_media/destroy/{id}' , [MediaGroupcontroller::class , 'destroy'])->name('admin.group_media.destroy');
 
 
+    //     // show all file belongs to media group
 
-        // videos media
-        Route::get('/videos' , [VideoController::class , 'videos'])->name('admin.media.videos');
-        Route::get('/videos/create' , [VideoController::class , 'create'])->name('admin.videos.add');
-        Route::get('/videos/edit/{id}' , [VideoController::class , 'edit'])->name('admin.videos.edit');
-        Route::post('/videos/update/{id}' , [VideoController::class , 'update'])->name('admin.videos.update');
-        Route::post('/videos/store' , [VideoController::class , 'store'])->name('admin.videos.store');
-        Route::get('/videos/soft_delete/{id}' , [VideoController::class , 'soft_delete'])->name('admin.videos.soft_delete');
-        Route::get('/videos/restore/{id}' , [VideoController::class , 'restore'])->name('admin.videos.restore');
-        Route::get('/videos/destroy/{id}' , [VideoController::class , 'destroy'])->name('admin.videos.destroy');
+    //     Route::get('/group_media/files/{id}' , [MediaGroupcontroller::class , 'show_files'])->name('admin.group_media.files');
+
+    //     //images
+    //     Route::get('/gallery' , [GalleryController::class , 'gallery'])->name('admin.media.gallery');
+    //     Route::get('/gallery/create' , [GalleryController::class , 'create'])->name('admin.gallery.add');
+    //     Route::get('/gallery/edit/{id}' , [GalleryController::class , 'edit'])->name('admin.gallery.edit');
+    //     Route::post('/gallery/store' , [GalleryController::class , 'store'])->name('admin.gallery.store');
+    //     Route::post('/gallery/update/{id}' , [GalleryController::class , 'update'])->name('admin.gallery.update');
+    //     Route::get('/gallery/soft_delete/{id}' , [GalleryController::class , 'soft_delete'])->name('admin.gallery.soft_delete');
+    //     Route::get('/gallery/restore/{id}' , [GalleryController::class , 'restore'])->name('admin.gallery.restore');
+    //     Route::get('/gallery/destroy/{id}' , [GalleryController::class , 'destroy'])->name('admin.gallery.destroy');
 
 
 
-        // files media
-        Route::get('/files' , [FileController::class , 'files'])->name('admin.media.files');
-        Route::get('/files/create' , [FileController::class , 'create'])->name('admin.files.add');
-        Route::get('/files/edit/{id}' , [FileController::class , 'edit'])->name('admin.files.edit');
-        Route::post('/files/update/{id}' , [FileController::class , 'update'])->name('admin.files.update');
-        Route::post('/files/store' , [FileController::class , 'store'])->name('admin.files.store');
-        Route::get('/files/soft_delete/{id}' , [FileController::class , 'soft_delete'])->name('admin.files.soft_delete');
-        Route::get('/files/restore/{id}' , [FileController::class , 'restore'])->name('admin.files.restore');
-        Route::get('/files/destroy/{id}' , [FileController::class , 'destroy'])->name('admin.files.destroy');
+    //     // videos media
+    //     Route::get('/videos' , [VideoController::class , 'videos'])->name('admin.media.videos');
+    //     Route::get('/videos/create' , [VideoController::class , 'create'])->name('admin.videos.add');
+    //     Route::get('/videos/edit/{id}' , [VideoController::class , 'edit'])->name('admin.videos.edit');
+    //     Route::post('/videos/update/{id}' , [VideoController::class , 'update'])->name('admin.videos.update');
+    //     Route::post('/videos/store' , [VideoController::class , 'store'])->name('admin.videos.store');
+    //     Route::get('/videos/soft_delete/{id}' , [VideoController::class , 'soft_delete'])->name('admin.videos.soft_delete');
+    //     Route::get('/videos/restore/{id}' , [VideoController::class , 'restore'])->name('admin.videos.restore');
+    //     Route::get('/videos/destroy/{id}' , [VideoController::class , 'destroy'])->name('admin.videos.destroy');
 
 
-    }); // end media files and gallery and gallery
+
+    //     // files media
+    //     Route::get('/files' , [FileController::class , 'files'])->name('admin.media.files');
+    //     Route::get('/files/create' , [FileController::class , 'create'])->name('admin.files.add');
+    //     Route::get('/files/edit/{id}' , [FileController::class , 'edit'])->name('admin.files.edit');
+    //     Route::post('/files/update/{id}' , [FileController::class , 'update'])->name('admin.files.update');
+    //     Route::post('/files/store' , [FileController::class , 'store'])->name('admin.files.store');
+    //     Route::get('/files/soft_delete/{id}' , [FileController::class , 'soft_delete'])->name('admin.files.soft_delete');
+    //     Route::get('/files/restore/{id}' , [FileController::class , 'restore'])->name('admin.files.restore');
+    //     Route::get('/files/destroy/{id}' , [FileController::class , 'destroy'])->name('admin.files.destroy');
+
+
+    // }); // end media files and gallery and gallery
 
 
     // route for description ( is some description or text with title )
-    Route::prefix('des')->group(function (){
-       Route::get('/' , [DesController::class , 'index'])->name('admin.des.index');
-       Route::get('/edit/{id}' , [DesController::class , 'edit'])->name('admin.des.edit');
-       Route::get('/create' , [DesController::class , 'create'])->name('admin.des.add');
-       Route::post('/store' , [DesController::class , 'store'])->name('admin.des.store');
-       Route::post('/update/{id}' , [DesController::class , 'update'])->name('admin.des.update');
-        Route::get('/soft_delete/{id}' , [DesController::class , 'soft_delete'])->name('admin.des.soft_delete');
-        Route::get('/restore/{id}' , [DesController::class , 'restore'])->name('admin.des.restore');
-        Route::get('/destroy/{id}' , [DesController::class , 'destroy'])->name('admin.des.destroy');
+    // Route::prefix('des')->group(function (){
+    //    Route::get('/' , [DesController::class , 'index'])->name('admin.des.index');
+    //    Route::get('/edit/{id}' , [DesController::class , 'edit'])->name('admin.des.edit');
+    //    Route::get('/create' , [DesController::class , 'create'])->name('admin.des.add');
+    //    Route::post('/store' , [DesController::class , 'store'])->name('admin.des.store');
+    //    Route::post('/update/{id}' , [DesController::class , 'update'])->name('admin.des.update');
+    //     Route::get('/soft_delete/{id}' , [DesController::class , 'soft_delete'])->name('admin.des.soft_delete');
+    //     Route::get('/restore/{id}' , [DesController::class , 'restore'])->name('admin.des.restore');
+    //     Route::get('/destroy/{id}' , [DesController::class , 'destroy'])->name('admin.des.destroy');
 
-    });
+    // });
 
 
 
 
     // start achievement
-    Route::prefix('achievements')->group(function (){
-        Route::get('/'  , [AchievementConroller::class , 'index'])->name('admin.ach.index');
-        Route::get('/create' , [AchievementConroller::class , 'create'])->name('admin.ach.add');
-        Route::get('/edit/{id}' , [AchievementConroller::class , 'edit'])->name('admin.ach.edit');
-        Route::get('/delete/{id}' , [AchievementConroller::class , 'delete'])->name('admin.ach.delete');
-        Route::post('/store' , [AchievementConroller::class , 'store'])->name('admin.ach.store');
-        Route::post('/update'  , [AchievementConroller::class , 'update'])->name('admin.ach.update');
-    });
+    // Route::prefix('achievements')->group(function (){
+    //     Route::get('/'  , [AchievementConroller::class , 'index'])->name('admin.ach.index');
+    //     Route::get('/create' , [AchievementConroller::class , 'create'])->name('admin.ach.add');
+    //     Route::get('/edit/{id}' , [AchievementConroller::class , 'edit'])->name('admin.ach.edit');
+    //     Route::get('/delete/{id}' , [AchievementConroller::class , 'delete'])->name('admin.ach.delete');
+    //     Route::post('/store' , [AchievementConroller::class , 'store'])->name('admin.ach.store');
+    //     Route::post('/update'  , [AchievementConroller::class , 'update'])->name('admin.ach.update');
+    // });
 
-    Route::prefix('parteners')->group(function (){
-        Route::get('/' , [PartenerController::class , 'index'])->name('admin.parteners.index');
-        Route::get('/create' , [PartenerController::class , 'create'])->name('admin.parteners.add');
-        Route::post('/store' , [PartenerController::class , 'store'])->name('admin.parteners.store');
-        Route::get('/edit/{id}' , [PartenerController::class , 'edit'])->name('admin.parteners.edit');
-        Route::get('/soft_delete/{id}' , [PartenerController::class , 'soft_delete'])->name('admin.parteners.soft_delete');
-        Route::get('/restore/{id}' , [PartenerController::class , 'restore'])->name('admin.parteners.restore');
-        Route::get('/destroy/{id}' , [PartenerController::class , 'destroy'])->name('admin.parteners.destroy');
-        Route::post('/update/{id}' , [PartenerController::class , 'update'])->name('admin.parteners.update');
-    });
+    // Route::prefix('parteners')->group(function (){
+    //     Route::get('/' , [PartenerController::class , 'index'])->name('admin.parteners.index');
+    //     Route::get('/create' , [PartenerController::class , 'create'])->name('admin.parteners.add');
+    //     Route::post('/store' , [PartenerController::class , 'store'])->name('admin.parteners.store');
+    //     Route::get('/edit/{id}' , [PartenerController::class , 'edit'])->name('admin.parteners.edit');
+    //     Route::get('/soft_delete/{id}' , [PartenerController::class , 'soft_delete'])->name('admin.parteners.soft_delete');
+    //     Route::get('/restore/{id}' , [PartenerController::class , 'restore'])->name('admin.parteners.restore');
+    //     Route::get('/destroy/{id}' , [PartenerController::class , 'destroy'])->name('admin.parteners.destroy');
+    //     Route::post('/update/{id}' , [PartenerController::class , 'update'])->name('admin.parteners.update');
+    // });
 
 
-    Route::prefix('pages')->group(function (){
-        Route::get('/' , [PageController::class , 'index'])->name('admin.pages.index');
-        Route::get('/create' , [PageController::class , 'create'])->name('admin.pages.add');
-        Route::get('/edit/{id}' , [PageController::class , 'edit'])->name('admin.pages.edit');
-        Route::post('/store' , [PageController::class , 'store'])->name('admin.pages.store');
-        Route::post('/update/{id}' , [PageController::class , 'update'])->name('admin.pages.update');
-        Route::get('/soft_delete/{id}' , [PageController::class , 'soft_delete'])->name('admin.pages.soft_delete');
-        Route::get('/restore/{id}' , [PageController::class , 'restore'])->name('admin.pages.restore');
-        Route::get('/destroy/{id}' , [PageController::class , 'destroy'])->name('admin.pages.destroy');
-    });
+    // Route::prefix('pages')->group(function (){
+    //     Route::get('/' , [PageController::class , 'index'])->name('admin.pages.index');
+    //     Route::get('/create' , [PageController::class , 'create'])->name('admin.pages.add');
+    //     Route::get('/edit/{id}' , [PageController::class , 'edit'])->name('admin.pages.edit');
+    //     Route::post('/store' , [PageController::class , 'store'])->name('admin.pages.store');
+    //     Route::post('/update/{id}' , [PageController::class , 'update'])->name('admin.pages.update');
+    //     Route::get('/soft_delete/{id}' , [PageController::class , 'soft_delete'])->name('admin.pages.soft_delete');
+    //     Route::get('/restore/{id}' , [PageController::class , 'restore'])->name('admin.pages.restore');
+    //     Route::get('/destroy/{id}' , [PageController::class , 'destroy'])->name('admin.pages.destroy');
+    // });
 
 
 
@@ -664,6 +670,3 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
 }); // end admin prefix
-
-
-

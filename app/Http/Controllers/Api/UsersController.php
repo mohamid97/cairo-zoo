@@ -28,6 +28,40 @@ use Illuminate\Support\Facades\Mail;
 class UsersController extends Controller
 {
     use ResponseTrait;
+
+
+
+
+        // login
+        public function login(LoginRequest $request)
+        {
+            try{
+                $credentials = $request->only('email', 'password');
+    
+                if (!auth()->attempt($credentials)) {
+                    return  $this->res(false , __('main.invalid_credentials'), 422);
+                }
+                $user = auth()->user();
+                if ($user->type != 'user') {
+                    return  $this->res(false , __('main.invalid_credentials'), 422);
+                }
+                $token = $user->createToken('API Token')->plainTextToken;
+                return  $this->res(true ,__('main.user_details') , 200 ,['user'=> new UserDetailsResource($user) , 'token'=>$token]);
+            }catch (ValidationException $e) {
+                DB::rollBack();
+                // Handle validation exceptions
+                return  $this->res(false , __('main.validation_failed') ,  422 ,   ['errors' => $e->errors()]);
+           }catch(\Exception $e){
+                return  $this->res(false , __('main.error_happened') , 500, $e->getMessage());
+            }
+    
+    
+        }
+
+
+
+
+
     public function get()
     {
         $users = User::all();
@@ -114,28 +148,7 @@ class UsersController extends Controller
 
 
 
-    // login
-    public function login(LoginRequest $request)
-    {
-        try{
-            $credentials = $request->only('email', 'password');
 
-            if (!auth()->attempt($credentials)) {
-                return  $this->res(false ,'Invalid credentials' , 422);
-            }
-            $user = auth()->user();
-            $token = $user->createToken('API Token')->plainTextToken;
-            return  $this->res(true ,'User Details' , 200 ,['user'=> new UserDetailsResource($user) , 'token'=>$token]);
-        }catch (ValidationException $e) {
-            DB::rollBack();
-            // Handle validation exceptions
-            return  $this->res(false , 'Validation failed: '  ,  422 ,   ['errors' => $e->errors()]);
-       }catch(\Exception $e){
-            return  $this->res(false ,'Error Happend' , 500, $e->getMessage());
-        }
-
-
-    }
 
 
 

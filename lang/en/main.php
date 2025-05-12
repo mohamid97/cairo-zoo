@@ -558,7 +558,15 @@ return [
     'delete_Message_warning'=>'Are you sure you want to delete this Message? All related data will be removed.',
     'brief'=>'Brief',
     'discount_already_exists'=>'Discount already exists for this target.',
-    'product_details_not_found'=>'product details not found. Maybe there is no data with this slug or no data in this language.'
+    'product_details_not_found'=>'product details not found. Maybe there is no data with this slug or no data in this language.',
+    'delete_cms_warning'=>'Are you sure you want to delete this CMS? All related data will be removed.',
+    'validation_failed'=>'Validation failed:',
+    'error_happened'=>'An error happened, Please try again later.',
+    'user_details'=>'User Details',
+    'wishlist_deleted'=>'WishList Item Delete Successfully',
+    'wishlist_not_found'=>'WishList Item Not Founded',
+    'no_wishlist'=>'No Wishlist For This User',
+    'wishlist'=>'Wishlist',
 
 
 

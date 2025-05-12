@@ -65,6 +65,25 @@
 
                 @if($settings->finish )
 
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-user-circle nav-icon"></i>
+                        <p>
+                            {{ __('main.users') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link">
+                                <i class="fa fa-user nav-icon"></i>
+                                <p>{{ __('main.my_users') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
                 @if($settings->messages)
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -133,7 +152,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.contact.index') }}" class="nav-link">
-                            <i class="fa fa-phone-volume"></i>
+                                <i class="fa fa-phone-volume"></i>
                                 <p>{{ __('main.contact_us') }}</p>
                             </a>
                         </li>
@@ -344,23 +363,38 @@
                 {{--                        </li>--}}
                 {{--                    @endif--}}
 
+
+
+
+
+                @if($settings->categories)
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-user-circle nav-icon"></i>
+                        <i class="fa fa-bars nav-icon"></i>
                         <p>
-                            {{ __('main.users') }}
+                            {{ __('main.category') }}
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.users.index') }}" class="nav-link">
-                                <i class="fa fa-user nav-icon"></i>
-                                <p>{{ __('main.my_users') }}</p>
+                            <a href="{{ route('admin.category.index') }}" class="nav-link">
+                                <i class="fa fa-bars nav-icon"></i>
+                                <p>{{ __('main.category') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.category.add') }}" class="nav-link">
+                                <i class="fa fa-plus nav-icon"></i>
+                                <p>{{ __('main.add') }}</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+                @endif
+
+
+
 
 
 
@@ -397,6 +431,32 @@
                             <a href="{{ route('admin.featured.index') }}" class="nav-link">
                                 <i class="fa fa-plus nav-icon"></i>
                                 <p>{{ __('main.featured') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+
+                @if($settings->cms)
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-newspaper nav-icon"></i>
+                        <p>
+                            {{ __('main.cms') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.cms.index') }}" class="nav-link">
+                                <i class="fa fa-newspaper nav-icon"></i>
+                                <p>{{ __('main.cms') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.cms.add') }}" class="nav-link">
+                                <i class="fa fa-plus nav-icon"></i>
+                                <p>{{ __('main.add') }}</p>
                             </a>
                         </li>
                     </ul>
@@ -604,24 +664,28 @@
                 {{--                        </ul>--}}
                 {{--                    </li>--}}
 
-                @if($settings->categories)
+
+
+
+
+                @if($settings->cms)
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-bars nav-icon"></i>
+                        <i class="fa fa-newspaper nav-icon"></i>
                         <p>
-                            {{ __('main.category') }}
+                            {{ __('main.cms') }}
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.category.index') }}" class="nav-link">
-                                <i class="fa fa-bars nav-icon"></i>
-                                <p>{{ __('main.category') }}</p>
+                            <a href="{{ route('admin.cms.index') }}" class="nav-link">
+                                <i class="fa fa-newspaper nav-icon"></i>
+                                <p>{{ __('main.cms') }}</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.category.add') }}" class="nav-link">
+                            <a href="{{ route('admin.cms.add') }}" class="nav-link">
                                 <i class="fa fa-plus nav-icon"></i>
                                 <p>{{ __('main.add') }}</p>
                             </a>
@@ -629,6 +693,7 @@
                     </ul>
                 </li>
                 @endif
+
 
 
 
@@ -870,31 +935,7 @@
                 {{--                        </li>--}}
                 {{--                    @endif--}}
 
-                {{--                    @if($settings->cms)--}}
-                {{--                        <li class="nav-item has-treeview">--}}
-                {{--                            <a href="#" class="nav-link">--}}
-                {{--                                <i class="fa fa-newspaper nav-icon"></i>--}}
-                {{--                                <p>--}}
-                {{--                                    {{ __('main.cms') }}--}}
-                {{--                                    <i class="right fas fa-angle-left"></i>--}}
-                {{--                                </p>--}}
-                {{--                            </a>--}}
-                {{--                            <ul class="nav nav-treeview">--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.cms.index') }}" class="nav-link">--}}
-                {{--                                        <i class="fa fa-newspaper nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.cms') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.cms.add') }}" class="nav-link">--}}
-                {{--                                        <i class="fa fa-plus nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.add') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                            </ul>--}}
-                {{--                        </li>--}}
-                {{--                    @endif--}}
+
 
                 {{--                    @if($settings->payments)--}}
                 {{--                        <li class="nav-item has-treeview">--}}

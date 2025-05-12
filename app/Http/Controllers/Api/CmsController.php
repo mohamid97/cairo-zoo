@@ -33,20 +33,22 @@ class CmsController extends Controller
 
         ]);
     }
-    public function get(){
 
 
-        $cms = Cms::whereHas('translations', function ($query) {
-            $query->where('locale', '=', app()->getLocale());
-        })->orderBy('updated_at' , 'desc')->get();
-        return  $this->res(true ,'All Cms Blogs' , 200 , CmsResource::collection($cms));
+    // public function get(){
 
 
-    }
+    //     $cms = Cms::whereHas('translations', function ($query) {
+    //         $query->where('locale', '=', app()->getLocale());
+    //     })->orderBy('updated_at' , 'desc')->get();
+    //     return  $this->res(true ,'All Cms Blogs' , 200 , CmsResource::collection($cms));
+
+
+    // }
 
     public function get_cms_details(Request $request){
         $cms_details = Cms::whereHas('translations', function ($query) use($request) {
-            $query->where('locale', '=', app()->getLocale())->where('slug' , $request->slug);
+            $query->where('slug' , $request->slug);
         })->first();
 
         if(optional($cms_details)->exists()){
@@ -55,4 +57,11 @@ class CmsController extends Controller
 
         return  $this->res(false ,'Article details not found. Maybe there is no data with this slug or no data in this language.' , 404);
     }
+
+
+
+
+    
+
+
 }

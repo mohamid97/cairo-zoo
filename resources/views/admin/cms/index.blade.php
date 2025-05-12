@@ -9,6 +9,9 @@
             margin-top: 26px;
             font-size: .875rem !important;
         }
+        .gap-2{
+            gap: 10px;
+        }
     </style>
 @endsection
 @section('content')
@@ -77,26 +80,43 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>
-                                    <img src="{{ asset('uploads/images/cms/'. $blog->image) }}" width="150px" height="150px">
+
+                                <a href="{{ asset('uploads/images/cms/'. $blog->image) }}" target="_blank">
+                                        <img class="img-circle" src="{{ asset('uploads/images/cms/'. $blog->image) }}" width="40px" height="40px" alt="{{ __('main.user_avatar') }}">
+                                    </a>
+                                    
+                              
                                 </td>
                                 <td>{{ $blog->translate(app()->getLocale())->name }}</td>
                                 <td>{{ $blog->translate(app()->getLocale())->slug }}</td>
                                 <td>
-                                    <a href="{{ route('admin.cms.edit', ['id' => $blog->id]) }}">
-                                        <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-edit"></i> {{ __('main.edit') }}</button>
+
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                <a href="{{ route('admin.cms.edit', ['id' => $blog->id]) }}">
+                                        <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-edit"></i> </button>
                                     </a>
                                     @if($blog->deleted_at == null)
                                         <a href="{{ route('admin.cms.soft_delete', ['id' => $blog->id]) }}">
-                                            <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-trash"></i> {{ __('main.soft_delete') }}</button>
+                                            <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-trash"></i> </button>
                                         </a>
                                     @else
                                         <a href="{{ route('admin.cms.restore', ['id' => $blog->id]) }}">
-                                            <button class="btn btn-sm btn-success"><i class="nav-icon fas fa-trash-restore"></i> {{ __('main.restore') }}</button>
+                                            <button class="btn btn-sm btn-success"><i class="nav-icon fas fa-trash-restore"></i> </button>
                                         </a>
                                     @endif
-                                    <a href="{{ route('admin.cms.destroy', ['id' => $blog->id]) }}">
+
+
+                                    <button class="btn btn-sm btn-danger" onclick="showDeleteCmsModal({{ $blog->id }})">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                    </button>
+
+
+
+                                    <!-- <a href="{{ route('admin.cms.destroy', ['id' => $blog->id]) }}">
                                         <button class="btn btn-sm btn-danger"><i class="nav-icon fas fa-trash"></i> {{ __('main.remove') }}</button>
-                                    </a>
+                                    </a> -->
+                                </div>
+
                                 </td>
                             </tr>
                         @empty
@@ -117,4 +137,36 @@
             </div>
         </div>
     </section>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="confirmDeleteCmsModal" tabindex="-1" role="dialog" aria-labelledby="confirmCmsDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmCmsDeleteLabel">{{ __('main.confirm_delete') }}</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ __('main.delete_cms_warning') ?? 'Are you sure you want to delete this Articel? All related data will be removed.' }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('main.cancel') }}</button>
+                    <a id="confirmDeleteCmsBtn" href="#" class="btn btn-danger">{{ __('main.confirm') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+@section('scripts')
+    <script>
+        function showDeleteCmsModal(cmsId) {
+            const url = `{{ url('admin/cms/destroy') }}/${cmsId}`;
+            document.getElementById('confirmDeleteCmsBtn').setAttribute('href', url);
+            $('#confirmDeleteCmsModal').modal('show');
+        }
+    </script>
 @endsection

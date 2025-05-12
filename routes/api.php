@@ -88,12 +88,27 @@ Route::middleware('checkLang')->group(function (){
 
     });
 
+    Route::prefix('blogs')->group(function(){
+        Route::post('paginate' , [CmsController::class , 'paginate']);
+        Route::post('/article_details' , [CmsController::class , 'get_cms_details']);
+
+    });
 
 
 
+    // user route without auth
+    Route::prefix('users')->group(function (){
 
-    
+        Route::post('/email/send-code', [\App\Http\Controllers\Api\Front\EmailVerificationController::class, 'sendCode']);
+        Route::post('/email/verify-code', [\App\Http\Controllers\Api\Front\EmailVerificationController::class, 'verifyCode']);
+        Route::post('login', [\App\Http\Controllers\Api\UsersController::class, 'login']);
 
+
+        //  Route::get('get' , [ \App\Http\Controllers\Api\UsersController::class, 'get']);
+        //    Route::post('/store' , [\App\Http\Controllers\Api\UsersController::class, 'store']);
+        // Route::post('rest_password' , [\App\Http\Controllers\Api\UsersController::class, 'rest_password']);
+        // Route::post('check/rest_code' , [\App\Http\Controllers\Api\UsersController::class, 'check_rest_code']);
+    });
 
 
 
@@ -166,16 +181,7 @@ Route::middleware('checkLang')->group(function (){
     //     Route::post('/service_details/get' , [\App\Http\Controllers\Api\ServicesController::class , 'get_service_details']);
     // });
 
-    // Route::prefix('users')->group(function (){
-    //      Route::get('get' , [ \App\Http\Controllers\Api\UsersController::class, 'get']);
-    //      Route::post('/store' , [\App\Http\Controllers\Api\UsersController::class, 'store']);
-    //      Route::post('login', [\App\Http\Controllers\Api\UsersController::class, 'login']);
 
-
-    //      // start rest password
-    //     Route::post('rest_password' , [\App\Http\Controllers\Api\UsersController::class, 'rest_password']);
-    //     Route::post('check/rest_code' , [\App\Http\Controllers\Api\UsersController::class, 'check_rest_code']);
-    // });
 
 
 
@@ -194,13 +200,7 @@ Route::middleware('checkLang')->group(function (){
 //    Route::prefix('featured')->group(function(){
 //      Route::post('/products' , [FeaturedApiController::class , 'get']);
 //    });
-//     Route::prefix('blog')->group(function(){
 
-//         Route::get('paginate' , [CmsController::class , 'paginate']);
-//         Route::post('/get' , [CmsController::class , 'get']);
-//         Route::post('/article_details' , [CmsController::class , 'get_cms_details']);
-
-//     });
 
 
 
@@ -257,6 +257,24 @@ Route::middleware('checkLang')->group(function (){
 
             });
 
+            Route::prefix('users')->middleware(['checkIfUser'])->group(function(){
+                Route::prefix('wishlists')->group(function(){
+                    Route::post('/get', [WishlistController::class, 'index']);
+                    Route::post('/store', [WishlistController::class, 'store']);
+                    Route::post('/delete', [WishlistController::class, 'delete']);
+                });
+
+            });
+
+
+
+
+
+
+
+
+
+
 
 
          
@@ -268,11 +286,7 @@ Route::middleware('checkLang')->group(function (){
 
 
        
-            // Route::prefix('wishlists')->group(function(){
-            //     Route::post('/wishlist', [WishlistController::class, 'index']);
-            //     Route::post('/store', [WishlistController::class, 'store']);
-            //     Route::post('/delete', [WishlistController::class, 'delete']);
-            // });
+
          
             // Route::prefix('compares')->group(function(){
             //     Route::post('/compare', [ComparisonController::class, 'index']);

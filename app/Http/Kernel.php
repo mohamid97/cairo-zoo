@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'checkIfDataEntry'=>\App\Http\Middleware\CheckDataEntry::class,
         'DashboardLang'=>\App\Http\Middleware\Admin\DashboardLang::class,
         'checkcashier'=>\App\Http\Middleware\Cashier\CkeckCashier::class,
+        'checkIfUser'=>\App\Http\Middleware\CheckIfUser::class,
     ];
 }
