@@ -28,13 +28,15 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name'=>'required|string|max:255',
-            'last_name'=>'required|string|max:255',
-            'avatar'=>'nullable|image',
-            'password'=>'required|string|min:6|max:20',
-            'email'=>'required|email|unique:users,email',
-            'phone' => 'required|regex:/^[0-9]{10,15}$/',
+
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'avatar'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', 
+            'password'   => 'required|string|min:6|max:20',
+            'email'      => 'required|email|unique:users,email',
+            'phone'      => 'required|regex:/^[0-9]{10,15}$/',
         ];
+        
     }
 
 

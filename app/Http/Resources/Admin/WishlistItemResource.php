@@ -22,8 +22,19 @@ class WishlistItemResource extends JsonResource
           
             'product_id' => $this->product->id,
             'product_name' => $this->product->name,
-            'price' => $this->product->price,
+            'product_image' => $this->product->image,
+            'thumbnail' => $this->product->thumbnail,
+            'image_path'=>asset('public/uploads/products/'),
+            'product_description' => $this->product->des,
+            'product_category' => $this->product->category ? $this->product->category->name : null,
+            'product_brand' => $this->product->brand ? $this->product->brand->name : null,
+            'barcode' => $this->product->barcode,
+            'sales_price' => $this->product->sales_price,
+            'discount' => $this->product->getBestDiscount(),
+            'stock' => $this->product->stock,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
+
+    
 }

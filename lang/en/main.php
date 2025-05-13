@@ -567,6 +567,18 @@ return [
     'wishlist_not_found'=>'WishList Item Not Founded',
     'no_wishlist'=>'No Wishlist For This User',
     'wishlist'=>'Wishlist',
+    'invalid_code'=>'Invalid or expired code.',
+    'email_verfied'=>'Email verified successfully. You can now register.',
+    'email_already_exists'=>'Email already exists. Please use a different email.',
+    'active_email'=>'Please verify your email before registering.',
+    'user_created'=>'User created successfully.',
+    'verification_code_sent'=>'Verification code sent to your email.',
+    'user_updated'=>'User updated successfully.',
+    'user_address_added'=>'User address added successfully.',
+    'user_address_updated'=>'User address updated successfully.',
+    'max_address'=>'User already has 3 addresses!',
+    'address_not_found'=>'User address not found.',
+    'address_deleted'=>'User address deleted successfully.',
 
 
 

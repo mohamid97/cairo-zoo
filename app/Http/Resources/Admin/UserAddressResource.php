@@ -19,8 +19,8 @@ class UserAddressResource extends JsonResource
         return [
           
             'id'=>$this->id,
-            'gov'=>new GovsResource(Govs::find($this->gov_id)),
-            'city'=> new CitiesResource(City::find($this->city_id)),
+            // 'gov'=>new GovsResource(Govs::find($this->gov_id)),
+            // 'city'=> new CitiesResource(City::find($this->city_id)),
            'address'=>$this->address
         ];
     }

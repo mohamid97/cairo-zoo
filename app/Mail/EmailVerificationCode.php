@@ -21,10 +21,11 @@ class EmailVerificationCode extends Mailable
 
      public $code;
      public $email;
-    public function __construct($code, $email)
+    public function __construct($email , $code)
     {
-        $this->code = $code;
         $this->email = $email;
+        $this->code = $code;
+        
     }
 
     /**

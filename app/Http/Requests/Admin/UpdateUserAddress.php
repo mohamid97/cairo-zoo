@@ -27,8 +27,8 @@ class UpdateUserAddress extends FormRequest
     public function rules()
     {
         return [
-            'gov_id'=>'required|integer|exists:govs,id',
-            'city_id'=>'required|integer|exists:cities,id',
+            // 'gov_id'=>'required|integer|exists:govs,id',
+            // 'city_id'=>'required|integer|exists:cities,id',
             'address_id'=>'required|integer|exists:user_addresses,id',
             'address'=>'required|string|max:255'
 

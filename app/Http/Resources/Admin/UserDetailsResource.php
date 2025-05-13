@@ -17,7 +17,7 @@ class UserDetailsResource extends JsonResource
         return [
             'first_name'     => $this->first_name,
             'last_name'      => $this->last_name,
-            'Complete Name'  => $this->first_name . $this->last_name,
+            'Complete Name'  => $this->first_name . ' ' . $this->last_name,
             'avatar'         => $this->avatar,
             'avatar_link'    => asset('/uploads/images/users/'),
             'phone'          => $this->phone,

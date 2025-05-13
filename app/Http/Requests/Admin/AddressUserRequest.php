@@ -27,10 +27,10 @@ class AddressUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'gov_id'=>'required|integer|exists:govs,id',
-            'city_id'=>'required|integer|exists:cities,id',
+            // 'gov_id'=>'required|integer|exists:govs,id',
+            // 'city_id'=>'required|integer|exists:cities,id',
             //'is_default'=>'required|in:0,1',
-            'address'=>'required|string|max:255'
+            'address'=>'required|string|max:60000'
 
         ];
     }

@@ -101,11 +101,11 @@ Route::middleware('checkLang')->group(function (){
 
         Route::post('/email/send-code', [\App\Http\Controllers\Api\Front\EmailVerificationController::class, 'sendCode']);
         Route::post('/email/verify-code', [\App\Http\Controllers\Api\Front\EmailVerificationController::class, 'verifyCode']);
+        Route::post('/register' , [\App\Http\Controllers\Api\UsersController::class, 'register']);
         Route::post('login', [\App\Http\Controllers\Api\UsersController::class, 'login']);
 
 
         //  Route::get('get' , [ \App\Http\Controllers\Api\UsersController::class, 'get']);
-        //    Route::post('/store' , [\App\Http\Controllers\Api\UsersController::class, 'store']);
         // Route::post('rest_password' , [\App\Http\Controllers\Api\UsersController::class, 'rest_password']);
         // Route::post('check/rest_code' , [\App\Http\Controllers\Api\UsersController::class, 'check_rest_code']);
     });
@@ -263,6 +263,22 @@ Route::middleware('checkLang')->group(function (){
                     Route::post('/store', [WishlistController::class, 'store']);
                     Route::post('/delete', [WishlistController::class, 'delete']);
                 });
+
+                Route::post('user-details', [\App\Http\Controllers\Api\UsersController::class, 'user']);
+                Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
+
+
+                Route::prefix('address')->group(function(){
+                    Route::post('/' , [\App\Http\Controllers\Api\UsersController::class , 'all_address']);
+                    Route::post('store' , [\App\Http\Controllers\Api\UsersController::class , 'store_address']);
+                    Route::post('update' , [\App\Http\Controllers\Api\UsersController::class , 'update_address']);
+                    Route::post('delete' ,[\App\Http\Controllers\Api\UsersController::class , 'delete_address'] );
+                    Route::post('special_address',[\App\Http\Controllers\Api\UsersController::class , 'special_address']);
+
+                });
+
+
+
 
             });
 
