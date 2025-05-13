@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\VerfiyEmail;
+use App\Models\Admin\verfiyEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,7 +22,7 @@ class EmailVerificationController extends Controller
     {
 
         try {
-            
+
             $request->validate([
                 'email' => 'required|email'
             ]);
@@ -34,26 +34,26 @@ class EmailVerificationController extends Controller
             }
 
             DB::beginTransaction();
-    
-            VerfiyEmail::updateOrCreate(
+
+            verfiyEmail::updateOrCreate(
                 ['email' => $email],
                 [
                     'code'       => $code,
                     'expires_at' => now()->addMinutes(10),
                 ]
             );
-    
-        
+
+
             Mail::to($email)
                 ->send(new \App\Mail\EmailVerificationCode($email, $code));
                 DB::commit();
-    
+
             return $this->res(true, __('main.verification_code_sent'), 200);
-    
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return $this->res(false,__('main.validation_failed') , 422 , $e->validator->errors());
-    
+
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->res(false, $e->getMessage(), 500);
@@ -79,7 +79,7 @@ class EmailVerificationController extends Controller
             }
 
             DB::beginTransaction();
-        
+
             $record->is_verified = true;
             $record->save();
 
@@ -89,7 +89,7 @@ class EmailVerificationController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return $this->res(false,__('main.validation_failed') , 422 , $e->validator->errors());
-    
+
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->res(false, $e->getMessage(), 500);
