@@ -32,7 +32,7 @@ class UsersController extends Controller
 
 
 
-  
+
     public function user(Request $request)
     {
         return  $this->res(true ,__('main.user_details') , 200 ,['user'=> new UserDetailsResource($request->user())]);
@@ -67,7 +67,7 @@ class UsersController extends Controller
 
 
 
-    
+
     public function register(StoreUserRequest $request)
     {
 
@@ -75,7 +75,6 @@ class UsersController extends Controller
             $record = VerfiyEmail::where('email', $request->email)
             ->where('is_verified', true)
             ->first();
-
             if (!$record) {
                 return $this->res(true , __('main.active_email') , 422);
             }
@@ -97,12 +96,12 @@ class UsersController extends Controller
                 'avatar'=> (isset($image_name) && $image_name != null) ?  $image_name : null
 
             ]);
-    
-            $record->delete(); 
+
+            $record->delete();
             DB::commit();
             return $this->res(false , __('main.user_created') , 200);
 
-        }catch(\Exception $e){       
+        }catch(\Exception $e){
             DB::rollBack();
             return  $this->res(false , __('main.error_happened') , $e->getCode() , $e->getMessage());
 
