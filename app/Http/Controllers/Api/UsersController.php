@@ -3,28 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\verfiyEmail;
 use App\Http\Requests\Admin\AddressUserRequest;
 use App\Http\Requests\Admin\ChangePasswordRequest;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserAddress;
 use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Resources\Admin\UserAddressResource;
 use App\Http\Resources\Admin\UserDetailsResource;
-use App\Http\Resources\Admin\UsersResource;
-use App\Mail\ChangePassword;
-use App\Models\Admin\Lang;
 use App\Models\Admin\UserAddress;
 use App\Models\User;
-use App\Trait\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Str; // Import Str facade
-use Illuminate\Support\Facades\Mail;
-use App\Models\Admin\VerfiyEmail;
+use App\Trait\ResponseTrait;
+
+
 
 class UsersController extends Controller
 {
