@@ -16,9 +16,14 @@ class WishlistController extends Controller
     public function index(Request $request)
     {
         $wishlist = Wishlist::where('user_id', $request->user()->id)->first();
-       //dd($wishlist);
-        return $this->res(true , 'User Wishlist' , 200 , new WishlistResource($wishlist->load(['user' , 'items.product'])));
-        
+        if($wishlist){
+            return $this->res(true , 'User Wishlist' , 200 , new WishlistResource($wishlist->load(['user' , 'items.product'])));
+
+        }
+
+        return $this->res(false , 'No Wishlist For This User' , 404 );
+
+
     }
 
     public function store(Request $request)
@@ -40,9 +45,9 @@ class WishlistController extends Controller
                     'product_id' => $request->product_id,
                 ]);
             }
-            
+
             DB::commit();
-          
+
            return  $this->res(true , 'User Wishlist' , 200 , new WishlistResource($wishlist->load(['user' , 'items.product'])));
 
         } catch (\Exception $e) {
@@ -55,27 +60,27 @@ class WishlistController extends Controller
     public function delete(Request $request)
     {
         $user = $request->user();
-    
+
         // Fetch the user's wishlist
         $wishlist = Wishlist::where('user_id', $user->id)->first();
-       
+
 
         if (!$wishlist) {
             return  $this->res(true , __('main.no_wishlist') , 404);
         }
 
-    
+
         // Now fetch the wishlist item based on the retrieved wishlist ID
         $wishlistItem = WishlistItems::where('wishlist_id', $wishlist->id)
             ->where('product_id', $request->product_id)
             ->first();
-    
+
         if ($wishlistItem) {
             $wishlistItem->delete();
             return  $this->res(true , __('main.wishlist_deleted') , 200 ,  new WishlistResource($wishlist->load(['user' , 'items.product'])));
         }
-    
+
         return  $this->res(true , __('main.wishlist_not_found') , 404);
     }
-    
+
 }
