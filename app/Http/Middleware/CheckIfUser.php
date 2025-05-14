@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
+use  Closure;
 use Illuminate\Http\Request;
+use App\Trait\ResponseTrait;
 
 class CheckIfUser
 {
+    use ResponseTrait;
     /**
      * Handle an incoming request.
      *
@@ -16,11 +18,11 @@ class CheckIfUser
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user(); 
+        $user = $request->user();
         if (!$user || $user->type !== 'user') {
             return $this->res(false, 'Access denied. You do not have user permissions.', 403);
         }
-        
+
         return $next($request);
     }
 }

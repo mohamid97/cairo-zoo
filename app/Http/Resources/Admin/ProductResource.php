@@ -35,6 +35,7 @@ class ProductResource extends JsonResource
             'meta_des'  =>$this->meta_des,
             'slug'=> $slug,
             'sku'=>$this->sku,
+            'discount'=>$this->getBestDiscount(),
             // 'stock'=>$this->stock,
             // 'old_price'=>$this->old_price,
             // 'discount'=>$this->discount,
