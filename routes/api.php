@@ -258,6 +258,9 @@ Route::middleware('checkLang')->group(function (){
             });
 
             Route::prefix('users')->middleware(['checkIfUser'])->group(function(){
+
+
+                Route::post('logout' , [\App\Http\Controllers\Api\UsersController::class , 'logout']);
                 Route::prefix('wishlists')->group(function(){
                     Route::post('/get', [WishlistController::class, 'index']);
                     Route::post('/store', [WishlistController::class, 'store']);

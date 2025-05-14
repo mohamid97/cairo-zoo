@@ -149,16 +149,27 @@ class CashierController extends Controller
             }
             
             $cahier_order->total_amount_before_discount  = $total_before_discount;
+            // if coupon is applied
+            if (isset($coupon)) {    
+                $cahier_order->coupon_code = $coupon->code;
+                $cahier_order->coupon_discount = $coupon->type == 'percentage' ? ceil($total_after_discount * $coupon->discount_value) / 100 : ceil($coupon->discount_value);
+                $total_after_discount -= $cahier_order->coupon_discount;
+                $coupon->times_used += 1;
+                $coupon->save();
+            } else {
+                $cahier_order->coupon_discount = 0;
+            }
             $cahier_order->total_amount_after_discount  = $total_after_discount;
-            $cahier_order->total_discount = $total_before_discount - $total_after_discount;
+            $cahier_order->total_discount = ceil($total_before_discount - $total_after_discount);
             $cahier_order->save();
     
             DB::commit();
             return $this->res(true, __('main.order_submitted_successfully'), 200, ['cahier_order' => new OrderResource($cahier_order)]);
 
         }catch(\Exception $e){
+            //dd($e->getMessage());
             DB::rollBack();
-            return $this->res(false, __('main.something_went_wrong'), 500);
+            return $this->res(false, __('main.error_happened'), 500);
         }
 
 

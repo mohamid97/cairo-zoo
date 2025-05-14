@@ -230,6 +230,21 @@ class UsersController extends Controller
 
 
 
+    public function logout(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $user->tokens()->delete();
+            return  $this->res(true , __('main.logout_success') , 200);
+
+        } catch (\Exception $e) {
+            return  $this->res(false , __('main.error_happened') , 500 , $e->getMessage());
+
+        }
+    }
+
+
+
 
 
 
@@ -289,19 +304,7 @@ class UsersController extends Controller
 
 
 
-    // logout
-    // public function logout(Request $request)
-    // {
-    //     try {
-    //         $user = $request->user();
-    //         $user->tokens()->delete();
-    //         return  $this->res(true ,'User Looged Out' , 200);
 
-    //     } catch (\Exception $e) {
-    //         return  $this->res(false ,'Error Happend' , 500 , $e->getMessage());
-
-    //     }
-    // }
 
 
     // change user passeword

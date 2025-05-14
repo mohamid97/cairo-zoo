@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'coupon_code' => $this->coupon_code,
+            'coupon_discount' => $this->coupon_discount,
             'total_amount_before_discount' => $this->total_amount_before_discount,
             'total_amount_after_discount' => $this->total_amount_after_discount,
             'total_discount' => $this->total_discount,

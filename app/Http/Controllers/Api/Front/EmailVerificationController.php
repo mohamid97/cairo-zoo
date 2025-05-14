@@ -30,7 +30,7 @@ class EmailVerificationController extends Controller
             $code  = rand(100000, 999999);
             $email = $request->email;
             if (User::where('email', $email)->exists()) {
-                return $this->res(false, __('main.email_already_exists'), 422);
+                return $this->res(true, __('main.email_already_exists'), 422);
             }
 
             DB::beginTransaction();
@@ -84,7 +84,7 @@ class EmailVerificationController extends Controller
             $record->save();
 
             DB::commit();
-            return $this->res(false , __('main.email_verfied') , 200);
+            return $this->res(true , __('main.email_verfied') , 200);
 
         }catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();

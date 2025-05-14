@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\OurteamController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CahierOrderController;
 
 
 Route::get('/mig' , function (){
@@ -526,6 +527,16 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     Route::prefix('settings')->group(function (){
         Route::get('/' , [SettingController::class , 'index'])->name('admin.settings.index');
         Route::post('/update' , [SettingController::class , 'update'])->name('admin.settings.update');
+    });
+
+
+
+
+
+    Route::prefix('cahier_orders')->group(function (){
+        Route::get('/' , [CahierOrderController::class , 'index'])->name('admin.cahier_orders.index');
+        Route::get('/show/{id}' , [CahierOrderController::class , 'show'])->name('admin.cahier_orders.show');
+        Route::get('/delete/{id}' , [CahierOrderController::class , 'delete'])->name('admin.cahier_orders.delete');
     });
 
 
