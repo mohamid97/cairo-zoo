@@ -16,7 +16,7 @@ class WishlistController extends Controller
     public function index(Request $request)
     {
         $wishlist = Wishlist::where('user_id', $request->user()->id)->first();
-        if($wishlist){
+        if(isset($wishlist)){
             return $this->res(true , 'User Wishlist' , 200 , new WishlistResource($wishlist->load(['user' , 'items.product'])));
 
         }
