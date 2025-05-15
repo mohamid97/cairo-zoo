@@ -61,7 +61,7 @@
                                 <option value="">{{ __('main.filter_by_category') }}</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ $selectedCategory == $category->id ? 'selected' : '' }}>
-                                        {{ $category->translate(app()->getLocale())->name }}
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
