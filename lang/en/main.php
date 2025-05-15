@@ -607,6 +607,20 @@ return [
     'print_invoice'=>'Print Invoice',
     'order_id'=>'Order ID',
     'order_information'=>'Order Information',
+    'logs'=>'Logs',
+    'all_logs'=>'All Logs', 
+    'log'=>'Log',
+    'log_details'=>'Log Details',
+    'log_user'=>'Log User',
+    'changes'=>'Changes',
+    'model'=>'Model',
+    'model_type'=>'Model Type',
+    'details'=>'Details',
+    'action'=>'Action',
+    'values'=>'Values',
+    'log_information'=>'Log Information',
+    'fields'=>'Fields',
+    'activity_logs'=>'Activity Logs',
 
 
 

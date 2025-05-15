@@ -1,13 +1,16 @@
 <?php
+
+use App\Http\Controllers\DataEntry\AboutController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataEntry\HomeController;
 use App\Http\Controllers\DataEntry\AuthController;
 use App\Http\Controllers\DataEntry\BrandController;
 use App\Http\Controllers\DataEntry\CategoryController;
+use App\Http\Controllers\DataEntry\CMSController;
+use App\Http\Controllers\DataEntry\ContactUsController;
+use App\Http\Controllers\DataEntry\MissionVission;
 use App\Http\Controllers\DataEntry\ProductController;
-
-
-
+use App\Http\Controllers\DataEntry\SliderController;
 
 Route::get('/data_entry/login', [AuthController::class , 'show_login'])->name('showLoginDataEntry');
 Route::post('/data_entry/login', [AuthController::class,'login'])->name('dataEntryLogin');
@@ -29,6 +32,8 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
 
 
 
+
+
     Route::get('chang_lang/{lang}' , function($lang){
         \Illuminate\Support\Facades\Session::put('locale', $lang);
         return redirect()->back();
@@ -38,6 +43,9 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
     Route::prefix('home')->controller(HomeController::class)->group(function (){
         Route::get('/' , 'index')->name('data_entry.home.index');
     });
+    // Route::prefix('home')->controller(HomeController::class)->group(function (){
+    //     Route::get('/' , 'index')->name('data_entry.index');
+    // });
 
 
     // start brand
@@ -106,6 +114,54 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
 
 
     });
+
+
+
+
+    Route::prefix('cms')->group(function (){
+        Route::get('/' , [CMSController::class , 'index'])->name('data_entry.cms.index');
+        Route::get('/edit/{id}' , [CMSController::class , 'edit'])->name('data_entry.cms.edit');
+        Route::post('/update/{id}' , [CMSController::class , 'update'])->name('data_entry.cms.update');
+        Route::get('/create' , [CMSController::class , 'create'])->name('data_entry.cms.add');
+        Route::post('/store' , [CMSController::class , 'store'])->name('data_entry.cms.store');
+        Route::get('/soft_delete/{id}' , [CMSController::class , 'soft_delete'])->name('data_entry.cms.soft_delete');
+        Route::get('/restore/{id}' , [CMSController::class , 'restore'])->name('data_entry.cms.restore');
+        Route::get('/destroy/{id}' , [CMSController::class , 'destroy'])->name('data_entry.cms.destroy');
+        });
+
+
+
+
+    Route::prefix('slider')->group(function (){
+        Route::get('/' , [SliderController::class , 'index'])->name('data_entry.sliders.index');
+        Route::get('/add' , [SliderController::class , 'create'])->name('data_entry.sliders.add');
+        Route::post('/store' , [SliderController::class , 'store'])->name('data_entry.sliders.store');
+        Route::get('/edit/{id}' , [SliderController::class , 'edit'])->name('data_entry.sliders.edit');
+        Route::post('/update/{id}' , [SliderController::class , 'update'])->name('data_entry.sliders.update');
+        Route::get('/destroy/{id}' , [SliderController::class , 'destroy'])->name('data_entry.sliders.destroy');
+        Route::get('/soft_delete/{id}' , [SliderController::class , 'soft_delete'])->name('data_entry.sliders.soft_delete');
+        Route::get('/restore/{id}' , [SliderController::class , 'restore'])->name('data_entry.sliders.restore');
+        Route::get('/slider/setting' , [SliderController::class , 'setting'])->name('data_entry.sliders.setting');
+        Route::post('/slider/setting/update' , [SliderController::class , 'update_setting'])->name('data_entry.sliders.setting_update');
+ 
+    }); // end slider
+
+
+
+    Route::prefix('contact-us')->group(function (){
+        Route::get('/' , [ContactUsController::class , 'index'])->name('data_entry.contact.index');
+        Route::post('/update' , [ContactUsController::class , 'update'])->name('data_entry.contact.update');
+    });
+
+
+    Route::prefix('about')->group(function (){
+        Route::get('/' , [AboutController::class , 'index'])->name('data_entry.about.index');
+        Route::post('/update' , [AboutController::class , 'update'])->name('data_entry.about.update');
+     });
+
+
+     Route::get('/mission_visison', [MissionVission::class , 'mision_vission'])->name('data_entry.mission_vission.index');
+     Route::post('/mission_visison/store', [MissionVission::class , 'mision_vission_store'])->name('data_entry.mission_vission.store');
 
 
 

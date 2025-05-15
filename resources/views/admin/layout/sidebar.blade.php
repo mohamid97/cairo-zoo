@@ -331,11 +331,16 @@
                             <a href="{{ route('admin.mission_vission.index') }}" class="nav-link">
                                 <i class="fa fa-newspaper nav-icon"></i>
                                 <p>{{ __('main.mission_vission') }}</p>
-                            </a>
+                            </a>    
                         </li>
                     </ul>
                 </li>
                 @endif
+
+
+
+
+
 
 
 
@@ -589,6 +594,24 @@
 
 
 
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-history nav-icon"></i>
+                        <p>
+                            {{ __('main.logs') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.logs.index') }}" class="nav-link">
+                                <i class="fa fa-newspaper nav-icon"></i>
+                                <p>{{ __('main.logs') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
 
 

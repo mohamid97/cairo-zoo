@@ -49,18 +49,17 @@ use App\Http\Controllers\Admin\OurteamController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CahierOrderController;
-
+use App\Http\Controllers\Admin\LogController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/mig' , function (){
 
 
-    // Run all migrations
-    // Artisan::call('migrate:fresh');
+    Artisan::call('migrate:fresh');
 
-    // Run all seeders
-//    Artisan::call('db:seed');  // --force to run in production
-//
-//    return "Migrations and seeders have been run successfully.";
+    Artisan::call('db:seed');  
+
+   return "Migrations and seeders have been run successfully.";
 
 });
 
@@ -238,6 +237,13 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
        Route::get('/' , [ContactUsController::class , 'index'])->name('admin.contact.index');
        Route::post('/update' , [ContactUsController::class , 'update'])->name('admin.contact.update');
    });
+
+   Route::prefix('logs')->group(function (){
+       Route::get('/' , [LogController::class , 'index'])->name('admin.logs.index');
+       Route::get('admin/logs/{log}', [LogController::class, 'show'])->name('admin.logs.show');
+       Route::get('/delete/{log}' , [LogController::class , 'delete'])->name('admin.logs.delete'); 
+       Route::get('user/logs/{user}', [LogController::class, 'userLogs'])->name('admin.logs.users.show');
+    });
 
 
    

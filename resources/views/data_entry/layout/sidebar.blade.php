@@ -35,7 +35,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{route('data_entry.home.index')}}" class="brand-link">
-        <img src="{{asset('dist/img/adminLTELogo.png')}}" alt="data_entryLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="{{asset('dist/img/AdminLTELogo.png')}}" alt="data_entryLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">Cairo Zoo</span>
     </a>
@@ -55,6 +55,9 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+
+
 
 
 
@@ -152,6 +155,123 @@
                                             </ul>
                                         </li>
 
+
+
+                                        <li class="nav-item has-treeview">
+                                            <a href="#" class="nav-link">
+                                                <i class="fa fa-newspaper nav-icon"></i>
+                                                <p>
+                                                    {{ __('main.cms') }}
+                                                    <i class="right fas fa-angle-left"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="{{ route('data_entry.cms.index') }}" class="nav-link">
+                                                        <i class="fa fa-newspaper nav-icon"></i>
+                                                        <p>{{ __('main.cms') }}</p>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="{{ route('data_entry.cms.add') }}" class="nav-link">
+                                                        <i class="fa fa-plus nav-icon"></i>
+                                                        <p>{{ __('main.add') }}</p>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-image"></i>
+                        <p>
+                            {{ __('main.sliders') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.sliders.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-image"></i>
+                                <p>{{ __('main.sliders') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.sliders.add') }}" class="nav-link">
+                                <i class="nav-icon fas fa-plus"></i>
+                                <p>{{ __('main.add') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.sliders.setting') }}" class="nav-link">
+                                <i class="fa fa-cog nav-icon"></i>
+                                <p>{{ __('main.setting') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-phone-volume"></i>
+                        <p>
+                            {{ __('main.contact_us') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.contact.index') }}" class="nav-link">
+                                <i class="fa fa-phone-volume"></i>
+                                <p>{{ __('main.contact_us') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-address-card nav-icon"></i>
+                        <p>
+                            {{ __('main.about_us') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.about.index') }}" class="nav-link">
+                                <i class="far fa-address-card nav-icon"></i>
+                                <p>{{ __('main.about_us') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-newspaper nav-icon"></i>
+                        <p>
+                            {{ __('main.mission_vission') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('data_entry.mission_vission.index') }}" class="nav-link">
+                                <i class="fa fa-newspaper nav-icon"></i>
+                                <p>{{ __('main.mission_vission') }}</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
 
 
