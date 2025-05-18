@@ -16,8 +16,7 @@ class OrderAddressResource extends JsonResource
     {
         return [
             'address'=>$this->address,
-            'gov'=>$this->gov->name,
-            'city'=>$this->city->name
+
         ];
     }
 }

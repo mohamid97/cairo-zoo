@@ -15,22 +15,21 @@ class UserCardResource extends JsonResource
     public function toArray($request)
     {
             // Calculate total product price
-            $totalProductPrice = $this->items->sum(function ($item) {
-                return $item->product->price * $item->quantity;
+            $totalProductPricebefore = $this->items->sum(function ($item) {
+                return $item->product->sales_price  * $item->quantity;
             });
-            // Calculate shipment price as 50 times the number of products
-            $shipmentPrice = $this->items->sum('quantity') * 50;
+            $totalProductPriceafter = $this->items->sum(function ($item) {
+                return  ( $item->product->sales_price - $item->product->getBestDiscount()) * $item->quantity;
+            });
     
-            // Calculate total price (product price + shipment price)
-            $totalPrice = $totalProductPrice + $shipmentPrice;
 
         return [
             'id' => $this->id,
             'user' => new UsersResource($this->user),
             'items' => UserCardItemResource::collection($this->items),
-            'total_product_price' => $totalProductPrice,   // Total product price
-            'shipment_price' => $shipmentPrice,            // Shipment price (number of products * 50)
-            'total_price' => $totalPrice,                  // Total price (product price + shipment)
+            'total_product_before_discount' => $totalProductPricebefore, 
+            'total_product_after_discount' => $totalProductPriceafter,  
+            'shipment_price' => 0,                             
             'created_at' => $this->created_at,
             
         ];

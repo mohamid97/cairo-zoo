@@ -621,6 +621,23 @@ return [
     'log_information'=>'Log Information',
     'fields'=>'Fields',
     'activity_logs'=>'Activity Logs',
+    'product_not_found'=>'Product not found',
+    'stock_less_than_quantity'=>'Not enough stock for this product',
+    'no_stock'=>'No stock for this product',
+    'item_added_successfully'=>'Item added successfully',
+    'no_data_in_cart'=>'No data in cart',
+    'user_cart'=>'User Cart',
+    'cart_items'=>'Cart Items',
+    'user_has_no_cart'=>'User has no cart',
+    'cart_item_deleted'=>'Cart item deleted successfully',
+    'cart_deleted'=>'Cart deleted successfully',
+    'have_pending_order'=>'You Already Have Order In Pending',
+    'empty_cart'=>'Your Cart Is Empty',
+    'order_added_successfully'=>'Order added successfully',
+    'order_updated_successfully'=>'Order updated successfully',
+    'order_deleted_successfully'=>'Order deleted successfully',
+    'all_user_order'=>'All User Orders',
+    'validation_failed'=>'Validation failed',
 
 
 

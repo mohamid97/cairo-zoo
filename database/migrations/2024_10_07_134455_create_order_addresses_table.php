@@ -16,11 +16,7 @@ return new class extends Migration
         Schema::create('order_addresses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('gov_id');
-            $table->unsignedBigInteger('city_id');
             $table->text('address');
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
-            $table->foreign('gov_id')->references('id')->on('govs')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->timestamps();

@@ -8,12 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class OrderAddress extends Model
 {
     use HasFactory;
-    protected $fillable = ['order_id' , 'gov_id' , 'city_id' , 'address'];
-    public function gov(){
-        return $this->belongsTo(Govs::class , 'gov_id');
+    protected $fillable = ['order_id' ,'address'];
 
-    }
-    public function city(){
-        return $this->belongsTo(City::class , 'city_id');
-    }
 }

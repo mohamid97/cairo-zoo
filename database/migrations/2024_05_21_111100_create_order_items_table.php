@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('product_name');
             $table->integer('quantity');
+            $table->decimal('sales_price', 8, 2);
+            $table->decimal('discount', 8, 2);
             $table->decimal('price', 8, 2);
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

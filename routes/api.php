@@ -259,7 +259,6 @@ Route::middleware('checkLang')->group(function (){
 
             Route::prefix('users')->middleware(['checkIfUser'])->group(function(){
 
-
                 Route::post('logout' , [\App\Http\Controllers\Api\UsersController::class , 'logout']);
                 Route::prefix('wishlists')->group(function(){
                     Route::post('/get', [WishlistController::class, 'index']);
@@ -283,6 +282,34 @@ Route::middleware('checkLang')->group(function (){
 
 
 
+                Route::prefix('carts')->group(function(){
+                     Route::post('add_item',[CardController::class , 'add_item']);
+                     Route::post('/cart', [CardController::class, 'get_user_card']);
+                     Route::post('cart_update' , [CardController::class, 'update']);
+                     Route::delete('clear', [CardController::class, 'delete']);
+                     Route::delete('item/delete', [CardController::class, 'delete_card_item']);
+
+                });
+
+
+
+                Route::prefix('orders_auth')->group(function(){
+                    Route::post('store' , [OrderController::class , 'store_auth']);
+                    Route::post('orders' , [OrderController::class , 'get_user_ordes']);
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
             });
 
 
@@ -297,10 +324,7 @@ Route::middleware('checkLang')->group(function (){
 
 
          
-            // Route::prefix('orders_auth')->group(function(){
-            //     Route::post('store' , [OrderController::class , 'store_auth']);
-            //     Route::post('orders' , [OrderController::class , 'get_user_ordes']);
-            // });
+
 
 
 
@@ -323,10 +347,8 @@ Route::middleware('checkLang')->group(function (){
             //     Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
             //     Route::post('logout', [\App\Http\Controllers\Api\UsersController::class, 'logout']);
             //     Route::post('change_password', [\App\Http\Controllers\Api\UsersController::class, 'change_password']);
-            //     Route::post('/card', [CardController::class, 'get_user_card']);
+            
             //     Route::post('cart_update' , [CardController::class, 'update']);
-            //     Route::delete('cart/clear', [CardController::class, 'delete']);
-            //     Route::post('cart/item/delete', [CardController::class, 'delete_card_item']);
 
 
             //     // address of user
@@ -344,10 +366,7 @@ Route::middleware('checkLang')->group(function (){
 
             // });
 
-            // Route::prefix('cards')->group(function(){
-            //     Route::post('add_item',[CardController::class , 'add_item']);
 
-            // });
 
 
 

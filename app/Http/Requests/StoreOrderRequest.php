@@ -30,13 +30,11 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'payment_method' => 'required|in:cash,paymob,else',
-            'shipment_way' => 'required|string|in:store,delivery', // Example: Allowed shipment options
-            'address' => 'required|string',
-            'gov_id' => 'required|exists:govs,id',
-            'city_id' => 'required|exists:cities,id',
+            'shipment_way' => 'required|string|in:store,delivery', 
+            'address' => 'required|string|max:60000',
             'first_name'=>'required|string|max:255',
             'last_name'=>'required|string|max:255',
-           'phone' => ['required', 'regex:/^01[0-2,5]{1}[0-9]{8}$/'],
+            'phone' => ['required', 'regex:/^01[0-2,5]{1}[0-9]{8}$/'],
 
         ];
     }
@@ -45,9 +43,8 @@ class StoreOrderRequest extends FormRequest
         // Override the failedValidation method to use $this->res()
         protected function failedValidation(Validator $validator)
         {
-
             throw new HttpResponseException(
-              $this->res(false, 'Validation errors', 422, ['errors' => $validator->errors()])
+              $this->res(false, __('main.validation_failed'), 422, ['errors' => $validator->errors()])
             );
               
             

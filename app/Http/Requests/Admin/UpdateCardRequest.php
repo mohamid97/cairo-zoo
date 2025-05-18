@@ -25,8 +25,8 @@ class UpdateCardRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',
-            'type' => 'in:increase,decrease',
-            'quantity' => 'integer|min:0', 
+            'type' => 'nullable|in:increase,decrease',
+            'quantity' => 'nullable|integer|min:1', 
         ];
     }
     
