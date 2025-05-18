@@ -24,11 +24,13 @@ class ProductDetailsResource extends JsonResource
             }
         }
 
+    
 
         return [
             'id'=>$this->id,
             'sales_price'    =>$this->sales_price,
             'category' =>isset($this->category_id) ? new CategoryDetailsResource($this->category): null,
+            'taste'=>isset($this->taste_id) ? new TasteReource($this->taste): null,
             'name'     =>$this->name,
             'des'       =>$this->des,
             'meta_title'=>$this->meta_title,

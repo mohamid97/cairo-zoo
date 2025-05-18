@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CahierOrderController;
 use App\Http\Controllers\Admin\LogController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Admin\TasteController;
 
 Route::get('/mig' , function (){
 
@@ -128,6 +129,17 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
             Route::post('/update_status/{id}', [OrderController::class, 'update_status'])->name('admin.orders.update_status');
 
         });
+
+
+    // start taste
+    Route::prefix('tastes')->group(function(){
+        Route::get('/' , [TasteController::class , 'index'])->name('admin.tastes.index');
+        Route::get('/create' , [TasteController::class , 'create'])->name('admin.tastes.add');
+        Route::post('/store' , [TasteController::class , 'store'])->name('admin.tastes.store');
+        Route::get('/edit/{id}' , [TasteController::class , 'edit'])->name('admin.tastes.edit');
+        Route::post('/update/{id}' , [TasteController::class , 'update'])->name('admin.tastes.update');
+        Route::get('/delete/{id}' , [TasteController::class , 'delete'])->name('admin.tastes.delete');
+    });
 
 
 

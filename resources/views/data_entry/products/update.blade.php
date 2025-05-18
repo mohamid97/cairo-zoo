@@ -243,7 +243,26 @@
                         <br>
                         <div class="border p-3">
                             <div class="row">
-                                <div class="form-group col-md-6">
+
+
+                                <div class="form-group col-md-4">
+                                    <label>{{ __('main.tastes') }}</label>
+                                    <select name="taste_id" class="form-control">
+                                        <option value="">{{ __('main.select_taste') }}</option>
+                                        @forelse($tastes as $taste)
+                                            <option value="{{$taste->id}}" {{ $taste->id == $product->taste_id ? 'selected' : '' }}>{{$taste->name}}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    @error('taste_id')
+                                    <div class="text-danger">{{ $errors->first('taste_id') }}</div>
+                                    @enderror
+                                </div>
+
+
+
+
+                                <div class="form-group col-md-4">
                                     <label>{{ __('main.category') }}</label>
                                     <select name="category_id" class="form-control">
                                         <option value="">{{ __('main.select_category') }}</option>
@@ -256,7 +275,7 @@
                                     <div class="text-danger">{{ $errors->first('category_id') }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label>{{ __('main.brand') }}</label>
                                     <select name="brand_id" class="form-control">
                                         <option value="">{{ __('main.select_brand') }}</option>
@@ -321,17 +340,17 @@
                         <div class="border p-3">
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="related_products">{{ __('main.related_products') }}</label>
+                                    <label for="related-products">{{ __('main.related_products') }}</label>
                                     <select name="related_products[]" id="related-products" class="form-control select2" multiple="multiple">
                                         @foreach($products as $productItem)
                                             <option value="{{ $productItem->id }}"
-                                                {{ in_array($productItem->id, $product->related_products ?? []) ? 'selected' : '' }}>
+                                                {{ in_array($productItem->id, old('related_products', $product->relatedProducts->pluck('id')->toArray())) ? 'selected' : '' }}>
                                                 {{ $productItem->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                     @error('related_products')
-                                    <div class="text-danger">{{ $errors->first('related_products') }}</div>
+                                    <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
 

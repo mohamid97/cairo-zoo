@@ -32,6 +32,7 @@ class StoreProductRequest extends FormRequest
             'small_des.*'=>'nullable|max:65535',
             'meta_des.*'=>'nullable|max:65535',
             'category_id'=>'nullable|integer|exists:categories,id',
+            'taste_id'=>'nullable|integer|exists:tastes,id',
             'brand_id'=>'nullable|integer|exists:brands,id',
             'sales_price' => 'nullable|numeric|min:0',
             'sku'=>'nullable|max:255',

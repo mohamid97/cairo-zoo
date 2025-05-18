@@ -19,7 +19,15 @@ class UserCardResource extends JsonResource
                 return $item->product->sales_price  * $item->quantity;
             });
             $totalProductPriceafter = $this->items->sum(function ($item) {
-                return  ( $item->product->sales_price - $item->product->getBestDiscount()) * $item->quantity;
+                if($item->product->getBestDiscount()){
+                   return  ( $item->product->sales_price - $item->product->getBestDiscount()['value'] ?? 0) * $item->quantity;
+                }
+
+                 return $item->product->sales_price  * $item->quantity;
+
+
+
+                
             });
     
 

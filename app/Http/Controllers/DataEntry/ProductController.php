@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DataEntry;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Taste;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Models\Admin\Brand;
@@ -70,7 +71,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('data_entry.products.add' , ['categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
+        return view('data_entry.products.add' , ['tastes'=>Taste::all() , 'categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
 
     }
 
@@ -100,7 +101,8 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? null,
                 'thumbinal' => $imageData['thumbinal'] ?? null,
-                'barcode'=>$request->barcode
+                'barcode'=>$request->barcode,
+                'taste_id'=>$request->taste_id
             ]);
 
             foreach ($this->langs as $lang) {
@@ -112,8 +114,9 @@ class ProductController extends Controller
                 $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
             }
 
-            $product->relatedProducts()->sync($request->related_products);
             $product->save();
+            $product->relatedProducts()->sync($request->related_products);
+
             LoggerHelper::logAction('create', $product, $product->toArray());
 
 
@@ -148,7 +151,8 @@ class ProductController extends Controller
             'categories' => $categories,
             'brands' => $brands,
             'products' => $products,
-            'product' => $product
+            'product' => $product,
+            'tastes'=>Taste::all()
         ]);
     }
 
@@ -180,7 +184,8 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? $product->image,
                 'thumbinal' => $imageData['thumbinal'] ?? $product->thumbinal,
-                'barcode'=>$request->barcode
+                'barcode'=>$request->barcode,
+                'taste_id'=>$request->taste_id
             ]);
             foreach ($this->langs as $lang) {
                 $product->{'name:'.$lang->code}  = $request->name[$lang->code];
@@ -192,7 +197,7 @@ class ProductController extends Controller
             }
 
             $product->save();
-
+            $product->relatedProducts()->sync($request->related_products);
             LoggerHelper::logAction('update', $product, $product->toArray());
 
             DB::commit();
@@ -423,7 +428,7 @@ class ProductController extends Controller
 
         Alert::success('Success', 'Product deleted successfully.');
         return redirect()->back();
-        
+
     }
 
     public function restore($id){

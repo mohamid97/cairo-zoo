@@ -64,6 +64,26 @@
                             </div>
                         </div>
                         <br>
+
+
+
+                        <div class="border p-3">
+                            <div class="row">
+                            @foreach($langs as $lang)
+                                <div class="form-group col-md-6">
+                                    <label for="slug">{{ __('main.slug') }} ({{ $lang->name }}) </label> <!-- Translated Label -->
+                                    <input type="text" name="slug[{{$lang->code}}]" class="form-control" id="slug" placeholder="{{ __('main.enter_slug') }}" value="{{ old('slug.' . $lang->code) }}">
+                                    @error('slug.' . $lang->code)
+                                    <div class="text-danger">{{ $errors->first('slug.' . $lang->code) }}</div>
+                                    @enderror
+                                </div>
+                            @endforeach
+                            </div>
+                        </div>
+                        <br>
+
+
+
                         <div class="border p-3">
                             <div class="row">
                                     <div class="form-group col-md-3">
@@ -284,7 +304,26 @@
                         <div class="border p-3">
 
                             <div class="row">
-                                <div class="form-group col-md-6">
+
+
+                                <div class="form-group col-md-4">
+                                    <label>{{ __('main.tastes') }}</label> <!-- Translated Label -->
+                                    <select name="taste_id" class="form-control">
+                                        <option value="">{{ __('main.select_taste') }}</option> <!-- Translated Option -->
+                                        @forelse($tastes as $taste)
+                                            <option value="{{$taste->id}}">{{$taste->name}}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    @error('taste_id')
+                                    <div class="text-danger">{{ $errors->first('taste_id') }}</div>
+                                    @enderror
+                                </div>
+
+
+
+
+                                <div class="form-group col-md-4">
                                     <label>{{ __('main.category') }}</label> <!-- Translated Label -->
                                     <select name="category_id" class="form-control">
                                         <option value="">{{ __('main.select_category') }}</option> <!-- Translated Option -->
@@ -297,7 +336,7 @@
                                     <div class="text-danger">{{ $errors->first('category') }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label>{{ __('main.brand') }}</label>
                                     <select name="brand_id" class="form-control">
                                         <option value="">{{ __('main.select_brand') }}</option> <!-- Translated Option -->

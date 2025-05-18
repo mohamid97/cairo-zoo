@@ -166,12 +166,25 @@
                                 <p>{{ __('main.products') }}</p>
                             </a>
                         </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.tastes.index') }}" class="nav-link">
+                                <i class="fa fa-plus nav-icon"></i>
+                                <p>{{ __('main.tastes') }}</p>
+                            </a>
+                        </li>
+
+
+
                         <li class="nav-item">
                             <a href="{{ route('admin.products.add') }}" class="nav-link">
                                 <i class="fa fa-plus nav-icon"></i>
                                 <p>{{ __('main.add') }}</p>
                             </a>
                         </li>
+
+
                         <li class="nav-item">
                             <a href="{{ route('admin.products.add_stock') }}" class="nav-link">
                                 <i class="fa fa-plus nav-icon"></i>

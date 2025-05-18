@@ -81,6 +81,8 @@ Route::middleware('checkLang')->group(function (){
     Route::prefix('products')->group(function (){
         Route::post('/paginate' , [\App\Http\Controllers\Api\ProductController::class , 'paginate']);
         Route::post('/product_details' , [\App\Http\Controllers\Api\ProductController::class , 'get_product_details']);
+        Route::post('/featured' , [FeaturedApiController::class , 'get']);
+
         // Route::post('/' , [\App\Http\Controllers\Api\ProductController::class , 'get']);
         // Route::post('/filter' , [\App\Http\Controllers\Api\ProductController::class , 'getFilteredProducts']);
         // Route::post('/filter_product_name_category' , [\App\Http\Controllers\Api\ProductController::class , 'filter_product_name_category']);
@@ -287,7 +289,7 @@ Route::middleware('checkLang')->group(function (){
                      Route::post('/cart', [CardController::class, 'get_user_card']);
                      Route::post('cart_update' , [CardController::class, 'update']);
                      Route::delete('clear', [CardController::class, 'delete']);
-                     Route::delete('item/delete', [CardController::class, 'delete_card_item']);
+                     Route::post('item/delete', [CardController::class, 'delete_card_item']);
 
                 });
 
@@ -297,12 +299,6 @@ Route::middleware('checkLang')->group(function (){
                     Route::post('store' , [OrderController::class , 'store_auth']);
                     Route::post('orders' , [OrderController::class , 'get_user_ordes']);
                 });
-
-
-
-
-
-
 
 
 

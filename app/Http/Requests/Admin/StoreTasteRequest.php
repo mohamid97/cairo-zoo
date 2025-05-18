@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddToCardRequest extends FormRequest
+class StoreTasteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,12 @@ class AddToCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|exists:products,id',
-            // 'quantity' => 'required|integer|min:1',
+            'name.*'=>'required|string|max:255',
+            'slug.*'=>'required|string|max:255',
+            'des.*'=>'required|string|max:6000',
+            'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,webp',
         ];
+
+
     }
-
-
 }

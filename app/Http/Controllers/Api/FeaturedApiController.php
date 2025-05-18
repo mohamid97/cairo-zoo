@@ -13,6 +13,6 @@ class FeaturedApiController extends Controller
     use ResponseTrait;
     public function get(){
         $featured = Featured::with('product.gallery')->get();
-        return $this->res(true , 'All Featured Products' , 200 , FeaturedProductsResource::collection($featured));
+        return $this->res(true , __('main.all_featured') , 200 , FeaturedProductsResource::collection($featured));
     }
 }

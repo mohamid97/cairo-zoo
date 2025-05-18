@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Admin\ProductProp;
+use App\Models\Admin\Taste;
 class ProductController extends Controller
 {
     protected $langs;
@@ -67,7 +68,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.add' , ['categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
+        return view('admin.products.add' , ['tastes'=>Taste::all() ,'categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
 
     }
 
@@ -97,7 +98,8 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? null,
                 'thumbinal' => $imageData['thumbinal'] ?? null,
-                'barcode'=>$request->barcode
+                'barcode'=>$request->barcode,
+                'taste_id'=>$request->taste_id
             ]);
 
             foreach ($this->langs as $lang) {
@@ -109,8 +111,9 @@ class ProductController extends Controller
                 $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
             }
 
-            $product->relatedProducts()->sync($request->related_products);
             $product->save();
+            $product->relatedProducts()->sync($request->related_products);
+
             DB::commit();
             Alert::success('Success', __('main.product_added_successfully'));
             return redirect()->back();
@@ -141,7 +144,8 @@ class ProductController extends Controller
             'categories' => $categories,
             'brands' => $brands,
             'products' => $products,
-            'product' => $product
+            'product' => $product,
+            'tastes'=>Taste::all() 
         ]);
     }
 
@@ -149,6 +153,7 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request , $id)
     {
 
+      
         try {
             DB::beginTransaction();
             $product = Product::findOrFail($id);
@@ -173,7 +178,9 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? $product->image,
                 'thumbinal' => $imageData['thumbinal'] ?? $product->thumbinal,
-                'barcode'=>$request->barcode
+                'barcode'=>$request->barcode,
+                'taste_id'=>$request->taste_id
+
             ]);
             foreach ($this->langs as $lang) {
                 $product->{'name:'.$lang->code}  = $request->name[$lang->code];
@@ -183,8 +190,9 @@ class ProductController extends Controller
                 $product->{'meta_title:'.$lang->code}  = $request->meta_title[$lang->code];
                 $product->{'slug:'.$lang->code}  = $request->slug[$lang->code];
             }
-
             $product->save();
+           $product->relatedProducts()->sync($request->related_products);
+
             DB::commit();
             Alert::success('Success', __('main.product_updated_successfully'));
             return redirect()->back();

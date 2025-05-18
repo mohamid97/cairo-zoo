@@ -11,6 +11,7 @@ use App\Http\Controllers\DataEntry\ContactUsController;
 use App\Http\Controllers\DataEntry\MissionVission;
 use App\Http\Controllers\DataEntry\ProductController;
 use App\Http\Controllers\DataEntry\SliderController;
+use App\Http\Controllers\DataEnrty\TasteController;
 
 Route::get('/data_entry/login', [AuthController::class , 'show_login'])->name('showLoginDataEntry');
 Route::post('/data_entry/login', [AuthController::class,'login'])->name('dataEntryLogin');
@@ -48,6 +49,17 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
     // });
 
 
+    //start taste
+    Route::prefix('tastes')->group(function(){
+        Route::get('/' , [TasteController::class , 'index'])->name('data_entry.tastes.index');
+        Route::get('/create' , [TasteController::class , 'create'])->name('data_entry.tastes.add');
+        Route::post('/store' , [TasteController::class , 'store'])->name('data_entry.tastes.store');
+        Route::get('/edit/{id}' , [TasteController::class , 'edit'])->name('data_entry.tastes.edit');
+        Route::post('/update/{id}' , [TasteController::class , 'update'])->name('data_entry.tastes.update');
+        Route::get('/delete/{id}' , [TasteController::class , 'delete'])->name('data_entry.tastes.delete');
+    });
+
+
     // start brand
     Route::prefix('brands')->group(function (){
         Route::get('/' , [BrandController::class , 'index'])->name('data_entry.brands.index');
@@ -58,7 +70,7 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
         Route::post('/update/{id}' , [BrandController::class , 'update'])->name('data_entry.brands.update');
     });
 
-    //start category 
+    //start category
 
     Route::prefix('categories')->group(function (){
         Route::get('/' , [CategoryController::class , 'index'])->name('data_entry.category.index');
@@ -143,7 +155,7 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
         Route::get('/restore/{id}' , [SliderController::class , 'restore'])->name('data_entry.sliders.restore');
         Route::get('/slider/setting' , [SliderController::class , 'setting'])->name('data_entry.sliders.setting');
         Route::post('/slider/setting/update' , [SliderController::class , 'update_setting'])->name('data_entry.sliders.setting_update');
- 
+
     }); // end slider
 
 
@@ -166,7 +178,7 @@ Route::middleware(['checkIfDataEntry' , 'DashboardLang'])->prefix('data_entry')-
 
 
 
-    
+
 
 
 });

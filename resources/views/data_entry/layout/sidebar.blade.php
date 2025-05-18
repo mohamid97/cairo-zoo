@@ -136,6 +136,14 @@
                                                         <p>{{ __('main.products') }}</p>
                                                     </a>
                                                 </li>
+
+
+                                                <li class="nav-item">
+                                                    <a href="{{ route('data_entry.tastes.index') }}" class="nav-link">
+                                                        <i class="fa fa-plus nav-icon"></i>
+                                                        <p>{{ __('main.tastes') }}</p>
+                                                    </a>
+                                                </li>
                                                 <li class="nav-item">
                                                     <a href="{{ route('data_entry.products.add') }}" class="nav-link">
                                                         <i class="fa fa-plus nav-icon"></i>

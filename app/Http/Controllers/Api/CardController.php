@@ -12,6 +12,7 @@ use App\Models\Front\CardItem;
 use App\Trait\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CardController extends Controller
 {
@@ -31,7 +32,7 @@ class CardController extends Controller
             if(!isset($product)){
                 return $this->res(false ,__('main.product_not_found') , 404);
             }
-            if($product->stock < $request->quantity){
+            if($product->stock < 1){
                 return  $this->res(false ,__('main.stock_less_than_quantity'), 404);
             }
             if ($cardItem) {
@@ -159,35 +160,48 @@ class CardController extends Controller
 
 
      
-      public function delete_card_item(Request $request){
-       
-            try {
-                $request->validate([
-                  'product_id' => 'required|exists:products,id',
-                ]);
-                DB::beginTransaction(); 
-                $user = $request->user();
-                $card = Card::with(['user' , 'items.product'])->where('user_id', $user->id)->first();
-                if (!$card) {
-                    return  $this->res(true ,__('main.user_has_no_cart') , 404);
-                }
-                $cardItem = CardItem::where('card_id', $card->id)->where('product_id', $request->product_id)->first();
-                if (!$cardItem) {
-                    return  $this->res(true ,__('main.user_has_no_cart'), 404);
-                }
-         
-                $cardItem->delete();
-                if ($card->items()->count() === 0) {
-                    $card->delete();
-                }
-                DB::commit(); 
-                return  $this->res(true ,__('main.cart_item_deleted'), 200 , new UserCardResource($card));
-            }  catch (\Exception $e) {
-                DB::rollBack(); 
-                return  $this->res(false , $e->errors() , $e->getCode());
-            }
+public function delete_card_item(Request $request)
+{
+    try {
       
-      } // end felete item form card
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        DB::beginTransaction(); 
+
+        $user = $request->user();
+        $card = Card::with(['user', 'items.product'])->where('user_id', $user->id)->first();
+
+        if (!$card) {
+            return $this->res(true, __('main.user_has_no_cart'), 404);
+        }
+
+        $cardItem = CardItem::where('card_id', $card->id)
+                            ->where('product_id', $request->product_id)
+                            ->first();
+
+        if (!$cardItem) {
+            return $this->res(true, __('main.product_not_found_in_cart'), 404);
+        }
+
+        $cardItem->delete();
+
+        if ($card->items()->count() === 0) {
+            $card->delete();
+        }
+
+        DB::commit();
+        return $this->res(true, __('main.cart_item_deleted'), 200, new UserCardResource($card));
+
+    } catch (ValidationException $e) {
+        return $this->res(false, $e->errors(), 422);
+
+    } catch (\Exception $e) {
+        DB::rollBack(); 
+        return $this->res(false, $e->getMessage(), $e->getCode() ?: 500);
+    }
+}
 
 
 

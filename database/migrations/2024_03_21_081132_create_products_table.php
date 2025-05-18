@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('sales_price');
 //            $table->string('old_price')->nullable();
-//            $table->string('discount')->nullable();
+            $table->unsignedBigInteger('taste_id')->nullable();
             $table->integer('stock')->default(0);
             $table->string('sku')->nullable();
             $table->string('image')->nullable();

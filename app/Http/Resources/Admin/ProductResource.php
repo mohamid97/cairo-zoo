@@ -28,6 +28,7 @@ class ProductResource extends JsonResource
         return [
             'id'=>$this->id,
             'sales_price'    =>$this->sales_price,
+            'price'          => ceil(($this->getBestDiscount()) ? $this->sales_price - $this->getBestDiscount()['value'] ?? 0 : $this->sales_price),
             // 'category' =>isset($this->category_id) ? new CategoryDetailsResource($this->category): null,
             'name'     =>$this->name,
             'des'       =>$this->des,
@@ -36,7 +37,7 @@ class ProductResource extends JsonResource
             'slug'=> $slug,
             'sku'=>$this->sku,
             'discount'=>$this->getBestDiscount(),
-            // 'stock'=>$this->stock,
+            'stock'=>$this->stock,
             // 'old_price'=>$this->old_price,
             // 'discount'=>$this->discount,
             'gallery' => $this->gallery && $this->gallery->isNotEmpty() ? ProductGallerResource::collection($this->gallery) : null,

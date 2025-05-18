@@ -16,7 +16,7 @@ class Product extends Model implements TranslatableContract
 {
     use HasFactory , Translatable , SoftDeletes;
     public $translatedAttributes = ['des', 'name' , 'small_des' , 'meta_des' , 'meta_title' , 'slug'];
-    protected $fillable = ['category_id' , 'barcode' ,'brand_id' , 'status' , 'image' , 'stock' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
+    protected $fillable = ['category_id' ,'barcode' , 'taste_id' ,'brand_id' , 'status' , 'image' , 'stock' , 'thumbinal' , 'sku' , 'sales_price' , 'star' , 'weight' , 'height' , 'length' , 'width' , 'video'];
     public $translationForeignKey = 'product_id';
     public $translationModel = 'App\Models\Admin\ProductTranslation';
 
@@ -27,6 +27,11 @@ class Product extends Model implements TranslatableContract
     public function category()
     {
         return $this->belongsTo(Category::class , 'category_id');
+    }
+
+    public function taste()
+    {
+        return $this->belongsTo(Taste::class , 'taste_id');
     }
 
     public function cardItems()
@@ -95,7 +100,7 @@ class Product extends Model implements TranslatableContract
             ->where('target_id', $this->brand_id)
             ->first();
         if ($brand) {
-            
+
             $discounts[] = $this->formatDiscount($brand);
         }
 
@@ -120,12 +125,12 @@ class Product extends Model implements TranslatableContract
             $value = $discount->discount_amount;
         }
 
-       
+
 
         return [
             'type' => $discount->percentage === 'YES' ? 'percentage' : 'amount',
             'value' => ceil($value),
-            'raw' => $discount, 
+            'raw' => $discount,
         ];
 
 
@@ -159,7 +164,7 @@ class Product extends Model implements TranslatableContract
         if ($discount) {
             if (isset($discount['value'])) {
                 return $this->sales_price - $discount['value'];
-            } 
+            }
         }
 
         return $this->sales_price;

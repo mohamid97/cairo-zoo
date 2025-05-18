@@ -638,11 +638,19 @@ return [
     'order_deleted_successfully'=>'Order deleted successfully',
     'all_user_order'=>'All User Orders',
     'validation_failed'=>'Validation failed',
-
-
-
-
-
+    'taste_added_successfully'=>'Taste created successfully',
+    'taste_updated_successfully'=>'Taste updated successfully',
+    'taste_deleted_successfully'=>'Taste deleted successfully',
+    'taste'=>'Taste',
+    'tastes'=>'Tastes',
+    'add_new_taste'=>'Add New Taste',
+    'delete_taste_warning'=>'Are you sure you want to delete this Taste? All related data will be removed.',
+    'field'=>'Field',
+    'created_at'=>'Created At',
+    'updated_at'=>'Updated At',
+    'select_taste'=>'Select Taste',
+    'all_featured'=>'All Featured Products',
+    'product_not_found_in_cart'=>'Product Not Found In Cart'
 
 
 
