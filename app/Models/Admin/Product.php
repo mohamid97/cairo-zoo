@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model implements TranslatableContract
 {
@@ -169,6 +170,65 @@ class Product extends Model implements TranslatableContract
 
         return $this->sales_price;
     }
+
+
+
+
+    public function deductStock($orderQuantity)
+    {
+
+        $remainingQty = $orderQuantity;
+        $stockMovements = $this->stocks()
+            ->where('quantity', '>', 0)
+            ->orderBy('id')
+            ->get();
+
+        foreach ($stockMovements as $movement) {
+            if ($remainingQty <= 0) break;
+
+            if ($movement->quantity >= $remainingQty) {
+                $this->diff_price($movement , $remainingQty);
+                $movement->quantity -= $remainingQty;
+                $movement->save();
+                $remainingQty = 0;
+            } else {
+                $this->diff_price($movement , $movement->quantity);
+                $remainingQty -= $movement->quantity;
+                $movement->quantity = 0;
+                $movement->save();
+            }
+
+
+            if ($movement->quantity === 0) {
+                $movement->delete();
+            }
+
+
+        }
+
+        return true;
+    }
+
+
+
+
+    public function diff_price($movement , $qty){
+        if ($this->sales_price  != $movement->sales_price){
+            DiffPrice::create([
+                    'product_id'=>$this->id,
+                    'amount'=> ceil(($this->sales_price - $movement->sales_price ) * $qty),
+                    'quantity'=>$qty,
+                     'date'=>now()->toDateString(),
+                     'diff_amount'=>ceil($this->sales_price - $movement->sales_price)
+
+                ]);
+
+        }
+
+
+    }
+
+
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\CashierOrder;
+use App\Models\Admin\DiffPrice;
 use App\Models\Admin\Product;
 use Illuminate\Http\Request;
 
@@ -37,15 +38,35 @@ class CahierOrderController extends Controller
 
 
 
-    public function show($id)
-{
-    $order = CashierOrder::with(['items.product', 'user'])->findOrFail($id);
-    
-    return view('admin.cahier_orders.order_details', [
-        'order' => $order,
-        'order_items' => $order->items,
-    ]);
-}
+        public function show($id)
+    {
+        $order = CashierOrder::with(['items.product', 'user'])->findOrFail($id);
+
+        return view('admin.cahier_orders.order_details', [
+            'order' => $order,
+            'order_items' => $order->items,
+        ]);
+    }
+
+
+    public function diff(Request $request){
+
+    $query = DiffPrice::with('product');
+
+    if ($request->filled('start_date')) {
+        $query->whereDate('created_at', '>=', $request->start_date);
+    }
+
+    if ($request->filled('end_date')) {
+        $query->whereDate('created_at', '<=', $request->end_date);
+    }
+
+    $diffs = $query->paginate(20);
+
+    return view('admin.cahier_orders.diff', compact('diffs'));
+
+
+    }
 
 
 

@@ -555,6 +555,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('/' , [CahierOrderController::class , 'index'])->name('admin.cahier_orders.index');
         Route::get('/show/{id}' , [CahierOrderController::class , 'show'])->name('admin.cahier_orders.show');
         Route::get('/delete/{id}' , [CahierOrderController::class , 'delete'])->name('admin.cahier_orders.delete');
+        Route::get('/diff' , [CahierOrderController::class , 'diff'])->name('admin.cahier_orders.diff');
     });
 
 

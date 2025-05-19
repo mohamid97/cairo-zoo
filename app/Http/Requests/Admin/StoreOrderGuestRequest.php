@@ -28,14 +28,15 @@ class StoreOrderGuestRequest extends FormRequest
     public function rules()
     {
         return [
+
             'payment_method' => 'required|in:cash,paymob,else',
-            'shipment_way' => 'required|string|in:store,delivery', // Example: Allowed shipment options
-            'address' => 'required|string',
-            'gov_id' => 'required|exists:govs,id',
-            'city_id' => 'required|exists:cities,id',
+            'shipment_way' => 'required|string|in:store,delivery', 
+            'address' => 'required|string|max:60000',
             'first_name'=>'required|string|max:255',
-            'last_name'=>'required|string|max:255',
-           'phone' => ['required', 'regex:/^01[0-2,5]{1}[0-9]{8}$/'],
+            'last_name'=> 'required|string|max:255',
+            'phone' =>  ['required', 'regex:/^01[0-2,5]{1}[0-9]{8}$/'],
+            'products.*.id'=> 'required|exists:products,id',
+            'products.*.quantity'=> 'required|integer|min:1'
 
         ];
     }

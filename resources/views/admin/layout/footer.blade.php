@@ -86,13 +86,11 @@
         document.getElementById('spinner-overlay').style.display = 'flex';
     }
 
-    // Function to hide the spinner overlay
     function hideSpinner() {
         document.getElementById('spinner-overlay').style.display = 'none';
     }
 
-    // Hide spinner when all resources are loaded
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         hideSpinner();
     });
 

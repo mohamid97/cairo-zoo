@@ -83,6 +83,16 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.cahier_orders.diff') }}" class="nav-link">
+                                <i class="fas fa-balance-scale"></i>
+                                <p>{{ __('main.difference') }}</p>
+                            </a>
+                        </li>
+
+
+
                     </ul>
                 </li>
 

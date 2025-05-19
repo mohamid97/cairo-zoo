@@ -42,32 +42,67 @@
     @yield('styles')
 
 <style>
-    #spinner-overlay {
+    .loader-wrapper {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
-        z-index: 9999; /* Ensure it's on top of everything */
+        top: 0; left: 0; right: 0; bottom: 0;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        background: rgba(26, 26, 26, 0.95);
+        z-index: 1000;
+        animation: fadeOut 2s ease 2s forwards;
     }
 
-    #spinner {
-        /* Add styles for your spinner animation */
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #444;
+        border-top-color: #00f7ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
     }
 
-    .loader {
-        color: #17a2b8;
-        display: inline-block;
-        position: relative;
-        font-size: 48px;
-        font-family: Arial, Helvetica, sans-serif;
-        box-sizing: border-box;
+    .loading-text {
+        color: #aaa;
+        font-size: 1.2rem;
+        opacity: 0;
+        animation: fadeInOut 2s ease-in-out infinite;
     }
 
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes colorChange {
+        0% {
+            background-color: var(--col1);
+        }
+        33.33% {
+            background-color: var(--col2);
+        }
+        66.66% {
+            background-color: var(--col3);
+        }
+        100% {
+            background-color: var(--col1);
+        }
+    }
+
+    @keyframes spin {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 
     ::-webkit-scrollbar {
         width: 10px; /* Width of the scrollbar */
@@ -109,11 +144,13 @@
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-<div id="spinner-overlay">
-    <div id="spinner">
-        <span class="loader">Loading...</span>
-    </div>
+
+
+<div class="loader-wrapper" id="spinner-overlay">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading...</p>
 </div>
+
 <div class="wrapper">
 @include('sweetalert::alert')
 

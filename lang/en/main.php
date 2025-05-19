@@ -551,7 +551,7 @@ return [
     'invalid_coupon_code'=>'Invalid coupon code',
     'coupon_code_expired'=>'Coupon code expired',
     'coupon_limit'=>'Coupon code usage limit reached',
-    'not_enough_stock'=>'Not enough stock for product:',
+    'not_enough_stock'=>'Not enough stock for product',
     'order_submitted_successfully'=>'Order submitted successfully',
     'coupon_code_is_valid'=>'Coupon code is valid',
     'delete_Slider_warning'=>'Are you sure you want to delete this Slider? All related data will be removed.',
@@ -650,7 +650,20 @@ return [
     'updated_at'=>'Updated At',
     'select_taste'=>'Select Taste',
     'all_featured'=>'All Featured Products',
-    'product_not_found_in_cart'=>'Product Not Found In Cart'
+    'product_not_found_in_cart'=>'Product Not Found In Cart',
+    'product_not_founded'=>'Product Not Found',
+    'invalid_coupon_or_limit_code'=>'Invalid coupon code or usage limit reached',
+    'diffs' => 'Differences',
+    'product' => 'Product',
+    'total_difference' => 'Total Difference',
+    'total_quantity' => 'Total Quantity',
+    'show_details' => 'Show Details',
+    'quantity' => 'Quantity',
+    'amount' => 'Amount',
+    'diff_amount' => 'Price Difference',
+    'date' => 'Date',
+    'home' => 'Home',
+    'difference'=>'Difference'
 
 
 

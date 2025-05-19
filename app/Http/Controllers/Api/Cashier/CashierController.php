@@ -15,8 +15,7 @@ use App\Http\Resources\Cashier\OrderResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Cashier\StoreOrderRequest;
-
-
+use App\Models\Admin\Stock;
 
 class CashierController extends Controller
 {
@@ -80,21 +79,20 @@ class CashierController extends Controller
 
     public function StoreOrder(StoreOrderRequest $request)
     {
-        
+    
         try{
             $user = $request->user();
             if ($request->has('coupon_code')) {
-                $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
-                ->whereDate('end_date', '>=', Carbon::now())->first();
-                if (!$coupon) {
-                    return $this->res(false, __('main.invalid_coupon_code'), 400);
-                }
-                if ($coupon->times_used >= $coupon->usage_limit) {
-                    return $this->res(false, __('main.coupon_limit'), 400);
-                    
+                if(!$this->check_coupon($request->coupon_code)){
+                    return $this->res(false, __('main.invalid_coupon_or_limit_code'), 400);
+
                 }
             }
 
+            if(!$this->ckeck_stocks($request->products)){
+                return $this->res(false , __('main.not_enough_stock'), 404);
+
+            }
             DB::beginTransaction();
             $products = $request->input('products');
             $cahier_order = CashierOrder::create([
@@ -106,32 +104,18 @@ class CashierController extends Controller
             $total_after_discount = 0;
             foreach ($products as $product) {
                 $productModel = Product::find($product['product_id']);
-                
-                if (!$productModel) {
-                    return $this->res(false, __('main.product_not_found'), 404);
-                }
-            
                 $discount = $productModel->getBestDiscount();
                 $discount_value = $discount['value'] ?? 0;
                 $discount_type = $discount['type'] ?? null;
-            
-                $quantity = $product['quantity'];
-                if ($productModel->stock < $quantity) {
-                    return $this->res(false, __('main.not_enough_stock') . $productModel->name, 400);
-                }
-            
                 $price_before_discount = $productModel->sales_price;
                 $price_after_discount = $price_before_discount - $discount_value;
-    
-                
-                $total_price_before_discount = ceil($quantity * $price_before_discount);
-                $total_price_after_discount = ceil($quantity * $price_after_discount);
-                // dd($total_price_before_discount  , $total_price_after_discount);
+                $total_price_before_discount = ceil($product['quantity'] * $price_before_discount);
+                $total_price_after_discount = ceil($product['quantity'] * $price_after_discount);
     
             
                 $orderItem = $cahier_order->items()->create([
                     'product_id' => $productModel->id,
-                    'quantity' => $quantity,
+                    'quantity' => $product['quantity'],
                     'price_before_discount' => $price_before_discount,
                     'price_after_discount' => $price_after_discount,
                     'total_price_before_discount' => $total_price_before_discount,
@@ -141,9 +125,9 @@ class CashierController extends Controller
                     'discount_amount'=> $discount_type === 'amount' ? $discount_value : null,
                 ]);
             
-                $productModel->stock -= $quantity;
+                $productModel->stock -= $product['quantity'];
                 $productModel->save();
-            
+                $productModel->deductStock($product['quantity']);
                 $total_before_discount += $total_price_before_discount;
                 $total_after_discount += $total_price_after_discount;
             }
@@ -167,13 +151,61 @@ class CashierController extends Controller
             return $this->res(true, __('main.order_submitted_successfully'), 200, ['cahier_order' => new OrderResource($cahier_order)]);
 
         }catch(\Exception $e){
-            //dd($e->getMessage());
+            // DB::rollBack();
+            // dd($e->getMessage());
             DB::rollBack();
             return $this->res(false, __('main.error_happened'), 500);
         }
 
 
+        
+
+
     }
+
+
+
+
+
+    // check stock
+    private function check_coupon($coupon_code)
+    {
+        $coupon = Coupon::where('code', $coupon_code)
+            ->where('is_active', 1)
+            ->whereDate('start_date', '<=', Carbon::now())
+            ->whereDate('end_date', '>=', Carbon::now())
+            ->first();
+
+        if (!isset($coupon)) {
+            return false;
+        }
+
+        if ($coupon->times_used >= $coupon->usage_limit) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // validate stock
+    private function ckeck_stocks(array $products)
+    {
+        foreach ($products as $product) {
+            $productModel = Product::find($product['product_id']);
+            if (!isset($productModel)) {
+                return false;
+
+            }
+            if ($productModel->stock < $product['quantity']) {
+                return false;
+
+            }
+        }
+
+        return true;
+
+    }
+
 
     //validate validate_coupon
     public function validate_coupon(Request $request)
@@ -192,6 +224,37 @@ class CashierController extends Controller
         }
         return $this->res(true, __('main.coupon_code_is_valid'), 200 ,new CouponResource($coupon));
     }
+
+
+    // get cashier orders 
+    public function cashier_orders(Request $request)
+    {
+        $user = $request->user();
+        $orders = CashierOrder::with(['user' , 'items'])->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return $this->res(true, __('main.cashier_orders'), 200, [
+            'orders' => OrderResource::collection($orders),
+            'pagination' => [
+                'current_page' => $orders->currentPage(),
+                'per_page' => $orders->perPage(),
+                'total' => $orders->total(),
+                'last_page' => $orders->lastPage(),
+                'next_page_url' => $orders->nextPageUrl(),
+                'prev_page_url' => $orders->previousPageUrl(),
+            ],
+        ]);
+
+
+        
+
+
+
+
+    } // end cashier orders
+
+
 
 
 

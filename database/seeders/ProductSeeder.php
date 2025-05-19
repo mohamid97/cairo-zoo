@@ -31,7 +31,7 @@ class ProductSeeder extends Seeder
                 'status' => 'published',
                 'image' => 'products/image_' . $i . '.jpg',
                 'thumbinal' => 'products/thumb_' . $i . '.jpg',
-                'stock' => rand(10, 100),
+                'stock' => 0,
                 'sku' => 'SKU' . $i,
                 'sales_price' => rand(50, 500),
                 'star' => rand(1, 5),

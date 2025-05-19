@@ -115,6 +115,14 @@ Route::middleware('checkLang')->group(function (){
 
 
 
+    
+    Route::prefix('orders_guest')->group(function(){
+        Route::post('store' , [OrderController::class , 'store_guest']);
+    });
+
+
+
+
 
 
     // start feedback api Fe
@@ -231,9 +239,6 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // Route::prefix('orders_guest')->group(function(){
-    //     Route::post('store' , [OrderController::class , 'store_guest']);
-    // });
 
     // Route::prefix('descriptions')->group(function(){
 
@@ -256,6 +261,7 @@ Route::middleware('checkLang')->group(function (){
                 Route::post('get_product' , [CashierController::class , 'getProduct']);
                 Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
                 Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
+                Route::post('orders' , [CashierController::class , 'cashier_orders']);
 
             });
 
@@ -270,7 +276,6 @@ Route::middleware('checkLang')->group(function (){
 
                 Route::post('user-details', [\App\Http\Controllers\Api\UsersController::class, 'user']);
                 Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
-
 
                 Route::prefix('address')->group(function(){
                     Route::post('/' , [\App\Http\Controllers\Api\UsersController::class , 'all_address']);
@@ -297,7 +302,7 @@ Route::middleware('checkLang')->group(function (){
 
                 Route::prefix('orders_auth')->group(function(){
                     Route::post('store' , [OrderController::class , 'store_auth']);
-                    Route::post('orders' , [OrderController::class , 'get_user_ordes']);
+                    Route::post('orders' , [OrderController::class , 'get_user_orders']);
                 });
 
 

@@ -19,9 +19,12 @@ class ItemOrderResource extends JsonResource
             'id'=>$this->id,
             'product_id'=>$this->product_id,
             'product_name'=>$this->product_name,
+            'sales_price'=>$this->sales_price,
+            'discount'=>$this->discount,
             'price'=>$this->price,
             'quantity'=>$this->quantity,
             'product'=>new OrderProductGalleryReource(Product::find($this->product_id))
         ];
     }
+    
 }

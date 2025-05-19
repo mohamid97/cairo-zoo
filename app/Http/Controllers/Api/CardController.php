@@ -45,9 +45,9 @@ class CardController extends Controller
                     'quantity' => 1,
                 ]);
             }
-    
             DB::commit();
             $updatedCard = Card::with(['user' , 'items.product'])->find($card->id);
+
             return  $this->res(true , __('main.item_added_successfully') , 200 , new UserCardResource($updatedCard));
         }catch(\Exception $e){
             DB::rollBack();
@@ -70,7 +70,6 @@ class CardController extends Controller
 
         if (!$card) {
             return  $this->res(true , __('main.no_data_in_cart') , 200);
-
         }
 
         return  $this->res(true ,__('main.user_cart') , 200 , new UserCardResource($card));

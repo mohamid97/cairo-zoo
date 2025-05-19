@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreOrderGuestRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\Admin\OrderAuthResource;
+use App\Models\Admin\Coupon;
 use App\Models\Admin\OrderAddress;
 use App\Models\Admin\Product;
 use App\Models\Front\Card;
 use App\Models\Front\Order;
 use App\Models\Front\OrderItem;
 use App\Trait\ResponseTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -53,7 +55,7 @@ class OrderController extends Controller
             });
 
             $totalAfterPrice = $cartItems->sum(function ($item) {
-                $dicount = Product::find($item->product_id)->getBestDiscount();
+                $discount = Product::find($item->product_id)->getBestDiscount();
                 $discount_value = $discount['value'] ?? 0;
                 $discount_type = $discount['type'] ?? null;
                 return ( Product::find($item->product_id)->sales_price - $discount_value ) * $item->quantity;
@@ -98,7 +100,10 @@ class OrderController extends Controller
                     
                 }
                 $product->stock -= $cartItem->quantity;
+                $product->deductStock($cartItem->quantity);
                 $product->save();
+                // dd(ceil($cartItem->product->getBestDiscount()['value'] ?? 0));
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem->product_id,
@@ -106,17 +111,18 @@ class OrderController extends Controller
                     'quantity' => $cartItem->quantity,
                     'sales_price' => ceil($cartItem->product->sales_price * $cartItem->quantity),
                     'discount'=> ceil($cartItem->product->getBestDiscount()['value'] ?? 0),
-                    'price'=> ceil(( $cartItem->product->sales_price - $cartItem->product->getBestDiscount()['value'] ?? 0 * $cartItem->quantity) * $cartItem->quantity)
+                    'price'=> ceil(( $cartItem->product->sales_price - ($cartItem->product->getBestDiscount()['value'] ?? 0 )  ) * $cartItem->quantity)
                 ]);
             }
             if ($request->has('address')) {
                 OrderAddress::create([
+                    'order_id'=>$order->id,
                     'address' => $request->input('address'),
                 ]);
             }
             DB::commit();
             $this->clearCart($user->id);
-            $order = Order::with(['items' , 'address.gov' ,'address.city' ,'user'])->where('user_id' , $user->id)->first();
+            $order = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->first();
             return $this->res(true , __('main.order_updated_successfully') , 200 , new OrderAuthResource( $order ));
 
         } catch (\Exception $e) {
@@ -192,97 +198,145 @@ class OrderController extends Controller
 
 
 
-    // public function store_guest(StoreOrderGuestRequest $request){
+    public function store_guest(StoreOrderGuestRequest $request){
 
-    //     // Start transaction to ensure everything is done or rolled back
-    //     DB::beginTransaction(); 
-    //     try {
-    //             //get total price
-    //             $total = 0;
-    //             $total_ship = 0;
-    //             foreach($request->products as $pro){            
-    //                 $product = Product::where('id' , $pro['id'])->first();
-    //                 if(isset($product)){
-    //                     $total += $product->price;
-    //                 }
+   
+        DB::beginTransaction(); 
+        try {
 
-    //                 if($request->has('shipment_way') && $request->shipment_way == 'delivery'){
-    //                     $total_ship += 50;
-    //                 }
-
-    //             }
-    //         // Create the order
-    //         $order = Order::create([
-    //             'user_id' => null,
-    //             'total_price' => $total,
-    //             'shipment_price' => $total_ship, // Default shipment price can be 0
-    //             'payment_method' => $request->input('payment_method', 'cash'),
-    //             'payment_status' => 'unpaid',
-    //             'status' => 'pending',
-    //             'phone'=>$request->phone,
-    //             'first_name'=>$request->first_name,
-    //             'last_name'=>$request->last_name
-    //         ]);
-
-    //         // loop all products normal item
-    //         foreach($request->products as $pro){
-    //             $product = Product::where('id' , $pro['id'])->first();
-    //             // Ensure there is enough stock before proceeding
-    //             if ($product->stock < $pro['quantity']) {
-    //                 return $this->res(false , 'Not enough stock for product: ' . $product->name , 402);
-                    
-    //             }
-    
-    //             // Deduct stock
-    //             $product->stock -= $pro['quantity'];
-    //             $product->save();
-
-    //             if(isset($product)){
-    //                 OrderItem::create([
-    //                     'order_id' => $order->id,
-    //                     'product_id' => $product->id,
-    //                     'product_name' =>$product->name,
-    //                     'quantity' => $pro['quantity'],
-    //                     'price' => $product->price * $pro['quantity'],
-    //                 ]);
-
-    //             }
-
-    //         }
-
-    //         // Handle address
-    //         if ($request->has('address')) {
-    //             OrderAddress::create([
-    //                 'order_id' => $order->id,
-    //                 'gov_id' => $request->input('gov_id'),
-    //                 'city_id' => $request->input('city_id'),
-    //                 'address' => $request->input('address'),
-    //             ]);
-    //         }
+            $coupon = null;
+                if ($request->has('coupon_code')) {
+                    $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
+                    ->whereDate('end_date', '>=', Carbon::now())->first();
+                    if (!$coupon) {
+                        return $this->res(false, __('main.invalid_coupon_code'), 400);
+                    }
+                    if ($coupon->times_used >= $coupon->usage_limit) {
+                        return $this->res(false, __('main.coupon_limit'), 400);
+                        
+                    }
+                }
 
 
-    //         DB::commit();
-    //         // Return the created order with its details
-    //         return $this->res(true , 'Order Created Successfully!' , 200);
+                $totalBefore = 0;
+                $totalAfter = 0;
+                $totalShip = 0;
 
-    //     } catch (\Exception $e) {
-    //         // Rollback the transaction if something fails
-    //         DB::rollBack();
-    //         return $this->res(true , $e->getMessage() , 500);
+                foreach ($request->products as $item) {
+                    $product = Product::find($item['id']);
 
-    //     }
+                    if (!isset($product)) {
+                        return $this->res(false, __('main.product_not_found'), 404);
+                    }
+
+                    if ($product->stock < $item['quantity']) {
+                        return $this->res(false, __('main.stock_less_than_quantity') . ': ' . $product->name, 402);
+                    }
+
+                    $discount = $product->getBestDiscount();
+                    $discountValue = $discount['value'] ?? 0;
+
+                    $before = $product->sales_price * $item['quantity'];
+                    $after = ($product->sales_price - $discountValue) * $item['quantity'];
+
+                    $totalBefore += $before;
+                    $totalAfter += $after;
+
+                    $items[] = [
+                        'product' => $product,
+                        'quantity' => $item['quantity'],
+                        'price' => $after,
+                        'discount' => $discountValue
+                    ];
+                }
 
 
 
+                $couponDiscount = 0;
+                if ($coupon) {
+                    $couponDiscount = $coupon->type == 'percentage'
+                        ? ceil($totalAfter * $coupon->discount / 100)
+                        : ceil($coupon->discount);
 
-    // } // end guest store order
+                    $totalAfter -= $couponDiscount;
+                }
+
+
+                if ($request->shipment_way == 'delivery') {
+                    $totalShip = 0;
+                }else{
+                     $totalShip = 0;
+                }
+
+
+
+                $order = Order::create([
+                    'user_id' => null,
+                    'total_price_before_discount' => ceil($totalBefore),
+                    'total_price_after_discount' => ceil($totalAfter),
+                    'shipment_price' => ceil($totalShip),
+                    'payment_method' => $request->input('payment_method', 'cash'),
+                    'payment_status' => 'unpaid',
+                    'status' => 'pending',
+                    'phone' => $request->phone,
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'coupon_code' => $request->coupon_code ?? null,
+                    'coupon_discount' => $couponDiscount,
+                    'discount_type' => $coupon->type ?? null
+                ]);
+
+
+                foreach ($items as $item) {
+                    $product = $item['product'];
+                    $product->stock -= $item['quantity'];
+                    $product->deductStock($item['quantity']);
+                    $product->save();
+
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'product_name' => $product->name,
+                        'quantity' => $item['quantity'],
+                        'sales_price' => $product->sales_price * $item['quantity'],
+                        'discount' => $item['discount'],
+                        'price' => $item['price']
+                    ]);
+                }
+
+
+                if ($request->has('address')) {
+                    OrderAddress::create([
+                        'order_id' => $order->id,
+                        'gov_id' => $request->input('gov_id'),
+                        'city_id' => $request->input('city_id'),
+                        'address' => $request->input('address'),
+                    ]);
+                }
+
+
+                DB::commit();
+                // Return the created order with its details
+                return $this->res(true , __('main.order_updated_successfully') , 200);
+
+        } catch (\Exception $e) {
+            // Rollback the transaction if something fails
+            DB::rollBack();
+            return $this->res(true , $e->getMessage() , 500);
+
+        }
 
 
 
 
-    public function get_user_ordes(Request $request){
+    } // end guest store order
+
+
+
+
+    public function get_user_orders(Request $request){
         $user = $request->user();
-        $orders = Order::with(['items' , 'address.gov' ,'address.city' ,'user'])->where('user_id' , $user->id)->paginate(10); // Paginate with 10 items per page;
+        $orders = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->paginate(15); // Paginate with 10 items per page;
         // Return the created order with its details
         return $this->res(true , __('main.all_user_order') , 200 ,  ['orders' => OrderAuthResource::collection( $orders ) ,  
            'pagination' => [

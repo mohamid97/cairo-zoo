@@ -106,10 +106,9 @@
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-<div id="spinner-overlay">
-    <div id="spinner">
-        <span class="loader">Loading...</span>
-    </div>
+<div class="loader-wrapper" id="spinner-overlay">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading...</p>
 </div>
 <div class="wrapper">
 @include('sweetalert::alert')
