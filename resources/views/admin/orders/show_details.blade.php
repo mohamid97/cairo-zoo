@@ -1,158 +1,118 @@
 @extends('admin.layout.master')
+
 @section('styles')
-    <style>
-        h4{
-            margin-top: 50px;
-        }
-
-    </style>
+<style>
+    .info-title {
+        font-weight: bold;
+        color: #17a2b8;
+    }
+    .badge-status {
+        font-size: 90%;
+    }
+</style>
 @endsection
+
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <h1>@lang('Order Details')</h1>
-        </div>
-    </section>
-
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">@lang('main.order_details')</h3>
-                </div>
-
-                <div class="card-body">
-                    <!-- Order Info -->
-                    <h4>@lang('main.user_information')</h4>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <th>@lang('main.full_name')</th>
-                            <td>
-
-
-                                {{$order->first_name}} {{$order->last_name}}
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.email')</th>
-                            <td>{{ $order->user ? $order->user->email : 'No Email' }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.phone')</th>
-                            <td>{{ $order->phone }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <h4>@lang('main.shipments')</h4>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <th>@lang('main.address')</th>
-                            <td>{{ $order->address->address }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.city')</th>
-                            <td>{{ $order->address->city->name }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.gov')</th>
-                            <td>{{ $order->address->gov->name }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.code')</th>
-                            <td>{{ $order->address->postal_code ?? 'N/A' }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Order Items -->
-                    <h4>@lang('main.order_items')</h4>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>@lang('main.product_name')</th>
-                            <th>@lang('main.quantity')</th>
-                            <th>@lang('main.per_price')</th>
-                            <th>@lang('main.price')</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($order->items as $item)
-                            <tr>
-                                <td>{{ $item->product->name }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ number_format($item->price, 2) }}</td>
-                                <td>{{ number_format($item->price * $item->quantity, 2) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-
-                    <!-- Order Summary -->
-                    <h4>@lang('main.order_summary')</h4>
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <th>@lang('main.total_items')</th>
-                            <td>{{ $order->items->sum('quantity') }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.total_price')</th>
-                            <td>{{ number_format($order->total_price, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.shiping_price')</th>
-                            <td>{{ number_format($order->shipment_price, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('main.final_total')</th>
-                            <td><strong>{{ number_format($order->total_price + $order->shipment_price, 2) }}</strong></td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Payment and Order Status -->
-
-                    <h4>@lang('main.status')</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <span>@lang('main.order_status')</span>
-                            <span class="badge badge-{{ $order->status == 'pending' ? 'primary' : ($order->status == 'proceed' ? 'info' : ($order->status == 'on way' ? 'warning' : ($order->status == 'finished' ? 'success' : 'danger'))) }}">
-                            {{ ucfirst($order->status) }}
-                        </span>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <span>@lang('main.payment_status')</span>
-                            <span class="badge badge-{{ $order->payment_status == 'paid' ? 'success' : 'danger' }}">
-                            {{ ucfirst($order->payment_status) }}
-                        </span>
-                        </div>
-
-                        <div class="col-md-4">
-                            <span>@lang('main.payment_method')</span>
-                            <span class="badge badge-{{ $order->payment_method == 'cash' ? 'info' : ($order->payment_method == 'paymob' ? 'warning' : ($order->payment_method == 'paypal' ? 'primary' : 'secondary')) }}">
-                            {{ ucfirst($order->payment_method) }}
-                        </span>
-                        </div>
-                    </div>
-                    <hr>
-                    <!-- Actions -->
-                    <div class="mt-4">
-                        <a href="{{ route('admin.orders.edit_status', ['id' => $order->id]) }}" class="btn btn-primary">
-                            <i class="fas fa-edit"></i> @lang('main.edit')
-                        </a>
-                        <a href="{{ route('admin.orders.delete', ['id' => $order->id]) }}" class="btn btn-danger"
-                           onclick="return confirm('@lang('Are you sure you want to delete this order?')')">
-                            <i class="fas fa-trash"></i> @lang('main.delete')
-                        </a>
-                    </div>
-                </div>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@lang('main.order_details')</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">@lang('main.home')</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.orders.index') }}">@lang('main.orders')</a></li>
+                    <li class="breadcrumb-item active">@lang('main.order_details')</li>
+                </ol>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<section class="content">
+<div class="container-fluid">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">@lang('main.order') #{{ $order->id }}</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-4">
+                <!-- Customer Info -->
+                <div class="col-md-6">
+                    <h5 class="info-title">@lang('main.customer_info')</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>@lang('main.name'):</strong> {{ $order->first_name }} {{ $order->last_name }}</li>
+                        <li class="list-group-item"><strong>@lang('main.phone'):</strong> {{ $order->phone }}</li>
+                        <li class="list-group-item">
+                            <strong>@lang('main.status'):</strong>
+                            <span class="badge badge-status 
+                                {{ $order->status === 'pending' ? 'badge-primary' : 
+                                   ($order->status === 'procced' ? 'badge-info' : 
+                                   ($order->status === 'on-way' ? 'badge-warning' : 
+                                   ($order->status === 'finished' ? 'badge-success' : 'badge-danger'))) }}">
+                                @lang('main.' . $order->status)
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>@lang('main.payment_status'):</strong>
+                            <span class="badge badge-status {{ $order->payment_status === 'paid' ? 'badge-success' : 'badge-danger' }}">
+                                @lang('main.' . $order->payment_status)
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Order Info -->
+                <div class="col-md-6">
+                    <h5 class="info-title">@lang('main.order_info')</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>@lang('main.total_before_discount'):</strong> {{ number_format($order->total_price_before_discount, 2) }}</li>
+                        <li class="list-group-item"><strong>@lang('main.total_after_discount'):</strong> {{ number_format($order->total_price_after_discount, 2) }}</li>
+                        <li class="list-group-item"><strong>@lang('main.shipment_price'):</strong> {{ number_format($order->shipment_price, 2) }}</li>
+                        @if ($order->coupon_code)
+                        <li class="list-group-item">
+                            <strong>@lang('main.coupon'):</strong> {{ $order->coupon_code }} 
+                            ({{ $order->discount_type === 'percentage' ? '%' : 'EGP' }} {{ $order->coupon_discount }})
+                        </li>
+                        @endif
+                        <li class="list-group-item"><strong>@lang('main.payment_method'):</strong> {{ ucfirst($order->payment_method) }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Order Items -->
+            <h5 class="info-title mb-3">@lang('main.items')</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="thead-info">
+                        <tr>
+                            <th>@lang('main.product')</th>
+                            <th>@lang('main.quantity')</th>
+                            <th>@lang('main.sales_price')</th>
+                            <th>@lang('main.discount')</th>
+                            <th>@lang('main.total')</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($order->items as $item)
+                        <tr>
+                            <td>{{ $item->product_name }}</td>
+                            <td>{{ $item->quantity }}</td>
+                            <td>{{ number_format($item->sales_price, 2) }}</td>
+                            <td>{{ number_format($item->discount, 2) }}</td>
+                            <td>{{ number_format($item->price, 2) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+</section>
 @endsection

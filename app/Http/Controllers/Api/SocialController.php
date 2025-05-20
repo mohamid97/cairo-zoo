@@ -15,7 +15,7 @@ class SocialController extends Controller
     public function get()
     {
         $social = SocialMedia::all();
-        return  $this->res(true ,'Social media links and status' , 200 ,SocialMediaResource::collection($social));
+        return  $this->res(true ,__('main.socail_media') , 200 ,SocialMediaResource::collection($social));
 
     }
 }

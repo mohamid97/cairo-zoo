@@ -50,6 +50,13 @@
                             </div>
 
                             <div class="col-md-2">
+                                <input type="date" name="from_date" class="form-control" value="{{ request()->from_date }}" placeholder="@lang('main.from_date')">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" name="to_date" class="form-control" value="{{ request()->to_date }}" placeholder="@lang('main.to_date')">
+                            </div>
+
+                            <div class="col-md-2">
                                 <select name="status" class="form-control">
                                     <option value="">@lang('main.all_status')</option>
                                     <option value="pending" {{ request()->status == 'pending' ? 'selected' : '' }}>@lang('main.pending')</option>
@@ -60,101 +67,117 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <select name="sort" class="form-control">
                                     <option value="desc" {{ request()->sort == 'desc' ? 'selected' : '' }}>@lang('main.descending')</option>
                                     <option value="asc" {{ request()->sort == 'asc' ? 'selected' : '' }}>@lang('main.ascending')</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary">@lang('main.search')</button>
+                            <div class="col-md-1">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search nav-icon"></i> @lang('main.search')</button>
                             </div>
                         </div>
                     </form>
 
                     <!-- Orders Table -->
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@lang('main.customer_name')</th>
+            <th>@lang('main.phone')</th>
+            <th>@lang('main.total_before_discount')</th>
+            <th>@lang('main.total_after_discount')</th>
+            <th>@lang('main.status')</th>
+            <th>@lang('main.coupon')</th>
+            <th>@lang('main.payment_status')</th>
+            <th>@lang('main.action')</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($orders as $index => $order)
+            <tr data-toggle="collapse" data-target="#items-{{ $order->id }}" class="accordion-toggle" style="cursor: pointer">
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $order->first_name }} {{ $order->last_name }}</td>
+                <td>{{ $order->phone }} </td>
+
+                <td>{{ number_format($order->total_price_before_discount, 2) }}</td>
+                <td>{{ number_format($order->total_price_after_discount, 2) }}</td>
+                <td>
+                    @if ($order->status == 'pending')
+                        <span class="badge badge-primary">@lang('main.pending')</span>
+                    @elseif ($order->status == 'procced')
+                        <span class="badge badge-info">@lang('main.proceed')</span>
+                    @elseif ($order->status == 'on-way')
+                        <span class="badge badge-warning">@lang('main.on_way')</span>
+                    @elseif ($order->status == 'finished')
+                        <span class="badge badge-success">@lang('main.finished')</span>
+                    @elseif ($order->status == 'canceled')
+                        <span class="badge badge-danger">@lang('main.canceled')</span>
+                    @endif
+                </td>
+                <td>{{ $order->coupon_code ?? '-' }}</td>
+                <td>
+                    @if ($order->payment_status == 'paid')
+                        <span class="badge badge-success">@lang('main.paid')</span>
+                    @else
+                        <span class="badge badge-danger">@lang('main.unpaid')</span>
+                    @endif
+                </td>
+                <td class="d-flex" style="gap: 5px">
+                    <a href="{{ route('admin.orders.delete', $order->id) }}" class="btn btn-sm btn-danger" title="@lang('main.remove')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    <a href="{{ route('admin.orders.show_details', $order->id) }}" class="btn btn-sm btn-primary" title="@lang('main.show')">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{{ route('admin.orders.edit_status', $order->id) }}" class="btn btn-sm btn-primary" title="@lang('main.edit_status')">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+
+            <!-- Collapsible row -->
+            <tr>
+                <td colspan="9" class="hiddenRow">
+                    <div class="collapse" id="items-{{ $order->id }}">
+                        <table class="table table-sm table-bordered" style="background: #17a2b8;
+    color: #FFF;">
                             <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>@lang('main.first_name')</th>
-                                <th>@lang('main.last_name')</th>
-                                <th>@lang('main.phone')</th>
-                                <th>@lang('main.quantity')</th>
-                                <th>@lang('main.status')</th>
-                                <th>@lang('main.payment_status')</th>
-                                <th>@lang('main.payment_method')</th>
-                                <th>@lang('main.action')</th>
-                            </tr>
+                                <tr>
+                                    <th>@lang('main.product')</th>
+                                    <th>@lang('main.quantity')</th>
+                                    <th>@lang('main.sales_price')</th>
+                                    <th>@lang('main.discount')</th>
+                                    <th>@lang('main.price')</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @forelse($orders as $index => $order)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{  $order->first_name }}</td>
-                                    <td>{{  $order->last_name }}</td>
-                                    <td>{{  $order->phone }}</td>
-                                    <td>{{ $order->items->sum('quantity') }}</td>
-                                    <td>
-                                        @if ($order->status == 'pending')
-                                            <span class="badge badge-primary">@lang('main.pending')</span>
-                                        @elseif ($order->status == 'procced')
-                                            <span class="badge badge-info">@lang('main.proceed')</span>
-                                        @elseif ($order->status == 'on-way')
-                                            <span class="badge badge-warning">@lang('main.on_way')</span>
-                                        @elseif ($order->status == 'finished')
-                                            <span class="badge badge-success">@lang('main.finished')</span>
-                                        @elseif ($order->status == 'canceled')
-                                            <span class="badge badge-danger">@lang('main.canceled')</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($order->payment_status == 'paid')
-                                            <span class="badge badge-success">@lang('main.paid')</span>
-                                        @else
-                                            <span class="badge badge-danger">@lang('main.unpaid')</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($order->payment_method == 'cash')
-                                            <span class="badge badge-success">@lang('main.cash')</span>
-                                        @elseif ($order->payment_method == 'paymob')
-                                            <span class="badge badge-success">@lang('main.paymob')</span>
-                                        @elseif ($order->payment_method == 'paypal')
-                                            <span class="badge badge-success">@lang('main.paypal')</span>
-                                        @elseif ($order->payment_method == 'other')
-                                            <span class="badge badge-success">@lang('main.other')</span>
-                                        @endif
-                                    </td>
-                                    <td class="d-flex" style="gap: 5px">
-                                        <a href="{{ route('admin.orders.delete', ['id' => $order->id]) }}">
-                                            <button class="btn btn-sm btn-danger" title="@lang('main.remove')">
-                                                <i class="nav-icon fas fa-trash"></i>
-                                            </button>
-                                        </a>
-
-                                        <a href="{{ route('admin.orders.show_details', ['id' => $order->id]) }}">
-                                            <button class="btn btn-sm btn-primary" title="@lang('main.show')">
-                                                <i class="nav-icon fas fa-eye"></i>
-                                            </button>
-                                        </a>
-
-                                        <a href="{{ route('admin.orders.edit_status', ['id' => $order->id]) }}">
-                                            <button class="btn btn-sm btn-primary" title="@lang('main.edit_status')">
-                                                <i class="nav-icon fas fa-edit"></i>
-                                            </button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8">@lang('main.no_data')</td>
-                                </tr>
-                            @endforelse
+                                @foreach($order->items as $item)
+                                    <tr>
+                                        <td>{{ $item->product_name ?? '-' }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td>{{ $item->sales_price }}</td>
+                                        <td>{{ $item->discount }}</td>
+                                        <td>{{$item->price}}</td>
+                                     
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="8">@lang('main.no_data')</td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
+
                     </div>
 
                     <!-- Pagination Links -->

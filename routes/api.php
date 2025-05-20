@@ -120,6 +120,11 @@ Route::middleware('checkLang')->group(function (){
         Route::post('store' , [OrderController::class , 'store_guest']);
     });
 
+    
+    Route::prefix('social-media')->group(function (){
+       Route::post('/get' , [\App\Http\Controllers\Api\SocialController::class , 'get']);
+    });
+
 
 
 
@@ -144,9 +149,6 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // Route::prefix('social-media')->group(function (){
-    //    Route::post('/get' , [\App\Http\Controllers\Api\SocialController::class , 'get']);
-    // });
 
     // Route::prefix('langs')->group(function (){
     //   Route::get('/get' , [\App\Http\Controllers\Api\LangController::class , 'get']);

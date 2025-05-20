@@ -52,13 +52,14 @@ use App\Http\Controllers\Admin\CahierOrderController;
 use App\Http\Controllers\Admin\LogController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\TasteController;
+use App\Http\Controllers\Admin\StatisticsController;
 
 Route::get('/mig' , function (){
 
 
     Artisan::call('migrate:fresh');
 
-    Artisan::call('db:seed');  
+    Artisan::call('db:seed');
 
    return "Migrations and seeders have been run successfully.";
 
@@ -120,15 +121,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
     Route::get('/' , [HomeController::class , 'index'])->name('admin.index');
-        // start order
-        Route::prefix('orders')->group(function(){
-            Route::get('/',[OrderController::class, 'index'])->name('admin.orders.index');
-            Route::get('/delete/{id}' , [OrderController::class, 'index'])->name('admin.orders.delete');
-            Route::get('/show_details/{id}' , [OrderController::class, 'show_details'])->name('admin.orders.show_details');
-            Route::get('/edit_status/{id}' ,[OrderController::class, 'edit_status'] )->name('admin.orders.edit_status');
-            Route::post('/update_status/{id}', [OrderController::class, 'update_status'])->name('admin.orders.update_status');
 
-        });
 
 
     // start taste
@@ -253,25 +246,28 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
    Route::prefix('logs')->group(function (){
        Route::get('/' , [LogController::class , 'index'])->name('admin.logs.index');
        Route::get('admin/logs/{log}', [LogController::class, 'show'])->name('admin.logs.show');
-       Route::get('/delete/{log}' , [LogController::class , 'delete'])->name('admin.logs.delete'); 
+       Route::get('/delete/{log}' , [LogController::class , 'delete'])->name('admin.logs.delete');
        Route::get('user/logs/{user}', [LogController::class, 'userLogs'])->name('admin.logs.users.show');
     });
 
 
-   
+        // start social media
+   Route::prefix('social-media')->group(function (){
+       Route::get('/' , [SocialMediaController::class , 'index'])->name('admin.social_media.index');
+       Route::post('/update' , [SocialMediaController::class , 'update'])->name('admin.social_media.update');
+   });
 
 
 
-   
 
 
 
 
-    // start social media
-//    Route::prefix('social-media')->group(function (){
-//        Route::get('/' , [SocialMediaController::class , 'index'])->name('admin.social_media.index');
-//        Route::post('/update' , [SocialMediaController::class , 'update'])->name('admin.social_media.update');
-//    });
+
+
+
+
+
 
 
 
@@ -518,7 +514,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('/destroy/{id}' , [CMSController::class , 'destroy'])->name('admin.cms.destroy');
         });
 
-         
+
 
 
     // route for admin discount
@@ -555,8 +551,27 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('/' , [CahierOrderController::class , 'index'])->name('admin.cahier_orders.index');
         Route::get('/show/{id}' , [CahierOrderController::class , 'show'])->name('admin.cahier_orders.show');
         Route::get('/delete/{id}' , [CahierOrderController::class , 'delete'])->name('admin.cahier_orders.delete');
-        Route::get('/diff' , [CahierOrderController::class , 'diff'])->name('admin.cahier_orders.diff');
     });
+
+    // statistics
+    Route::prefix('statistics')->group(function(){
+        Route::get('store_data' , [StatisticsController::class , 'store_data'])->name('admin.statistics.store');
+        Route::get('/diff' , [StatisticsController::class , 'diff'])->name('admin.statistics.diff');
+      
+    });
+
+
+        // start order
+    Route::prefix('orders')->group(function(){
+        Route::get('/',[OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/delete/{id}' , [OrderController::class, 'index'])->name('admin.orders.delete');
+        Route::get('/show_details/{id}' , [OrderController::class, 'show_details'])->name('admin.orders.show_details');
+        Route::get('/edit_status/{id}' ,[OrderController::class, 'edit_status'] )->name('admin.orders.edit_status');
+        Route::post('/update_status/{id}', [OrderController::class, 'update_status'])->name('admin.orders.update_status');
+
+    });
+
+
 
 
 

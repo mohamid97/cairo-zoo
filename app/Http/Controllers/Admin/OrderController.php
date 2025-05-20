@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Order::with(['items', 'address.gov', 'address.city', 'user']);
+        $query = Order::with(['items', 'address', 'user']);
 
         // Search by product
         if ($request->has('product') && $request->product != null) {
@@ -35,6 +35,19 @@ class OrderController extends Controller
             $query->where('status', $request->status);
         }
 
+
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+
+
+
         // Sort by ascending or descending order
         if ($request->has('sort') && in_array($request->sort, ['asc', 'desc'])) {
             $query->orderBy('created_at', $request->sort);
@@ -42,7 +55,7 @@ class OrderController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $orders = $query->paginate(10);
+        $orders = $query->paginate(20);
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -56,7 +69,7 @@ class OrderController extends Controller
      // Show order details
      public function show_details($id)
      {
-         $order = Order::with('items.product', 'address.gov', 'address.city', 'user')->findOrFail($id);
+         $order = Order::with('items.product', 'address', 'user')->findOrFail($id);
          return view('admin.orders.show_details', compact('order'));
      }
 

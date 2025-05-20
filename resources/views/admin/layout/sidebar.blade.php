@@ -68,7 +68,46 @@
 
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-receipt"></i> 
+                        <i class="fas fa-chart-bar"></i>
+
+                        <p>
+                            {{ __('main.statistics') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.statistics.diff') }}" class="nav-link">
+                                <i class="fas fa-balance-scale"></i>
+                                <p>{{ __('main.difference') }}</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.statistics.store') }}" class="nav-link">
+                                <i class="fas fa-receipt"></i>
+
+                                <p>{{ __('main.store_data') }}</p>
+                            </a>
+                        </li>
+
+
+
+
+
+
+                    </ul>
+                </li>
+
+
+
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-receipt"></i>
                         <p>
                             {{ __('main.cashier_orders') }}
                             <i class="right fas fa-angle-left"></i>
@@ -77,24 +116,43 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.cahier_orders.index') }}" class="nav-link">
-                                <i class="fas fa-receipt"></i> 
+                                <i class="fas fa-receipt"></i>
 
                                 <p>{{ __('main.cashier_orders') }}</p>
                             </a>
                         </li>
 
 
-                        <li class="nav-item">
-                            <a href="{{ route('admin.cahier_orders.diff') }}" class="nav-link">
-                                <i class="fas fa-balance-scale"></i>
-                                <p>{{ __('main.difference') }}</p>
-                            </a>
-                        </li>
 
 
 
                     </ul>
                 </li>
+
+
+                    @if($settings->orders)
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-receipt nav-icon"></i>
+                                <p>
+                                    {{ __('main.orders') }}
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.orders.index') }}"
+                                       class="nav-link">
+                                        <i class="fa fa-receipt nav-icon"></i>
+                                        <p>{{ __('main.orders') }}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+
+
+
 
                 @if($settings->brand)
                 <li class="nav-item has-treeview">
@@ -354,11 +412,34 @@
                             <a href="{{ route('admin.mission_vission.index') }}" class="nav-link">
                                 <i class="fa fa-newspaper nav-icon"></i>
                                 <p>{{ __('main.mission_vission') }}</p>
-                            </a>    
+                            </a>
                         </li>
                     </ul>
                 </li>
                 @endif
+
+
+
+                                        @if($settings->social_media)
+                                            <li class="nav-item has-treeview">
+                                                <a href="#" class="nav-link">
+                                                    <i class="fa fa-hashtag nav-icon"></i>
+                                                    <p>
+                                                        {{ __('main.social_media') }}
+                                                        <i class="right fas fa-angle-left"></i>
+                                                    </p>
+                                                </a>
+                                                <ul class="nav nav-treeview">
+                                                    <li class="nav-item">
+                                                        <a href="{{ route('admin.social_media.index') }}"
+                    class="nav-link">
+                                                            <i class="fa fa-hashtag nav-icon"></i>
+                                                            <p>{{ __('main.social_media') }}</p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        @endif
 
 
 
@@ -442,26 +523,7 @@
 
 
 
-                {{--                    @if($settings->social_media)--}}
-                {{--                        <li class="nav-item has-treeview">--}}
-                {{--                            <a href="#" class="nav-link">--}}
-                {{--                                <i class="fa fa-hashtag nav-icon"></i>--}}
-                {{--                                <p>--}}
-                {{--                                    {{ __('main.social_media') }}--}}
-                {{--                                    <i class="right fas fa-angle-left"></i>--}}
-                {{--                                </p>--}}
-                {{--                            </a>--}}
-                {{--                            <ul class="nav nav-treeview">--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.social_media.index') }}"
-                class="nav-link">--}}
-                {{--                                        <i class="fa fa-hashtag nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.social_media') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                            </ul>--}}
-                {{--                        </li>--}}
-                {{--                    @endif--}}
+
 
 
 
@@ -948,26 +1010,7 @@
 
 
 
-                {{--                    @if($settings->orders)--}}
-                {{--                        <li class="nav-item has-treeview">--}}
-                {{--                            <a href="#" class="nav-link">--}}
-                {{--                                <i class="fa fa-receipt nav-icon"></i>--}}
-                {{--                                <p>--}}
-                {{--                                    {{ __('main.orders') }}--}}
-                {{--                                    <i class="right fas fa-angle-left"></i>--}}
-                {{--                                </p>--}}
-                {{--                            </a>--}}
-                {{--                            <ul class="nav nav-treeview">--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.orders.index') }}"
-                class="nav-link">--}}
-                {{--                                        <i class="fa fa-receipt nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.orders') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                            </ul>--}}
-                {{--                        </li>--}}
-                {{--                    @endif--}}
+
 
 
 

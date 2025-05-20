@@ -36,7 +36,7 @@
     
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <form method="GET" action="{{ route('admin.cahier_orders.diff') }}" class="form-inline mb-4">
+                    <form method="GET" action="{{ route('admin.statistics.diff') }}" class="form-inline mb-4">
     <div class="form-group mr-2">
         <label for="start_date" class="mr-2">{{ __('main.start_date') }}</label>
         <input type="date" id="start_date" name="start_date" class="form-control"
@@ -50,7 +50,7 @@
     </div>
 
     <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> {{ __('main.search') }}</button>
-   <a href="{{ route('admin.cahier_orders.diff') }}" class="btn btn-primary ml-2">
+   <a href="{{ route('admin.statistics.diff') }}" class="btn btn-primary ml-2">
     <i class="fas fa-sync-alt mr-1"></i> {{ __('main.reset') }}
 </a>
 

@@ -49,24 +49,7 @@ class CahierOrderController extends Controller
     }
 
 
-    public function diff(Request $request){
 
-    $query = DiffPrice::with('product');
-
-    if ($request->filled('start_date')) {
-        $query->whereDate('created_at', '>=', $request->start_date);
-    }
-
-    if ($request->filled('end_date')) {
-        $query->whereDate('created_at', '<=', $request->end_date);
-    }
-
-    $diffs = $query->paginate(20);
-
-    return view('admin.cahier_orders.diff', compact('diffs'));
-
-
-    }
 
 
 
