@@ -557,7 +557,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     Route::prefix('statistics')->group(function(){
         Route::get('store_data' , [StatisticsController::class , 'store_data'])->name('admin.statistics.store');
         Route::get('/diff' , [StatisticsController::class , 'diff'])->name('admin.statistics.diff');
-      
+
     });
 
 

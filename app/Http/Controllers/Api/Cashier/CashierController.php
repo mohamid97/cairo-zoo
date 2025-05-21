@@ -83,11 +83,14 @@ class CashierController extends Controller
         try{
             $user = $request->user();
             if ($request->has('coupon_code')) {
-                if(!$this->check_coupon($request->coupon_code)){
+            
+                if( ($coupon = $this->check_coupon($request->coupon_code)) == false){
                     return $this->res(false, __('main.invalid_coupon_or_limit_code'), 400);
 
                 }
             }
+
+          
 
             if(!$this->ckeck_stocks($request->products)){
                 return $this->res(false , __('main.not_enough_stock'), 404);
@@ -134,7 +137,7 @@ class CashierController extends Controller
             
             $cahier_order->total_amount_before_discount  = $total_before_discount;
             // if coupon is applied
-            if (isset($coupon)) {    
+            if ($coupon) {   
                 $cahier_order->coupon_code = $coupon->code;
                 $cahier_order->coupon_discount = $coupon->type == 'percentage' ? ceil($total_after_discount * $coupon->discount_value) / 100 : ceil($coupon->discount_value);
                 $total_after_discount -= $cahier_order->coupon_discount;
@@ -151,8 +154,8 @@ class CashierController extends Controller
             return $this->res(true, __('main.order_submitted_successfully'), 200, ['cahier_order' => new OrderResource($cahier_order)]);
 
         }catch(\Exception $e){
-            // DB::rollBack();
-            // dd($e->getMessage());
+            DB::rollBack();
+            dd($e->getMessage() , $e->getLine());
             DB::rollBack();
             return $this->res(false, __('main.error_happened'), 500);
         }
@@ -184,7 +187,7 @@ class CashierController extends Controller
             return false;
         }
 
-        return true;
+        return $coupon;
     }
 
     // validate stock

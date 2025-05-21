@@ -113,8 +113,6 @@ Route::middleware('checkLang')->group(function (){
     });
 
 
-
-
     
     Route::prefix('orders_guest')->group(function(){
         Route::post('store' , [OrderController::class , 'store_guest']);
@@ -125,9 +123,7 @@ Route::middleware('checkLang')->group(function (){
        Route::post('/get' , [\App\Http\Controllers\Api\SocialController::class , 'get']);
     });
 
-
-
-
+    
 
 
     // start feedback api Fe
@@ -135,8 +131,6 @@ Route::middleware('checkLang')->group(function (){
 
     //     Route::get('/get' , [\App\Http\Controllers\Api\FeedbackController::class , 'get']);
     // });
-
-
 
 
 
