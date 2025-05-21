@@ -15,6 +15,7 @@ use App\Http\Resources\Cashier\OrderResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Cashier\StoreOrderRequest;
+use App\Http\Resources\Admin\UsersResource;
 use App\Models\Admin\Stock;
 
 class CashierController extends Controller
@@ -55,7 +56,7 @@ class CashierController extends Controller
             return $this->res(false, __('main.access_denied'), 403);
         }
 
-        return $this->res(true, __('main.cashier_info'), 200, [new CashierResource($user)]);
+        return $this->res(true, __('main.cashier_info'), 200, ['user'=>new UsersResource($user)]);
       
     }
 
