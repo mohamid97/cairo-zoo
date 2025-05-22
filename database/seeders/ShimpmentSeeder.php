@@ -18,7 +18,7 @@ class ShimpmentSeeder extends Seeder
         DB::table('shimpments')->insert([
             [
                 'is_free' => 'paid',
-                'details' => 'Bal Bla Bla',
+                'min_to_free' => null,
             ],
 
         ]);

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('shimpments', function (Blueprint $table) {
             $table->id();
             $table->enum('is_free' , ['free' , 'paid'])->default('paid');
-            $table->text('details')->nullable();
+            $table->decimal('min_to_free')->nullable();
             $table->timestamps();
         });
     }

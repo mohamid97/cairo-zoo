@@ -681,7 +681,25 @@ return [
     'items' => 'Order Items',
     'sales_price' => 'Sales Price',
     'payment_method' => 'Payment Method',
-    'socail_media'=>'Social media links and status'
+    'socail_media'=>'Social media links and status',
+    'add_zone'=>'Add Zone',
+    'zones'=>'Zones',
+    'zone'=>'Zone',
+    'all_zones'=>'All Zones',
+    'add_new_zone'=>'Add New Zone',
+    'zone_add_successfully'=>'Zone Add Successfully',
+    'zone_updated_successfully'=>'Zone Updated Successfully',
+    'zone_deleted'=>'Zone Deleted Successfully !',
+    'select_zone'=>'Select Zone',
+    'add_city'=>'Add City',
+    'cities'=>'Cities',
+    'city_add_successfully'=>'City Added Sucessfully !',
+    'city_deleted'=>'City Deleted Successfully !',
+    'add_new_city'=>'Add New City',
+    'all_city'=>'All City',
+    'show_city'=>'Show City',
+    'min_to_free'=>'min_to_free',
+    'free'=>'Free'
 
 
 

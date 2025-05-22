@@ -33,10 +33,10 @@
                         <div class="border  p-3">
 
                             <div class="form-group" >
-                                <label>Type</label>
+                                <label>{{__('main.type')}}</label>
                                 <select type="text" name="is_free" class="form-control" id="type">
-                                    <option value="free" {{$shimp->is_free == 'free' ?'selected':''}}>Free</option>
-                                    <option value="paid" {{$shimp->is_free == 'paid' ?'selected':''}}>Paid</option>
+                                    <option value="paid" {{($shimp && $shimp->is_free )== 'paid' ?'selected':''}}>{{__('main.paid')}}</option>
+                                    <option value="free" {{($shimp && $shimp->is_free) == 'free' ?'selected':''}}>{{__('main.free')}}</option>
                                 </select>
                                 @error('is_free')
                                 <div class="text-danger">{{ $errors->first('is_free') }}</div>
@@ -49,21 +49,18 @@
 
 
 
+                        <div class="border  p-3">
 
-                            <div class="border p-3">
-            
-                                <div class="form-group">
-                                    <label for="details">Details </label>
-                                    <textarea name="details" class="ckeditor">
-                                      {{isset($shimp->details)?$shimp->details:''}}
-                                    </textarea>
+                            <div class="form-group" >
+                                <label>{{__('main.min_to_free')}}</label>
+                                <input type="number" name="min_to_free" class="form-control"/>
 
-                                    @error('details')
-                                    <div class="text-danger">{{ $errors->first('details') }}</div>
-                                    @enderror
-                                </div>
-                      
+                                @error('min_to_free')
+                                <div class="text-danger">{{ $errors->first('min_to_free') }}</div>
+                                @enderror
                             </div>
+                        </div>
+                        <br>
 
 
 

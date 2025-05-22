@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Cashier\CashierController;
+use App\Http\Controllers\Api\ShipmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +122,14 @@ Route::middleware('checkLang')->group(function (){
     
     Route::prefix('social-media')->group(function (){
        Route::post('/get' , [\App\Http\Controllers\Api\SocialController::class , 'get']);
+    });
+
+
+    Route::prefix('shipments')->group(function(){
+        Route::get('setting' , [ShipmentController::class , 'setting']);
+        Route::get('all_zones' , [ShipmentController::class , 'zones']);
+        Route::get('all_cities/{zone_id}' , [ShipmentController::class , 'cities']);
+
     });
 
     

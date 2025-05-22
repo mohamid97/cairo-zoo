@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('gov_id');
+            $table->unsignedBigInteger('zone_id');
             $table->string('code')->nullable();
             $table->enum('checked' , [0,1])->default(0);
-            $table->foreign('gov_id')->references('id')->on('govs')->onDelete('cascade');
+            $table->foreign('zone_id')->references('id')->on('shimpment_zones')->onDelete('cascade');
             $table->timestamps();
         });
     }

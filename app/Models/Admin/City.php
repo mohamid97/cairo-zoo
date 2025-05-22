@@ -16,7 +16,7 @@ class City extends Model implements  TranslatableContract
     public $translationForeignKey = 'city_id';
     public $translationModel = 'App\Models\Admin\CityTranslation';
 
-    public function gov(){
-        return $this->belongsTo(Govs::class , 'gov_id');
+    public function zone(){
+        return $this->belongsTo(ShimpmentZone::class , 'zone_id');
     }
 }

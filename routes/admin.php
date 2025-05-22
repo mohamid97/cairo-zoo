@@ -346,29 +346,38 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
     // route of shimpments
 
-//    Route::prefix('shimpments')->group(function(){
-//
-//        Route::get('get' , [ShimpmentsController::class , 'index'])->name('admin.shimpments.index');
-//        Route::post('update' , [ShimpmentsController::class , 'update' ])->name('admin.shimpments.update');
-//        Route::get('/show_zone' , [ShimpmentsController::class , 'show_zone'])->name('admin.shimpments.Show_zone');
-//        Route::get('/add_zone' , [ShimpmentsController::class , 'add_zone'])->name('admin.shimpments.add_zone');
-//        Route::post('store_zone' , [ShimpmentsController::class , 'store_zone'])->name('admin.shimpments.store_zone');
-//        Route::get('/edit_zone/{id}' , [ShimpmentsController::class , 'edit_zone'])->name('admin.shimpments.edit_zone');
-//        Route::post('/update_zone/{id}' , [ShimpmentsController::class , 'update_zone'])->name('admin.shimpments.update_zone');
-//        Route::get('/soft_delete_zone/{id}' , [ShimpmentsController::class , 'soft_delete_zone'])->name('admin.shimpments.soft_delete_zone');
-//        Route::get('/restore_zone/{id}' , [ShimpmentsController::class , 'restore_zone'])->name('admin.shimpments.restore_zone');
-//        Route::get('/destroy_zone/{id}' , [ShimpmentsController::class , 'destroy_zone'])->name('admin.shimpments.destroy_zone');
-//
-//        // start company shipment
-//        Route::get('/show_company' , [ShimpmentsController::class , 'show_company'])->name('admin.shimpments.Show_company');
-//        Route::get('/add_company' , [ShimpmentsController::class , 'add_company'])->name('admin.shimpments.add_company');
-//        Route::post('store_company' , [ShimpmentsController::class , 'store_company'])->name('admin.shimpments.store_company');
-//        Route::get('/edit_company/{id}' , [ShimpmentsController::class , 'edit_company'])->name('admin.shimpments.edit_company');
-//        Route::post('/update_company/{id}' , [ShimpmentsController::class , 'update_company'])->name('admin.shimpments.update_company');
-//        Route::get('/soft_delete_company/{id}' , [ShimpmentsController::class , 'soft_delete_company'])->name('admin.shimpments.soft_delete_company');
-//        Route::get('/restore_company/{id}' , [ShimpmentsController::class , 'restore_company'])->name('admin.shimpments.restore_company');
-//        Route::get('/destroy_company/{id}' , [ShimpmentsController::class , 'destroy_company'])->name('admin.shimpments.destroy_company');
-//    });
+   Route::prefix('shimpments')->group(function(){
+
+       Route::get('get' , [ShimpmentsController::class , 'index'])->name('admin.shimpments.index');
+       Route::post('update' , [ShimpmentsController::class , 'update' ])->name('admin.shimpments.update');
+       Route::get('/show_zone' , [ShimpmentsController::class , 'show_zone'])->name('admin.shimpments.Show_zone');
+       Route::get('/add_zone' , [ShimpmentsController::class , 'add_zone'])->name('admin.shimpments.add_zone');
+       Route::post('store_zone' , [ShimpmentsController::class , 'store_zone'])->name('admin.shimpments.store_zone');
+       Route::get('/edit_zone/{id}' , [ShimpmentsController::class , 'edit_zone'])->name('admin.shimpments.edit_zone');
+       Route::post('/update_zone/{id}' , [ShimpmentsController::class , 'update_zone'])->name('admin.shimpments.update_zone');
+    //    Route::get('/soft_delete_zone/{id}' , [ShimpmentsController::class , 'soft_delete_zone'])->name('admin.shimpments.soft_delete_zone');
+    //    Route::get('/restore_zone/{id}' , [ShimpmentsController::class , 'restore_zone'])->name('admin.shimpments.restore_zone');
+       Route::get('/destroy_zone/{id}' , [ShimpmentsController::class , 'destroy_zone'])->name('admin.shimpments.destroy_zone');
+
+
+       // cities
+       Route::get('/show_city' , [ShimpmentsController::class , 'show_city'])->name('admin.shimpments.show_city');
+       Route::get('/add_city' , [ShimpmentsController::class , 'add_city'])->name('admin.shimpments.add_city');
+       Route::post('store_city' , [ShimpmentsController::class , 'store_city'])->name('admin.shimpments.store_city');
+       Route::get('/destroy_city/{id}' , [ShimpmentsController::class , 'destroy_city'])->name('admin.shimpments.destroy_city');
+
+
+
+       // start company shipment
+       Route::get('/show_company' , [ShimpmentsController::class , 'show_company'])->name('admin.shimpments.Show_company');
+       Route::get('/add_company' , [ShimpmentsController::class , 'add_company'])->name('admin.shimpments.add_company');
+       Route::post('store_company' , [ShimpmentsController::class , 'store_company'])->name('admin.shimpments.store_company');
+       Route::get('/edit_company/{id}' , [ShimpmentsController::class , 'edit_company'])->name('admin.shimpments.edit_company');
+       Route::post('/update_company/{id}' , [ShimpmentsController::class , 'update_company'])->name('admin.shimpments.update_company');
+       Route::get('/soft_delete_company/{id}' , [ShimpmentsController::class , 'soft_delete_company'])->name('admin.shimpments.soft_delete_company');
+       Route::get('/restore_company/{id}' , [ShimpmentsController::class , 'restore_company'])->name('admin.shimpments.restore_company');
+       Route::get('/destroy_company/{id}' , [ShimpmentsController::class , 'destroy_company'])->name('admin.shimpments.destroy_company');
+   });
 
 
 
@@ -570,6 +579,12 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::post('/update_status/{id}', [OrderController::class, 'update_status'])->name('admin.orders.update_status');
 
     });
+
+    // start shipment
+    // Route::prefix('shipment')->group(function(){
+    //     Route::get('add/gov' , [ShimpmentsController::class , 'add_gov'])->name('admin.shipment.add_gov');
+
+    // });
 
 
 

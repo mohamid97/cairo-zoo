@@ -130,6 +130,69 @@
                 </li>
 
 
+                @if($settings->discounts)
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-money-bill-wave nav-icon"></i>
+                        <p>
+                            {{ __('main.discounts') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.discounts.index') }}" class="nav-link">
+                                <i class="fas fa-money-bill-wave nav-icon"></i>
+
+                                <p>{{ __('main.discounts') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.discounts.add') }}" class="nav-link">
+                                <i class="fa fa-plus nav-icon"></i>
+                                <p>{{ __('main.add') }}</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                @endif
+
+
+                
+                @if($settings->coupons)
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-ticket-alt mr-2"></i>
+                        <p>
+                            {{ __('main.coupons') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.coupons.index') }}" class="nav-link">
+                                <i class="fas fa-money-bill-wave nav-icon"></i>
+
+                                <p>{{ __('main.coupons') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.coupons.add') }}" class="nav-link">
+                                <i class="fa fa-plus nav-icon"></i>
+                                <p>{{ __('main.add') }}</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                @endif
+
+
+
+
+
+
                     @if($settings->orders)
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
@@ -591,62 +654,7 @@
                 @endif
 
 
-                @if($settings->discounts)
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-money-bill-wave nav-icon"></i>
-                        <p>
-                            {{ __('main.discounts') }}
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.discounts.index') }}" class="nav-link">
-                                <i class="fas fa-money-bill-wave nav-icon"></i>
 
-                                <p>{{ __('main.discounts') }}</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.discounts.add') }}" class="nav-link">
-                                <i class="fa fa-plus nav-icon"></i>
-                                <p>{{ __('main.add') }}</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                @endif
-
-
-                @if($settings->coupons)
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-ticket-alt mr-2"></i>
-                        <p>
-                            {{ __('main.coupons') }}
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.coupons.index') }}" class="nav-link">
-                                <i class="fas fa-money-bill-wave nav-icon"></i>
-
-                                <p>{{ __('main.coupons') }}</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.coupons.add') }}" class="nav-link">
-                                <i class="fa fa-plus nav-icon"></i>
-                                <p>{{ __('main.add') }}</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                @endif
 
 
                 @if($settings->cms)
@@ -1102,40 +1110,45 @@
                 {{--                        </li>--}}
                 {{--                    @endif--}}
 
-                {{--                    @if($settings->shimpment)--}}
-                {{--                        <li class="nav-item has-treeview">--}}
-                {{--                            <a href="#" class="nav-link">--}}
-                {{--                                <i class="fas fa-car nav-icon"></i>--}}
-                {{--                                <p>--}}
-                {{--                                    {{ __('main.shipments') }}--}}
-                {{--                                    <i class="right fas fa-angle-left"></i>--}}
-                {{--                                </p>--}}
-                {{--                            </a>--}}
-                {{--                            <ul class="nav nav-treeview">--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.shimpments.index') }}"
-                class="nav-link">--}}
-                {{--                                        <i class="fas fa-car nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.shipments') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.shimpments.Show_zone') }}"
-                class="nav-link">--}}
-                {{--                                        <i class="fas fa-eye nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.show_zone') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                                <li class="nav-item">--}}
-                {{--                                    <a href="{{ route('admin.shimpments.Show_company') }}"
-                class="nav-link">--}}
-                {{--                                        <i class="fas fa-eye nav-icon"></i>--}}
-                {{--                                        <p>{{ __('main.company') }}</p>--}}
-                {{--                                    </a>--}}
-                {{--                                </li>--}}
-                {{--                            </ul>--}}
-                {{--                        </li>--}}
-                {{--                    @endif--}}
+                @if($settings->shimpment)
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-car nav-icon"></i>
+                        <p>
+                            {{ __('main.shipments') }}
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.shimpments.index') }}" class="nav-link">
+                                <i class="fas fa-car nav-icon"></i>
+                                <p>{{ __('main.shipments') }}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.shimpments.Show_zone') }}" class="nav-link">
+                                <i class="fas fa-eye nav-icon"></i>
+                                <p>{{ __('main.show_zone') }}</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.shimpments.show_city') }}" class="nav-link">
+                                <i class="fas fa-eye nav-icon"></i>
+                                <p>{{ __('main.show_city') }}</p>
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('admin.shimpments.Show_company') }}" class="nav-link">
+                                <i class="fas fa-eye nav-icon"></i>
+                                <p>{{ __('main.company') }}</p>
+                            </a>
+                        </li> --}}
+                    </ul>
+                </li>
+            @endif
+            
 
 
                 {{--                    @if($settings->parteners)--}}
