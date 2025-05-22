@@ -21,6 +21,9 @@ return new class extends Migration
             $table->decimal('total_amount_before_discount')->nullable();
             $table->decimal('total_amount_after_discount')->nullable();
             $table->decimal('total_discount')->nullable();
+            $table->enum('status' , [ 'finshed'  ,'canceled' , 'retrieval'])->default('finshed');
+            $table->text('message_retrieval')->nullable();
+
             $table->timestamps();
         });
     }

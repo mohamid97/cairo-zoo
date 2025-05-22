@@ -183,16 +183,20 @@ class Product extends Model implements TranslatableContract
             ->orderBy('id')
             ->get();
 
+            $order_info = [];
+
         foreach ($stockMovements as $movement) {
             if ($remainingQty <= 0) break;
 
             if ($movement->quantity >= $remainingQty) {
                 $this->diff_price($movement , $remainingQty);
+                $order_info[] = ['qty'=>$remainingQty , 'sales_price'=>$movement->sales_price , 'cost_price'=> $movement->cost_price];
                 $movement->quantity -= $remainingQty;
                 $movement->save();
                 $remainingQty = 0;
             } else {
                 $this->diff_price($movement , $movement->quantity);
+                $order_info[] = ['qty'=>$movement->quantity , 'sales_price'=>$movement->sales_price , 'cost_price'=> $movement->cost_price];
                 $remainingQty -= $movement->quantity;
                 $movement->quantity = 0;
                 $movement->save();
@@ -206,7 +210,7 @@ class Product extends Model implements TranslatableContract
 
         }
 
-        return true;
+        return $order_info;
     }
 
 
@@ -227,6 +231,23 @@ class Product extends Model implements TranslatableContract
 
 
     }
+
+
+
+
+
+    // public function increase_stock($quantity, $salesPrice = null)
+    // {
+    //     $this->stocks()->create([
+    //         'product_id' => $this->id,
+    //         'quantity' => $quantity,
+    //         'sales_price' => $salesPrice ?? $this->sales_price,
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
+
+    //     return true;
+    // }
 
 
 

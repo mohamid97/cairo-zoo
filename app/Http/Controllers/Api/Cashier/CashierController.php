@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Cashier\StoreOrderRequest;
 use App\Http\Resources\Admin\UsersResource;
+use App\Models\Admin\CahierOrderInfo;
 use App\Models\Admin\Stock;
 
 class CashierController extends Controller
@@ -116,7 +117,9 @@ class CashierController extends Controller
                 $total_price_before_discount = ceil($product['quantity'] * $price_before_discount);
                 $total_price_after_discount = ceil($product['quantity'] * $price_after_discount);
     
-            
+                $order_info = $productModel->deductStock( $product['quantity']);
+                $this->casheir_order_info($cahier_order->id , $productModel->id , $order_info);
+
                 $orderItem = $cahier_order->items()->create([
                     'product_id' => $productModel->id,
                     'quantity' => $product['quantity'],
@@ -127,11 +130,11 @@ class CashierController extends Controller
                     'discount_type' => $discount_type,
                     'discount_percentage'=> $discount_type === 'percentage' ? $discount_value : null,
                     'discount_amount'=> $discount_type === 'amount' ? $discount_value : null,
+
                 ]);
             
                 $productModel->stock -= $product['quantity'];
                 $productModel->save();
-                $productModel->deductStock($product['quantity']);
                 $total_before_discount += $total_price_before_discount;
                 $total_after_discount += $total_price_after_discount;
             }
@@ -163,6 +166,21 @@ class CashierController extends Controller
 
 
         
+
+
+    }
+
+    private function casheir_order_info($order_id , $product_id , $order_info){
+
+        foreach($order_info as $info){
+            CahierOrderInfo::create([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id,
+                'qty'=>$info['qty'],
+                'sales_price'=>$info['sales_price'],
+                'cost_price'=>$info['cost_price']
+            ]);
+        }
 
 
     }
@@ -234,9 +252,19 @@ class CashierController extends Controller
     public function cashier_orders(Request $request)
     {
         $user = $request->user();
-        $orders = CashierOrder::with(['user' , 'items'])->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $orders = CashierOrder::with(['user' , 'items'])->where('user_id', $user->id);
+        if ($request->has('from') && $request->has('to')) {
+            $from = Carbon::parse($request->input('from'))->startOfDay();
+            $to = Carbon::parse($request->input('to'))->endOfDay();
+            $orders = $orders->whereBetween('created_at', [$from, $to]);
+        }
+
+
+        if ($request->has('status')) {
+            $orders = $orders->where('status', $request->input('status'));
+        }
+        $orders = $orders->orderBy('created_at', 'desc')->paginate(20);
+
 
         return $this->res(true, __('main.cashier_orders'), 200, [
             'orders' => OrderResource::collection($orders),
@@ -257,6 +285,83 @@ class CashierController extends Controller
 
 
     } // end cashier orders
+
+
+    public function retrieval(Request $request)
+    {
+
+
+        try{
+
+
+        DB::beginTransaction();
+
+        if (!$request->order_id) {
+            return $this->res(false, __('main.order_id_requied'), 404);
+        }
+
+        $order = CashierOrder::with(['items', 'user'])->find($request->input('order_id'));
+
+        if (!$order) {
+            return $this->res(false, __('main.order_not_found'), 404);
+        }
+
+
+
+        if ($order->status == 'retrieval') {
+            return $this->res(false, __('main.order_already_retrieval'), 404);
+        }
+        
+
+        // Return product quantities to stock
+        foreach ($order->items as $item) {
+            $product = Product::find($item->product_id);
+            if (!$product) {
+                return $this->res(false , __('main.product_mot_found') , 404);
+
+            }
+
+            $product->stock += $item->quantity;
+            $product->save();
+            $infos = CahierOrderInfo::where('order_id' , $request->order_id)->get(); 
+            foreach($infos as $info){
+                $stock = Stock::where('product_id' , $info->product_id)->where('cost_price' , $info->cost_price)->where('sales_price' , $info->sales_price)->first();
+                if($stock){
+                    $stock->quantity += $info->qty;
+                    $stock->save();
+                }else{
+                    Stock::create([
+                        'product_id'=>$info->product_id,
+                        'quantity'=>$info->qty,
+                        'cost_price'=>$info->cost_price,
+                        'sales_price'=>$info->sales_price
+                    ]);
+                }
+                
+
+
+            } // end foreach
+
+
+            
+
+
+        }
+
+        $order->update(['status' => 'retrieval' , 'message_retrieval'=> $request->message ?? null]);
+        DB::commit();
+        return $this->res(true, __('main.order_retrieved_successfully'), 200, [
+            'order' => new OrderResource($order),
+        ]);
+
+    }catch(\Exception $e){
+        DB::rollBack();
+        dd($e->getMessage() , $e->getLine());
+        DB::rollBack();
+        return $this->res(false, __('main.error_happened'), 500);
+    }
+
+    }
 
 
 

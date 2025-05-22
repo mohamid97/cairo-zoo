@@ -75,6 +75,8 @@
                                 <p class="mb-1"><span class="info-label">{{ __('main.order_date') }}:</span> {{ $order->created_at->format('Y-m-d H:i') }}</p>
                                 <p class="mb-1"><span class="info-label">{{ __('main.total_items') }}:</span> {{ $order->items->count() }}</p>
                                 <p class="mb-1"><span class="info-label">{{ __('main.total_quantity') }}:</span> {{ $order->items->sum('quantity') }}</p>
+                                <p class="mb-1 text-primary"><span class="info-label">{{ __('main.status') }}:</span>  {{ $order->status }}</p>
+
                             </div>
                         </div>
 

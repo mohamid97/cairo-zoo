@@ -17,6 +17,8 @@ class CashierOrder extends Model
         'total_amount_before_discount',
         'total_amount_after_discount',
         'total_discount',
+        'status',
+        'message_retrieval'
     ];
 
     public function user()

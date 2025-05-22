@@ -267,6 +267,7 @@ Route::middleware('checkLang')->group(function (){
                 Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
                 Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
                 Route::post('orders' , [CashierController::class , 'cashier_orders']);
+                Route::post('retrieval' , [CashierController::class , 'retrieval']);
 
             });
 

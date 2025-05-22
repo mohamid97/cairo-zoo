@@ -699,7 +699,13 @@ return [
     'all_city'=>'All City',
     'show_city'=>'Show City',
     'min_to_free'=>'min_to_free',
-    'free'=>'Free'
+    'free'=>'Free',
+    'order_id_requied'=>'Order Id Requied',
+    'order_not_found'=>'Order Not Found',
+    'order_already_retrieval'=>'Order Already Retrieval',
+    'yes'=>'Yes',
+    'no'=>'No',
+    'filter_has_discount'=>'Filter If Has Discount',
 
 
 

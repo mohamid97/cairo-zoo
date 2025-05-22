@@ -22,6 +22,8 @@ class OrderResource extends JsonResource
             'total_amount_before_discount' => $this->total_amount_before_discount,
             'total_amount_after_discount' => $this->total_amount_after_discount,
             'total_discount' => $this->total_discount,
+            'status'=>$this->status,
+            'message_retrieval'=>$this->message_retrieval,
             'created_at' => $this->created_at->toDateTimeString(),
             'items' => OrderItemResource::collection($this->items),
         ];

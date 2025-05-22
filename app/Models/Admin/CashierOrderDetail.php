@@ -19,7 +19,8 @@ class CashierOrderDetail extends Model
         'quantity',
         'discount_type',
         'discount_percentage',
-        'discount_amount'
+        'discount_amount',
+
    
     ];
 
