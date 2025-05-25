@@ -565,6 +565,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
     // statistics
     Route::prefix('statistics')->group(function(){
         Route::get('store_data' , [StatisticsController::class , 'store_data'])->name('admin.statistics.store');
+        Route::get('/orders' , [StatisticsController::class , 'orders'])->name('admin.statistics.orders');
         Route::get('/diff' , [StatisticsController::class , 'diff'])->name('admin.statistics.diff');
 
     });
@@ -577,6 +578,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('/show_details/{id}' , [OrderController::class, 'show_details'])->name('admin.orders.show_details');
         Route::get('/edit_status/{id}' ,[OrderController::class, 'edit_status'] )->name('admin.orders.edit_status');
         Route::post('/update_status/{id}', [OrderController::class, 'update_status'])->name('admin.orders.update_status');
+        Route::get('retrieval/{id}' , [OrderController::class, 'retrieval'])->name('admin.orders.retrieval');
 
     });
 

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\OrderInfo;
+use App\Models\Admin\Product;
+use App\Models\Admin\Stock;
 use App\Models\Front\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class OrderController extends Controller
@@ -62,10 +66,6 @@ class OrderController extends Controller
 
 
 
-    
-
-
-
 
      // Show order details
      public function show_details($id)
@@ -117,6 +117,68 @@ class OrderController extends Controller
          $order->delete();
          Alert::success('Success', 'Order deleted successfully.');
          return redirect()->route('admin.orders.index');
+     }
+
+     public function retrieval($id){
+
+        try{
+            DB::beginTransaction();
+            $order = Order::with(['user' , 'items' , 'address'])->findOrFail($id);
+            if ($order->payment_status != 'paid') {
+               Alert::error('error' , __('main.order_not_paid'));
+               return redirect()->route('admin.orders.index');
+
+            }
+
+            foreach ($order->items as $item) {
+                $product = Product::find($item->product_id);
+                if (!$product) {
+                    Alert('error' , __('main.product_mot_found'));
+                    return redirect()->route('admin.orders.index');
+
+                }
+
+                $product->stock += $item->quantity;
+                $product->save();
+                $infos = OrderInfo::where('order_id' , $id)->get(); 
+                foreach($infos as $info){
+                    $stock = Stock::where('product_id' , $info->product_id)->where('cost_price' , $info->cost_price)->where('sales_price' , $info->sales_price)->first();
+                    if($stock){
+                        $stock->quantity += $info->qty;
+                        $stock->save();
+                    }else{
+                        Stock::create([
+                            'product_id'=>$info->product_id,
+                            'quantity'=>$info->qty,
+                            'cost_price'=>$info->cost_price,
+                            'sales_price'=>$info->sales_price
+                        ]);
+                    }
+                    
+
+
+                } // end foreach
+
+
+            
+
+
+            } // end foreach for items
+
+
+            $order->update(['status' => 'retrieval']);
+            Alert::success('success' , __('main.main.order_retrieved_successfully'));
+            DB::commit();
+
+        }catch(\Exception $e){
+            DB::rollBack();
+            dd($e->getMessage() , $e->getLine());
+            Alert::error('error' , __('main.programer_error'));
+
+        }
+
+
+
      }
 
 

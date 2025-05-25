@@ -706,7 +706,10 @@ return [
     'yes'=>'Yes',
     'no'=>'No',
     'filter_has_discount'=>'Filter If Has Discount',
-    'min_to_free'=>'Min Amount To Free Shipment'
+    'min_to_free'=>'Min Amount To Free Shipment',
+    'total_order'=>'Total Order Price ( Total Price + Shipment Price )',
+    'order_not_paid'=>'Order Not Paid',
+    'retrieval'=>'Retrieval'
 
 
 

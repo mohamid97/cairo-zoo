@@ -47,10 +47,10 @@
                         <li class="list-group-item"><strong>@lang('main.phone'):</strong> {{ $order->phone }}</li>
                         <li class="list-group-item">
                             <strong>@lang('main.status'):</strong>
-                            <span class="badge badge-status 
-                                {{ $order->status === 'pending' ? 'badge-primary' : 
-                                   ($order->status === 'procced' ? 'badge-info' : 
-                                   ($order->status === 'on-way' ? 'badge-warning' : 
+                            <span class="badge badge-status
+                                {{ $order->status === 'pending' ? 'badge-primary' :
+                                   ($order->status === 'procced' ? 'badge-info' :
+                                   ($order->status === 'on-way' ? 'badge-warning' :
                                    ($order->status === 'finished' ? 'badge-success' : 'badge-danger'))) }}">
                                 @lang('main.' . $order->status)
                             </span>
@@ -73,11 +73,14 @@
                         <li class="list-group-item"><strong>@lang('main.shipment_price'):</strong> {{ number_format($order->shipment_price, 2) }}</li>
                         @if ($order->coupon_code)
                         <li class="list-group-item">
-                            <strong>@lang('main.coupon'):</strong> {{ $order->coupon_code }} 
+                            <strong>@lang('main.coupon'):</strong> {{ $order->coupon_code }}
                             ({{ $order->discount_type === 'percentage' ? '%' : 'EGP' }} {{ $order->coupon_discount }})
                         </li>
                         @endif
                         <li class="list-group-item"><strong>@lang('main.payment_method'):</strong> {{ ucfirst($order->payment_method) }}</li>
+
+                        <li class="list-group-item"><strong>@lang('main.total_order'):</strong> {{ number_format($order->total_price_after_discount + $order->shipment_price , 2)   }}</li>
+
                     </ul>
                 </div>
             </div>

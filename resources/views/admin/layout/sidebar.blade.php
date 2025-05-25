@@ -78,12 +78,12 @@
                     <ul class="nav nav-treeview">
 
 
-                        <li class="nav-item">
-                            <a href="{{ route('admin.statistics.diff') }}" class="nav-link">
-                                <i class="fas fa-balance-scale"></i>
-                                <p>{{ __('main.difference') }}</p>
-                            </a>
-                        </li>
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{ route('admin.statistics.diff') }}" class="nav-link">--}}
+{{--                                <i class="fas fa-balance-scale"></i>--}}
+{{--                                <p>{{ __('main.difference') }}</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
 
 
                         <li class="nav-item">
@@ -91,6 +91,15 @@
                                 <i class="fas fa-receipt"></i>
 
                                 <p>{{ __('main.store_data') }}</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('admin.statistics.orders') }}" class="nav-link">
+                                <i class="fas fa-receipt"></i>
+
+                                <p>{{ __('main.orders') }}</p>
                             </a>
                         </li>
 
@@ -159,7 +168,7 @@
                 @endif
 
 
-                
+
                 @if($settings->coupons)
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -1148,7 +1157,7 @@
                     </ul>
                 </li>
             @endif
-            
+
 
 
                 {{--                    @if($settings->parteners)--}}

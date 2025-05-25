@@ -116,6 +116,10 @@
                         <span class="badge badge-success">@lang('main.finished')</span>
                     @elseif ($order->status == 'canceled')
                         <span class="badge badge-danger">@lang('main.canceled')</span>
+
+                    @elseif ($order->status == 'retrieval')
+                        <span class="badge badge-danger">@lang('main.retrieval')</span>
+
                     @endif
                 </td>
                 <td>{{ $order->coupon_code ?? '-' }}</td>
@@ -127,15 +131,23 @@
                     @endif
                 </td>
                 <td class="d-flex" style="gap: 5px">
-                    <a href="{{ route('admin.orders.delete', $order->id) }}" class="btn btn-sm btn-danger" title="@lang('main.remove')">
-                        <i class="fas fa-trash"></i>
-                    </a>
+{{--                    <a href="{{ route('admin.orders.delete', $order->id) }}" class="btn btn-sm btn-danger" title="@lang('main.remove')">--}}
+{{--                        <i class="fas fa-trash"></i>--}}
+{{--                    </a>--}}
                     <a href="{{ route('admin.orders.show_details', $order->id) }}" class="btn btn-sm btn-primary" title="@lang('main.show')">
                         <i class="fas fa-eye"></i>
                     </a>
                     <a href="{{ route('admin.orders.edit_status', $order->id) }}" class="btn btn-sm btn-primary" title="@lang('main.edit_status')">
                         <i class="fas fa-edit"></i>
                     </a>
+
+
+                    <a href="{{ route('admin.orders.retrieval', $order->id) }}" class="btn btn-sm btn-primary" title="@lang('main.retrieval')">
+                        <i class="fas fa-undo"></i>
+
+                    </a>
+
+
                 </td>
             </tr>
 
@@ -162,7 +174,7 @@
                                         <td>{{ $item->sales_price }}</td>
                                         <td>{{ $item->discount }}</td>
                                         <td>{{$item->price}}</td>
-                                     
+
                                     </tr>
                                 @endforeach
                             </tbody>

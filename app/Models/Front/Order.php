@@ -3,6 +3,7 @@
 namespace App\Models\Front;
 
 use App\Models\Admin\OrderAddress;
+use App\Models\Admin\OrderInfo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,5 +25,9 @@ class Order extends Model
     }
     public function address(){
         return $this->hasOne(OrderAddress::class , 'order_id');
+    }
+
+    public function order_info(){
+        return $this->hasMany(OrderInfo::class , 'order_id');
     }
 }
