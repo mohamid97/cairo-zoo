@@ -16,11 +16,11 @@ class OrderProductGalleryReource extends JsonResource
     {
         return [
                 'gallery'=>ProductGallerResource::collection($this->gallery),
-                'discount'=>$this->discount,
-                'old_price'=>$this->old_price,
-                'sku'=>$this->sku,
-                'stock'=>$this->stock,
-                'name'=>$this->name
+                // 'discount'=>$this->discount,
+                // 'old_price'=>$this->old_price,
+                // 'sku'=>$this->sku,
+                // 'stock'=>$this->stock,
+                // 'name'=>$this->name
 
 
         ];

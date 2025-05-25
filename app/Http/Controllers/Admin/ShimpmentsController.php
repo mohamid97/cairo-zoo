@@ -33,8 +33,9 @@ class ShimpmentsController extends Controller
         
         $request->validate([
             'is_free'=>'required|in:paid,free',
-            'min_to_free'=>'nullable|integer'
+            'min_to_free'=>'nullable|numeric'
         ]);
+
      
         try{
                 DB::beginTransaction();

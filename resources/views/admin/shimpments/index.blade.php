@@ -22,7 +22,7 @@
 
             <div class="card card-info">
                 <div class="card-header">
-                    <h3 class="card-title">About Us</h3>
+                    <h3 class="card-title">{{__('main.setting')}}</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
@@ -53,7 +53,7 @@
 
                             <div class="form-group" >
                                 <label>{{__('main.min_to_free')}}</label>
-                                <input type="number" name="min_to_free" class="form-control"/>
+                                <input type="number" name="min_to_free" class="form-control" value="{{ ($shimp && $shimp->min_to_free ) ? $shimp->min_to_free : '' }}"/>
 
                                 @error('min_to_free')
                                 <div class="text-danger">{{ $errors->first('min_to_free') }}</div>

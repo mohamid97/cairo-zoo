@@ -35,7 +35,9 @@ class OrderAuthResource extends JsonResource
             'shipment_price'=>$this->shipment_price,
             'created_at'=>$this->created_at,
             'payment_status'=>$this->payment_status,
-            'payment_method'=>$this->payment_method
+            'payment_method'=>$this->payment_method,
+            'zone'=>$this->zone,
+            'city'=>$this->city,
         ];
     }
 }

@@ -706,6 +706,7 @@ return [
     'yes'=>'Yes',
     'no'=>'No',
     'filter_has_discount'=>'Filter If Has Discount',
+    'min_to_free'=>'Min Amount To Free Shipment'
 
 
 

@@ -23,7 +23,7 @@ class ItemOrderResource extends JsonResource
             'discount'=>$this->discount,
             'price'=>$this->price,
             'quantity'=>$this->quantity,
-            'product'=>new OrderProductGalleryReource(Product::find($this->product_id))
+            'product_gallery'=>new OrderProductGalleryReource(Product::find($this->product_id))
         ];
     }
     

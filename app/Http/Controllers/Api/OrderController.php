@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreOrderGuestRequest;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\Admin\OrderAuthResource;
+use App\Models\Admin\City;
 use App\Models\Admin\Coupon;
 use App\Models\Admin\OrderAddress;
+use App\Models\Admin\OrderInfo;
 use App\Models\Admin\Product;
+use App\Models\Admin\Shimpment;
+use App\Models\Admin\ShimpmentZone;
 use App\Models\Front\Card;
 use App\Models\Front\Order;
 use App\Models\Front\OrderItem;
@@ -22,8 +26,8 @@ class OrderController extends Controller
     use ResponseTrait;
     // store order
     public function store_auth(StoreOrderRequest $request){
-     
-        DB::beginTransaction(); 
+
+        DB::beginTransaction();
         try {
             $user = $request->user();
 
@@ -35,7 +39,7 @@ class OrderController extends Controller
                 }
                 if ($coupon->times_used >= $coupon->usage_limit) {
                     return $this->res(false, __('main.coupon_limit'), 400);
-                    
+
                 }
             }
 
@@ -61,26 +65,22 @@ class OrderController extends Controller
                 return ( Product::find($item->product_id)->sales_price - $discount_value ) * $item->quantity;
             });
 
-            $total_ship = 0;
-            if($request->has('shipment_way') && $request->shipment_way == 'store'){
-                $total_ship = 0;
-            }else{
-                foreach ($cartItems as $cartItem) {
-                    $total_ship += 0;
-     
-                }
-            }
+
+
+
 
             if (isset($coupon)) {
                 $coupon_discount = $coupon->type == 'percentage' ? ceil($totalAfterPrice * $coupon->discount) / 100 : ceil($coupon->discount);
                 $totalAfterPrice -= $coupon_discount;
             }
 
+            $ship_details = $this->get_shipment_price($request->shipment_way ?? 'store' , $request->zone_id , $request->city_id , ceil($totalAfterPrice));
+
             $order = Order::create([
                 'user_id' => $user->id,
                 'total_price_after_discount' => ceil($totalAfterPrice),
                 'total_price_before_discount' => ceil($totalbeforePrice),
-                'shipment_price' => ceil($total_ship), 
+                'shipment_price' => ceil($ship_details['price'])  ?? 0,
                 'payment_method' => $request->input('payment_method', 'cash'),
                 'payment_status' => 'unpaid',
                 'status' => 'pending',
@@ -90,6 +90,8 @@ class OrderController extends Controller
                 'coupon_code' => $request->input('coupon_code') ?? null,
                 'coupon_discount' =>(isset($coupon)) ? ceil($coupon_discount) : null,
                 'discount_type' => (isset($coupon)) ? $coupon->type : null,
+                'zone'=>$ship_details['zone_name'] ?? 'N/A',
+                'city'=>$ship_details['city_name'] ?? 'N/A'
 
             ]);
 
@@ -97,11 +99,12 @@ class OrderController extends Controller
                 $product = Product::find($cartItem->product_id);
                 if ($product->stock < $cartItem->quantity) {
                     return $this->res(false , __('main.stock_less_than_quantity') . ' : ' .  $product->name , 402);
-                    
+
                 }
                 $product->stock -= $cartItem->quantity;
-                $product->deductStock($cartItem->quantity);
-                $product->save();
+                $order_info = $product->deductStock($cartItem->quantity);
+                $this->order_info($order->id , $product->id , $order_info);
+
                 // dd(ceil($cartItem->product->getBestDiscount()['value'] ?? 0));
 
                 OrderItem::create([
@@ -113,6 +116,9 @@ class OrderController extends Controller
                     'discount'=> ceil($cartItem->product->getBestDiscount()['value'] ?? 0),
                     'price'=> ceil(( $cartItem->product->sales_price - ($cartItem->product->getBestDiscount()['value'] ?? 0 )  ) * $cartItem->quantity)
                 ]);
+
+
+                $product->save();
             }
             if ($request->has('address')) {
                 OrderAddress::create([
@@ -122,7 +128,7 @@ class OrderController extends Controller
             }
             DB::commit();
             $this->clearCart($user->id);
-            $order = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->first();
+            $order = Order::with(['items' ,'address' ,'user'])->where('user_id' , $user->id)->first();
             return $this->res(true , __('main.order_updated_successfully') , 200 , new OrderAuthResource( $order ));
 
         } catch (\Exception $e) {
@@ -131,12 +137,48 @@ class OrderController extends Controller
         }
 
 
-        
 
 
 
 
 
+
+
+    } // end order
+
+
+    // ship fun return price and city and zone name
+    private function get_shipment_price($ship_way , $zone_id , $city_id , $total_price){
+            $zone = ShimpmentZone::find($zone_id);
+            $city = City::find($city_id);
+        if($ship_way && $ship_way != 'store') {
+            $shipment_setting = Shimpment::first();
+            if(isset($shipment_setting) && $shipment_setting->is_free != 'free' && $total_price < $shipment_setting->min_to_free){
+
+                return [ 'price'=>$zone->price , 'zone_name'=>$zone->name , 'city_name'=>$city->name  ];
+
+            }
+
+
+        }
+
+
+        return [ 'price'=>0 , 'zone_name'=>$zone->name , 'city_name'=>$city->name  ];
+
+
+    }
+
+    private function order_info($order_id , $product_id , $order_info){
+
+        foreach($order_info as $info){
+            OrderInfo::create([
+                'order_id'=>$order_id,
+                'product_id'=>$product_id,
+                'qty'=>$info['qty'],
+                'sales_price'=>$info['sales_price'],
+                'cost_price'=>$info['cost_price']
+            ]);
+        }
 
     }
 
@@ -149,7 +191,7 @@ class OrderController extends Controller
     private function clearCart($userId)
     {        Card::where('user_id', $userId)->delete();
     }
-    
+
 
 
 
@@ -200,8 +242,8 @@ class OrderController extends Controller
 
     public function store_guest(StoreOrderGuestRequest $request){
 
-   
-        DB::beginTransaction(); 
+
+        DB::beginTransaction();
         try {
 
             $coupon = null;
@@ -213,7 +255,7 @@ class OrderController extends Controller
                     }
                     if ($coupon->times_used >= $coupon->usage_limit) {
                         return $this->res(false, __('main.coupon_limit'), 400);
-                        
+
                     }
                 }
 
@@ -338,7 +380,7 @@ class OrderController extends Controller
         $user = $request->user();
         $orders = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->paginate(15); // Paginate with 10 items per page;
         // Return the created order with its details
-        return $this->res(true , __('main.all_user_order') , 200 ,  ['orders' => OrderAuthResource::collection( $orders ) ,  
+        return $this->res(true , __('main.all_user_order') , 200 ,  ['orders' => OrderAuthResource::collection( $orders ) ,
            'pagination' => [
             'current_page' => $orders->currentPage(),
             'last_page' => $orders->lastPage(),

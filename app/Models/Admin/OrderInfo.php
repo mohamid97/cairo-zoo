@@ -5,9 +5,8 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Shimpment extends Model
+class OrderInfo extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['is_free' , 'min_to_free'];
+    protected $fillable = ['order_id' , 'product_id' , 'qty' , 'sales_price' , 'cost_price'];
 }

@@ -32,17 +32,17 @@ class CardController extends Controller
             if(!isset($product)){
                 return $this->res(false ,__('main.product_not_found') , 404);
             }
-            if($product->stock < 1){
+            if($product->stock < $request->quantity){
                 return  $this->res(false ,__('main.stock_less_than_quantity'), 404);
             }
             if ($cardItem) {
-                $cardItem->quantity += 1;
+                $cardItem->quantity += $request->quantity;
                 $cardItem->save();
             } else {
                 CardItem::create([
                     'card_id' => $card->id,
                     'product_id' => $request->product_id,
-                    'quantity' => 1,
+                    'quantity' => $request->quantity,
                 ]);
             }
             DB::commit();
