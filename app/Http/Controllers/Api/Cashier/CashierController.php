@@ -141,7 +141,7 @@ class CashierController extends Controller
             
             $cahier_order->total_amount_before_discount  = $total_before_discount;
             // if coupon is applied
-            if ($coupon) {   
+            if (isset($coupon)) {   
                 $cahier_order->coupon_code = $coupon->code;
                 $cahier_order->coupon_discount = $coupon->type == 'percentage' ? ceil($total_after_discount * $coupon->discount_value) / 100 : ceil($coupon->discount_value);
                 $total_after_discount -= $cahier_order->coupon_discount;

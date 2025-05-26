@@ -105,6 +105,19 @@
 
 
 
+                        
+                        <li class="nav-item">
+                            <a href="{{ route('admin.statistics.monthly_report') }}" class="nav-link">
+                                <i class="fas fa-receipt"></i>
+
+                                <p>{{ __('main.monthly_report') }}</p>
+                            </a>
+                        </li>
+
+
+
+
+
 
 
 
@@ -196,6 +209,33 @@
                     </ul>
                 </li>
                 @endif
+
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-ticket-alt mr-2"></i>
+                            <p>
+                                {{ __('main.expense') }}
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.expense.index') }}" class="nav-link">
+                                    <i class="fas fa-calculator mr-2"></i>
+
+                                    <p>{{ __('main.expense') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.expense.add') }}" class="nav-link">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ __('main.add') }}</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
 
 
 

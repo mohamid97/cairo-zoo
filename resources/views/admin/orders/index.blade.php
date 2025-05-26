@@ -112,14 +112,13 @@
                         <span class="badge badge-info">@lang('main.proceed')</span>
                     @elseif ($order->status == 'on-way')
                         <span class="badge badge-warning">@lang('main.on_way')</span>
-                    @elseif ($order->status == 'finished')
+                    @elseif ($order->status == 'finshed')
                         <span class="badge badge-success">@lang('main.finished')</span>
                     @elseif ($order->status == 'canceled')
                         <span class="badge badge-danger">@lang('main.canceled')</span>
 
                     @elseif ($order->status == 'retrieval')
                         <span class="badge badge-danger">@lang('main.retrieval')</span>
-
                     @endif
                 </td>
                 <td>{{ $order->coupon_code ?? '-' }}</td>

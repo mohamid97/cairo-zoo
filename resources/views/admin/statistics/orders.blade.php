@@ -54,7 +54,7 @@
 
                         <tr>
                             <th>Shipment Fees</th>
-                            <td>{{ $online_orders->total_orders ?? 0 }}</td>
+                            <td> -- </td>
                             <td>{{ number_format($online_orders->total_shipment ?? 0, 2) }}</td>
                         </tr>
 
@@ -139,6 +139,16 @@
                         </tr>
 
                         <tr>
+                            <th>Cancel Orders Revenue</th>
+                            <td>{{ $cashier_orders->canceled_orders ?? 0 }}</td>
+                            <td>{{ number_format($cashier_orders->canceled_revenue ?? 0, 2) }}</td>
+
+
+                        </tr>
+
+
+
+                        <tr>
                             <th>Retrieval Orders</th>
                             <td>{{ $cashier_orders->retrieval_orders ?? 0 }}</td>
                             <td>{{ number_format($cashier_orders->retrieval_revenue ?? 0, 2) }}</td>
@@ -165,9 +175,9 @@
                         </tr>
                         </thead>
                         <tr>
-                            <th>{{ number_format($online_orders->completed_revenue, 2) }}</th>
-                            <td>{{ number_format($online_orders->diff , 2) }}</td>
-                            <td>{{ number_format($online_orders->total_shipment_complete, 2) }}</td>
+                            <th>{{ number_format($combined_stats['total_complete'], 2) }}</th>
+                            <td>{{ number_format($online_orders->diff  + $cashier_orders->diff , 2) }}</td>
+                            <td>{{ number_format($online_orders->total_shipment_complete , 2) }}</td>
 
                         </tr>
 

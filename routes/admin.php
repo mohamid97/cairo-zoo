@@ -53,6 +53,7 @@ use App\Http\Controllers\Admin\LogController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\TasteController;
 use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Admin\ExpenseController;
 
 Route::get('/mig' , function (){
 
@@ -567,7 +568,20 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('store_data' , [StatisticsController::class , 'store_data'])->name('admin.statistics.store');
         Route::get('/orders' , [StatisticsController::class , 'orders'])->name('admin.statistics.orders');
         Route::get('/diff' , [StatisticsController::class , 'diff'])->name('admin.statistics.diff');
+        Route::get('/monthly_report' , [StatisticsController::class , 'monthly_report'])->name('admin.statistics.monthly_report');
+        Route::get('/statistics/export', [StatisticsController::class, 'export'])->name('admin.statistics.export');
 
+
+    });
+
+    // start expense
+    Route::prefix('expense')->group(function(){
+        Route::get('/', [ExpenseController::class, 'index'])->name('admin.expense.index');
+        Route::get('/add', [ExpenseController::class, 'add'])->name('admin.expense.add');
+        Route::post('/store', [ExpenseController::class, 'store'])->name('admin.expense.store');
+        Route::get('/edit/{id}', [ExpenseController::class, 'edit'])->name('admin.expense.edit');
+        Route::post('/update/{id}', [ExpenseController::class, 'update'])->name('admin.expense.update');
+        Route::get('/delete/{id}', [ExpenseController::class, 'destroy'])->name('admin.expense.delete');
     });
 
 

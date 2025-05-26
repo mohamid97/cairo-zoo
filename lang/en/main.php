@@ -709,7 +709,20 @@ return [
     'min_to_free'=>'Min Amount To Free Shipment',
     'total_order'=>'Total Order Price ( Total Price + Shipment Price )',
     'order_not_paid'=>'Order Not Paid',
-    'retrieval'=>'Retrieval'
+    'retrieval'=>'Retrieval',
+    'expense'=>'Expense',
+    'add_new_expense'=>'Add New Expense',
+    'all_expenses'=>'All Expenses',
+    'expense_added_successfully'=>'Expense Added Successfully',
+    'expense_updated_successfully'=>'Expense Updated Successfully',
+    'expense_deleted_successfully'=>'Expense Deleted Successfully',
+    'delete_expense_warning'=>'Are you sure you want to delete this Expense? All related data will be removed.',
+    'expense_name'=>'Expense Name',
+    'add_expense'=>'Add Expense',
+    'fixed' => 'Fixed',
+    'variable' => 'Variable',
+    'expense_list' => 'Expense List',
+    
 
 
 

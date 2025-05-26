@@ -70,7 +70,7 @@ Route::middleware('checkLang')->group(function (){
     });
 
 
-    
+
     Route::prefix('mission_vission')->group(function(){
         Route::post('/get' , [MissionVisionController::class , 'get']);
     });
@@ -114,12 +114,12 @@ Route::middleware('checkLang')->group(function (){
     });
 
 
-    
+
     Route::prefix('orders_guest')->group(function(){
         Route::post('store' , [OrderController::class , 'store_guest']);
     });
 
-    
+
     Route::prefix('social-media')->group(function (){
        Route::post('/get' , [\App\Http\Controllers\Api\SocialController::class , 'get']);
     });
@@ -132,7 +132,7 @@ Route::middleware('checkLang')->group(function (){
 
     });
 
-    
+
 
 
     // start feedback api Fe
@@ -251,21 +251,21 @@ Route::middleware('checkLang')->group(function (){
     // });
 
 
-    // cashier login 
+    // cashier login
     Route::prefix('cashier')->group(function(){
         Route::post('login' , [CashierController::class , 'login']);
     });
     // authincation with sanctum
 
         Route::middleware('auth:sanctum')->group(function (){
+            Route::post('logout' , [CashierController::class , 'logout']);
+            Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
 
             // start router for cahsier
             Route::prefix('cashier')->middleware(['checkcashier'])->group(function(){
-                Route::post('logout' , [CashierController::class , 'logout']);
                 Route::post('info' , [CashierController::class , 'getCashierInfo']);
                 Route::post('get_product' , [CashierController::class , 'getProduct']);
                 Route::post('storeOrder' , [CashierController::class , 'StoreOrder']);
-                Route::post('validate/coupon' , [CashierController::class , 'validate_coupon']);
                 Route::post('orders' , [CashierController::class , 'cashier_orders']);
                 Route::post('retrieval' , [CashierController::class , 'retrieval']);
 
@@ -330,14 +330,14 @@ Route::middleware('checkLang')->group(function (){
 
 
 
-         
 
 
 
 
-       
 
-         
+
+
+
             // Route::prefix('compares')->group(function(){
             //     Route::post('/compare', [ComparisonController::class, 'index']);
             //     Route::post('/store', [ComparisonController::class, 'store']);
@@ -354,7 +354,7 @@ Route::middleware('checkLang')->group(function (){
             //     Route::post('update', [\App\Http\Controllers\Api\UsersController::class, 'update']);
             //     Route::post('logout', [\App\Http\Controllers\Api\UsersController::class, 'logout']);
             //     Route::post('change_password', [\App\Http\Controllers\Api\UsersController::class, 'change_password']);
-            
+
             //     Route::post('cart_update' , [CardController::class, 'update']);
 
 
@@ -390,7 +390,7 @@ Route::middleware('checkLang')->group(function (){
 
 
 
-    
+
 
 
 
