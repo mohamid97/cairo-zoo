@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Admin\Points;
 use App\Models\Admin\UserAddress;
 use App\Models\Front\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -60,6 +61,11 @@ class User extends Authenticatable
 
         return $this->hasMany(Order::class , 'user_id');
 
+    }
+
+    public function points()
+    {
+        return $this->hasMany(Points::class, 'user_id');
     }
 
 

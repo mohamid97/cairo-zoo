@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Cashier\CashierController;
+use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\ShipmentController;
 
 /*
@@ -309,6 +310,10 @@ Route::middleware('checkLang')->group(function (){
                 Route::prefix('orders_auth')->group(function(){
                     Route::post('store' , [OrderController::class , 'store_auth']);
                     Route::post('orders' , [OrderController::class , 'get_user_orders']);
+                });
+
+                Route::prefix('points')->group(function(){
+                    Route::post('get' , [PointController::class , 'get']);
                 });
 
 

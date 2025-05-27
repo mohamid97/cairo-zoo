@@ -22,7 +22,9 @@ class UserDetailsResource extends JsonResource
             'avatar_link'    => asset('/uploads/images/users/'),
             'phone'          => $this->phone,
             'email'          => $this->email,
-            'address'        => UserAddressResource::collection($this->address)
+            'address'        => UserAddressResource::collection($this->address),
+            'points' =>       $this->points,
+            'pounds' =>       $this->pounds,
 
         ];
     }

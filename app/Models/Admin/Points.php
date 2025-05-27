@@ -9,6 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Points extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'points',
+        'pounds',
+        'order_id',
+
+    ];
 
     public function user()
     {

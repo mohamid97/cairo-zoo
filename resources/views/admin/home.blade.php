@@ -56,13 +56,13 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $services }}</h3>
-                            <p>{{ __('main.services') }}</p>
+                            <h3>{{ $brands }}</h3>
+                            <p>{{ __('main.brands') }}</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="{{ route('admin.services.index') }}" class="small-box-footer">{{ __('main.more_info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('admin.brands.index') }}" class="small-box-footer">{{ __('main.more_info') }} <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -113,15 +113,15 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{ $media_group }}</h3>
-                            <p>{{ __('main.media_group') }}</p>
+                            <h3>{{ $coupons }}</h3>
+                            <p>{{ __('main.active_coupons') }}</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="{{ route('admin.group_media.index') }}" class="small-box-footer">{{ __('main.more_info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('admin.coupons.index') }}" class="small-box-footer">{{ __('main.more_info') }} <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
+                </div> 
                 <!-- ./col -->
 
                 <div class="col-lg-3 col-6">
@@ -165,10 +165,10 @@
 
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box mb-3">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-percent"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">{{ __('main.offers') }}</span>
-                            <span class="info-box-number">{{ $offers }}</span>
+                            <span class="info-box-text">{{ __('main.complete_orders') }}</span>
+                            <span class="info-box-number">{{ $completedOrders }}</span>
                         </div>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
 
             <div class="row">
             <div class="card col-md-12">
-                <div class="card-header border-transparent">
+                {{-- <div class="card-header border-transparent">
                     <h3 class="card-title">  {{ __('main.latest_cards') }}</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -262,9 +262,9 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="card-body p-0">
+                {{-- <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table m-0">
                             <thead>
@@ -296,12 +296,12 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="card-footer clearfix">
+                {{-- <div class="card-footer clearfix">
                     <a href="{{ route('admin.cards.index') }}" class="btn btn-sm btn-secondary float-right"> {{ __('main.all_carts') }}  </a>
 
-                </div>
+                </div> --}}
             </div>
         </div>
             <div class="row">

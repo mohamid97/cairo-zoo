@@ -10,6 +10,8 @@ use App\Models\Admin\City;
 use App\Models\Admin\Coupon;
 use App\Models\Admin\OrderAddress;
 use App\Models\Admin\OrderInfo;
+use App\Models\Admin\Points;
+use App\Models\Admin\PointsPrice;
 use App\Models\Admin\Product;
 use App\Models\Admin\Shimpment;
 use App\Models\Admin\ShimpmentZone;
@@ -74,6 +76,23 @@ class OrderController extends Controller
                 $totalAfterPrice -= $coupon_discount;
             }
 
+            // check points
+            if($request->points && $user->points >= $request->points){
+                $pointPrice = PointsPrice::first();
+                if(isset($pointPrice)){
+                   $all_pounds = floor(($request->points / $pointPrice->num_points) * $pointPrice->num_pounds);
+                   $pounds = ($all_pounds <= $totalAfterPrice) ? $all_pounds : $totalAfterPrice;
+                   $totalAfterPrice -= $pounds;
+                   $user->points -= $request->points;
+                   $user->pounds -= $all_pounds;
+                   $user->save();
+                }
+
+
+
+
+            }
+
             $ship_details = $this->get_shipment_price($request->shipment_way ?? 'delivery' , $request->zone_id , $request->city_id , ceil($totalAfterPrice));
 
             $order = Order::create([
@@ -91,7 +110,10 @@ class OrderController extends Controller
                 'coupon_discount' =>(isset($coupon)) ? ceil($coupon_discount) : null,
                 'discount_type' => (isset($coupon)) ? $coupon->type : null,
                 'zone'=>$ship_details['zone_name'] ?? 'N/A',
-                'city'=>$ship_details['city_name'] ?? 'N/A'
+                'city'=>$ship_details['city_name'] ?? 'N/A',
+                'points_used' => $request->points ?? 0,
+                'pounds_used' => (isset($pounds)) ? $pounds : 0
+
 
             ]);
 
@@ -126,6 +148,11 @@ class OrderController extends Controller
                     'address' => $request->input('address'),
                 ]);
             }
+
+
+
+
+
             DB::commit();
             $this->clearCart($user->id);
             $order = Order::with(['items' ,'address' ,'user'])->where('user_id' , $user->id)->first();
@@ -145,6 +172,8 @@ class OrderController extends Controller
 
 
     } // end order
+
+
 
 
     // ship fun return price and city and zone name
@@ -259,11 +288,8 @@ class OrderController extends Controller
                     }
                 }
 
-
                 $totalBefore = 0;
                 $totalAfter = 0;
-                $totalShip = 0;
-
                 foreach ($request->products as $item) {
                     $product = Product::find($item['id']);
 
@@ -295,7 +321,7 @@ class OrderController extends Controller
 
 
                 $couponDiscount = 0;
-                if ($coupon) {
+                if (isset($coupon)) {
                     $couponDiscount = $coupon->type == 'percentage'
                         ? ceil($totalAfter * $coupon->discount / 100)
                         : ceil($coupon->discount);
@@ -304,11 +330,7 @@ class OrderController extends Controller
                 }
 
 
-                if ($request->shipment_way == 'delivery') {
-                    $totalShip = 0;
-                }else{
-                     $totalShip = 0;
-                }
+               $ship_details = $this->get_shipment_price($request->shipment_way ?? 'delivery' , $request->zone_id , $request->city_id , ceil($totalAfter));
 
 
 
@@ -316,23 +338,26 @@ class OrderController extends Controller
                     'user_id' => null,
                     'total_price_before_discount' => ceil($totalBefore),
                     'total_price_after_discount' => ceil($totalAfter),
-                    'shipment_price' => ceil($totalShip),
+                    'shipment_price' => ceil($ship_details['price'])  ?? 0,
                     'payment_method' => $request->input('payment_method', 'cash'),
                     'payment_status' => 'unpaid',
                     'status' => 'pending',
                     'phone' => $request->phone,
                     'first_name' => $request->first_name,
                     'last_name' => $request->last_name,
-                    'coupon_code' => $request->coupon_code ?? null,
-                    'coupon_discount' => $couponDiscount,
-                    'discount_type' => $coupon->type ?? null
+                    'coupon_code' => $request->input('coupon_code') ?? null,
+                    'coupon_discount' =>(isset($coupon)) ? ceil($couponDiscount) : null,
+                    'discount_type' => (isset($coupon)) ? $coupon->type : null,
+                    'zone' => $ship_details['zone_name'] ?? 'N/A',
+                    'city' => $ship_details['city_name'] ?? 'N/A'
                 ]);
 
 
                 foreach ($items as $item) {
                     $product = $item['product'];
                     $product->stock -= $item['quantity'];
-                    $product->deductStock($item['quantity']);
+                    $order_info = $product->deductStock($item['quantity']);
+                    $this->order_info($order->id , $product->id , $order_info);
                     $product->save();
 
                     OrderItem::create([
@@ -346,20 +371,17 @@ class OrderController extends Controller
                     ]);
                 }
 
-
-                if ($request->has('address')) {
-                    OrderAddress::create([
-                        'order_id' => $order->id,
-                        'gov_id' => $request->input('gov_id'),
-                        'city_id' => $request->input('city_id'),
-                        'address' => $request->input('address'),
-                    ]);
-                }
+            if ($request->has('address')) {
+                OrderAddress::create([
+                    'order_id'=>$order->id,
+                    'address' => $request->input('address'),
+                ]);
+            }
 
 
                 DB::commit();
                 // Return the created order with its details
-                return $this->res(true , __('main.order_updated_successfully') , 200);
+                return $this->res(true , __('main.order_added_successfully') , 200);
 
         } catch (\Exception $e) {
             // Rollback the transaction if something fails

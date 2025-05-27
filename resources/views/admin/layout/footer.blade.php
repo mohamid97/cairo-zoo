@@ -60,23 +60,6 @@
         document.getElementById('currentYear').textContent = year;
 
 
-        // // Get the current URL path
-        // var url = window.location.pathname;
-
-        // // Get all navigation links
-        // var navLinks = document.querySelectorAll('.nav-item a');
-
-        // // Loop through each navigation link
-        // navLinks.forEach(function(link) {
-        //     var linkUrl = new URL(link.href);
-        //     // console.log(link);
-        // // Check if the link's href matches the current URL
-        //     if (linkUrl.pathname === url) {
-        //         // Add the "active" class to the parent list item
-        //         link.classList.add('active');
-
-        //     }
-        // });
 
 
 
@@ -108,9 +91,9 @@
 
 
 </script>
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
-{{--<script src="{{asset('dist/js/ckeditor.js')}}"></script>--}}
+
+
 
 
 

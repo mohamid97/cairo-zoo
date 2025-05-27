@@ -85,7 +85,7 @@
                                 <td>
                                     <a href="{{ route('admin.users.edit', ['id' => $account->id]) }}">
                                         <button class="btn btn-sm btn-info">
-                                            <i class="nav-icon fas fa-edit"></i> 
+                                            <i class="nav-icon fas fa-edit"></i>
                                         </button>
                                     </a>
 
@@ -104,9 +104,12 @@
 {{--                                @endif--}}
 
                                 <!-- Remove with confirmation -->
-                                    <button class="btn btn-sm btn-danger" onclick="showDeleteModal({{ $account->id }})">
-                                        <i class="nav-icon fas fa-trash"></i> 
-                                    </button>
+
+                                    @if($account->type != 'admin')
+                                        <button class="btn btn-sm btn-danger" onclick="showDeleteModal({{ $account->id }})">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                        </button>
+                                     @endif
                                 </td>
                             </tr>
                         @empty

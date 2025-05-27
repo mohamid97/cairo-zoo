@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\OrderInfo;
+use App\Models\Admin\Points;
+use App\Models\Admin\PointsPrice;
 use App\Models\Admin\Product;
 use App\Models\Admin\Stock;
 use App\Models\Front\Order;
@@ -92,6 +94,9 @@ class OrderController extends Controller
                  'payment_status' => 'required|in:paid,unpaid',
              ]);
              $order->status = $request->status;
+             if($request->status == 'finshed'){
+                $this->add_points($order->total_after_price , $order->user , $order);
+             }
              $order->payment_status = $request->payment_status;
              $order->save();
              Alert::success('Success', 'Order status updated successfully.');
@@ -167,6 +172,7 @@ class OrderController extends Controller
 
 
             $order->update(['status' => 'retrieval']);
+            $this->remove_points($order , $order->user);
             Alert::success('success' , __('main.main.order_retrieved_successfully'));
             DB::commit();
 
@@ -180,6 +186,50 @@ class OrderController extends Controller
 
 
      }
+
+
+
+
+    private function add_points($totalAfterPrice , $user , $order){
+            $pointsPrice = PointsPrice::first();
+            if(isset($pointsPrice)){
+                if($pointsPrice->order_amount <= $totalAfterPrice){
+                  $points = floor($totalAfterPrice / $pointsPrice->order_amount) * $pointsPrice->order_points;
+                  if($points > 0){
+                    $pounds = floor($points / $pointsPrice->num_points) * $pointsPrice->num_pounds;
+                    Points::create([
+                        'user_id' => $user->id,
+                        'points' => $points,
+                        'pounds' => $pounds,
+                        'order_id' => $order->id,
+                        
+                    ]);
+
+                    $user->points += $points;
+                    $user->pounds += $pounds;
+                    $user->save();
+                  }
+
+                }
+            } // end points price
+
+    }
+
+
+    // remove points from user if order return 
+    private function remove_points($order , $user){
+        $points = Points::where('order_id' , $order->id)->first();
+        if(isset($points)){
+            $user->points -= $points->points;
+            $user->pounds -= $points->pounds;
+            $user->save();
+            $points->delete();
+        }
+
+    }
+
+
+    
 
 
 

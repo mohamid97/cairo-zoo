@@ -36,7 +36,9 @@ class StoreOrderGuestRequest extends FormRequest
             'last_name'=> 'required|string|max:255',
             'phone' =>  ['required', 'regex:/^01[0-2,5]{1}[0-9]{8}$/'],
             'products.*.id'=> 'required|exists:products,id',
-            'products.*.quantity'=> 'required|integer|min:1'
+            'products.*.quantity'=> 'required|integer|min:1',
+            'zone_id'=>'required|integer|exists:shimpment_zones,id',
+            'city_id'=>'required|integer|exists:cities,id'
 
         ];
     }

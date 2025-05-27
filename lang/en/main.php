@@ -722,6 +722,19 @@ return [
     'fixed' => 'Fixed',
     'variable' => 'Variable',
     'expense_list' => 'Expense List',
+    'active_coupons' => 'Active Coupons',
+    'complete_orders'=> 'Complete Orders',
+    'finshed' => 'Finished',
+    'points_price' => 'Points Price',
+    'enter_pounds' => 'Enter Pounds',
+    'points_price'=> 'Points Price',
+    'user_points'=> 'User Points',
+    'ecommerce' => 'Ecommerce',
+    'profile' => 'Profile',
+    'slider_setting'=> 'Slider Setting',
+    'system_data' => 'System Data',
+    'brands_categories' => 'Brands & Categories',
+
     
 
 

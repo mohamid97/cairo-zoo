@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->decimal('total_price_after_discount', 8, 2);
             $table->decimal('total_price_before_discount', 8, 2);
+            $table->decimal('pounds_used', 8, 2)->default(0);
             $table->decimal('shipment_price', 8, 2);
             $table->enum('payment_method' , ['cash' , 'paymob' , 'else'])->default('cash');
             $table->enum('payment_status' , ['paid' , 'unpaid'])->default('unpaid');
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('zone');
             $table->string('city');
+            $table->integer('points_used')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

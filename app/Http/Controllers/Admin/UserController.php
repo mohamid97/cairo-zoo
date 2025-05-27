@@ -114,8 +114,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->forceDelete();
-        Alert::success('success', 'User Deleted Successfully !');
+        if($user->type != 'admin'){
+            $user->forceDelete();
+            Alert::success('success', 'User Deleted Successfully !');
+        }else{
+            Alert::success('error', 'Can not Delete This User');
+
+        }
+
         return redirect()->route('admin.users.index');
     }
 

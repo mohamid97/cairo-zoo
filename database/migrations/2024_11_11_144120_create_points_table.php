@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('points');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
             $table->string('pounds');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

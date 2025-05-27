@@ -146,11 +146,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 
 
 
-    // start points
-//    Route::prefix('points')->group(function(){
-//        Route::get('index' , [PointsController::class , 'get'])->name('admin.points.index');
-//        Route::post('/update/points_price' ,[PointsController::class , 'update_price'])->name('admin.points_pirce.update');
-//    });
+
 
 
     //sales tool
@@ -197,12 +193,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
 //    });
 
 
-    // start cards
-//    Route::prefix('cards')->group(function(){
-//        Route::get('/get' , [CardController::class , 'get'])->name('admin.cards.index');
-//        Route::get('delete/{id}', [CardController::class, 'delete'])->name('admin.cards.delete');
-//        Route::get('/show_details/{id}', [CardController::class, 'showDetails'])->name('admin.cards.show_details');
-//    });
+
 
     // start slider
    Route::prefix('slider')->group(function (){
@@ -595,6 +586,25 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('retrieval/{id}' , [OrderController::class, 'retrieval'])->name('admin.orders.retrieval');
 
     });
+
+
+    // start cards
+    Route::prefix('cards')->group(function(){
+        Route::get('/get' , [CardController::class , 'get'])->name('admin.cards.index');
+        Route::get('delete/{id}', [CardController::class, 'delete'])->name('admin.cards.delete');
+        Route::get('/show_details/{id}', [CardController::class, 'showDetails'])->name('admin.cards.show_details');
+    });
+
+    // start points
+    Route::prefix('points')->group(function(){
+        Route::get('index' , [PointsController::class , 'get'])->name('admin.points.index');
+        Route::post('/update/points_price' ,[PointsController::class , 'update_price'])->name('admin.points_pirce.update');
+    });
+
+
+
+
+
 
     // start shipment
     // Route::prefix('shipment')->group(function(){

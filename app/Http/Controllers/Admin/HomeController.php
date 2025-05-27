@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Brand;
 use App\Models\Admin\Category;
 use App\Models\Admin\Cms;
+use App\Models\Admin\Coupon;
 use App\Models\Admin\Lang;
 use App\Models\Admin\MediaGroup;
 use App\Models\Admin\Message;
@@ -35,27 +37,30 @@ class HomeController extends Controller
         $langs       = Lang::count();
         $media_group = MediaGroup::count();
         $sliders     = Slider::count();
+        $brands      = Brand::count();
+        $coupons     = Coupon::where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->count();
         $latest_messages = Message::latest()->take(5)->get();
         $cards = Card::count();
         $orders = Order::count();
-        $offers = Offers::count();
+        $completedOrders = Order::where('status', 'finshed')->count();
+        // $offers = Offers::count();
         // Fetch the latest 10 orders along with related user and order items
         $latest_orders = Order::with('user', 'items')
         ->orderBy('created_at', 'desc')
         ->take(10)
         ->get();
-        $latest_cards = Card::with(['user' , 'items.product'])->latest()->take(10)->get();
-                // Calculate total price for each card
-                foreach ($latest_cards  as $card) {
-                    $card->total_price = $card->items->sum(function ($item) {
-                        return $item->product->price * $item->quantity;
-                    });
-                }
+        // $latest_cards = Card::with(['user' , 'items.product'])->latest()->take(10)->get();
+        //         // Calculate total price for each card
+        //         foreach ($latest_cards  as $card) {
+        //             $card->total_price = $card->items->sum(function ($item) {
+        //                 return $item->product->price * $item->quantity;
+        //             });
+        //         }
 
 
         $lowest_stock = Product::where('stock' , '<' , 10)->take(10)->get();
 
-                $possibleStatuses = ['pending', 'finshed', 'canceled', 'procced', 'on-way'];
+                $possibleStatuses = ['pending', 'finshed', 'canceled', 'procced', 'on-way' , ''];
                 // Order Status Counts
                 $orderStatusCounts = Order::selectRaw('status, count(*) as count')
                     ->groupBy('status')
@@ -96,14 +101,14 @@ class HomeController extends Controller
                     $currentMonth = Carbon::now()->month;
 
                     // Get sales data for each month up to the current month
-                    $monthlySales = Order::where('status', 'finshed')
-                        ->whereYear('created_at', Carbon::now()->year)
-                        ->selectRaw('MONTH(created_at) as month, SUM(total_price) as total_sales')
-                        ->groupBy('month')
-                        ->orderBy('month')
-                        ->get()
-                        ->pluck('total_sales', 'month')
-                        ->toArray();
+                    // $monthlySales = Order::where('status', 'finshed')
+                    //     ->whereYear('created_at', Carbon::now()->year)
+                    //     ->selectRaw('MONTH(created_at) as month, SUM(total_price) as total_sales')
+                    //     ->groupBy('month')
+                    //     ->orderBy('month')
+                    //     ->get()
+                    //     ->pluck('total_sales', 'month')
+                    //     ->toArray();
 
                     // Fill in any missing months with zero sales
                     $salesData = [];
@@ -125,9 +130,12 @@ class HomeController extends Controller
             'sliders'         => $sliders,
             'cards'           => $cards,
             'orders'          => $orders,
-            'offers'          => $offers,
+            'coupons'         => $coupons,
+            'completedOrders' => $completedOrders,
+            // 'offers'          => $offers,
+            'brands'          => $brands,
             'latest_orders'   =>$latest_orders,
-            'latest_cards'    =>$latest_cards,
+            // 'latest_cards'    =>$latest_cards,
            'orderStatusCounts' => $orderStatusCounts,
            'productsStockCounts' =>  $productsStockCounts,
            'categoryProductCounts'=>$categoryProductCounts,
@@ -136,7 +144,7 @@ class HomeController extends Controller
            'salesData'=>$salesData,
            'currentMonth'=>$currentMonth,
            'lowest_stock'=> $lowest_stock,
-            'totalPoints'=>$totalPoints
+           'totalPoints'=>$totalPoints
         ]);
 
     }

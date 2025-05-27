@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('google_id')->nullable();
             $table->text('rest_password_code')->nullable();
+            $table->integer('points')->default(0);
+            $table->decimal('pounds')->default(0);
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
