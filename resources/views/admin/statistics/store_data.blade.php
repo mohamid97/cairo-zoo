@@ -95,7 +95,8 @@
 
                             <tr class="collapse bg-light" id="{{ $collapseId }}">
                                 <td colspan="5">
-                                    <table class="table mb-0 table-sm">
+                                    <table class="table mb-0 table-sm" style="    background: #17a2b8;
+    color: #FFF;">
                                         <thead>
                                         <tr>
                                             <th>{{ __('main.quantity') }}</th>

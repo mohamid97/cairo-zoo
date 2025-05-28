@@ -212,7 +212,9 @@
                                     <th>{{ __('main.status') }}</th>
                                     <th>{{ __('main.total_price') }}</th>
                                     <th>{{ __('main.shiping_price') }}</th>
-                                    <th>{{ __('main.shiping_price') }}</th>
+                                    <th>{{ __('main.zone') }}</th>
+                                    <th>{{ __('main.city') }}</th>
+                                    <th>{{ __('main.date') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -221,7 +223,7 @@
                                         <td>
                                             <a href="{{ route('admin.orders.show_details', $order->id) }}">{{ $order->id }}</a>
                                         </td>
-                                        <td>{{ $order->user->name ?? 'Guest' }}</td>
+                                        <td> <a href="{{ route('admin.orders.show_details', $order->id) }}"> {{ $order->user->first_name ?? __('main.guest') }} </a></td>
                                         <td>
                                     <span
                                         class="badge badge-{{ $order->status == 'pending' ? 'warning' : ($order->status == 'finished' ? 'success' : 'info') }}"
@@ -230,13 +232,15 @@
                                         {{ ucfirst($order->status) }}
                                     </span>
                                         </td>
-                                        <td>${{ number_format($order->total_price, 2) }}</td>
-                                        <td>${{ number_format($order->shipment_price, 2) }}</td>
-                                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ number_format($order->total_price_after_discount, 2) }}</td>
+                                        <td>{{ number_format($order->shipment_price, 2) }}</td>
+                                        <td>{{ $order->zone }}</td>
+                                        <td>{{ $order->city }}</td>
+                                        <td>{{ $order->created_at->format('d M Y, H:i') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No latest orders available.</td>
+                                        <td colspan="6" class="text-center">{{__('main.no_orders')}}</td>
                                     </tr>
                                 @endforelse
                                 </tbody>
@@ -248,6 +252,75 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+            <div class="row">
+                <div class="card col-md-12">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title"> {{ __('main.latest_cahier_orders') }}</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                <tr>
+                                    <th> ID</th>
+                                    <th>{{ __('main.name') }}</th>
+                                    <th>{{ __('main.status') }}</th>
+                                    <th>{{ __('main.total_price') }}</th>
+                        
+                                    <th>{{ __('main.zone') }}</th>
+                                    <th>{{ __('main.city') }}</th>
+                                    <th>{{ __('main.date') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse($latest_cahier_orders as $order)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('admin.cahier_orders.show', $order->id) }}">{{ $order->id }}</a>
+                                        </td>
+                                        <td> <a href="{{ route('admin.cahier_orders.show', $order->id) }}"> {{ $order->user->first_name ?? __('main.guest') }} </a></td>
+                                        <td>
+                                    <span
+                                        class="badge badge-{{ $order->status == 'pending' ? 'warning' : ($order->status == 'finished' ? 'success' : 'info') }}"
+                                        title="{{ ucfirst($order->status) }} Order"
+                                    >
+                                        {{ ucfirst($order->status) }}
+                                    </span>
+                                        </td>
+                                        <td>{{ number_format($order->total_amount_after_discount, 2) }}</td>
+                                        
+                                        <td>{{ $order->zone }}</td>
+                                        <td>{{ $order->city }}</td>
+                                        <td>{{ $order->created_at->format('d M Y, H:i') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">{{__('main.no_orders')}}</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer clearfix">
+                        <a href="{{ route('admin.cahier_orders.index') }}" class="btn btn-sm btn-secondary float-right">{{ __('main.all_orders') }}</a>
+                    </div>
+                </div>
+            </div>
+
+
 
 
             <div class="row">
@@ -323,20 +396,22 @@
                             <table class="table m-0">
                                 <thead>
                                     <tr>
-                                        <th> ID</th>
+                                        <th> # </th>
                                         <th>{{ __('main.name') }} </th>
                                         <th>{{ __('main.stock') }} </th>
-                                        <th>{{ __('main.date') }} </th>
+                                        <th>{{ __('main.brand') }} </th>
+                                        <th>{{ __('main.category') }} </th>
+                                        <th>{{ __('main.created_at') }} </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($lowest_stock as $pro)
+                                    @foreach($lowest_stock as $index => $pro)
                                     <tr>
-                                        <td><a href="{{ route('admin.products.edit', $pro->id) }}">{{ $pro->id }} </a></td>
-                                        <td>{{ $pro->name ?? 'N/A' }}</td>
-
-                                        <td>{{ $pro->stock }}</td>
-
+                                        <td><a href="{{ route('admin.products.edit', $pro->id) }}">{{ $index + 1  }} </a></td>
+                                        <td><a href="{{ route('admin.products.edit', $pro->id) }}">{{ $pro->name ?? 'N/A' }} </a></td>
+                                        <td>{{$pro->stock}}</td>
+                                        <td>{{ ($pro->brand) ? $pro->brand->name : 'N/A' }}</td>
+                                        <td>{{ ($pro->category) ? $pro->category->name : 'N/A' }}</td>
                                         <td>{{ $pro->created_at->format('d M Y, H:i') }}</td>
                                     </tr>
                                     @endforeach
@@ -364,13 +439,27 @@
                         <canvas id="orderChart"></canvas>
                     </div>
 
+                   <div class="col-md-6">
+                        <canvas id="orderChart"></canvas>
+                    </div>
+
+
+                </div>
+
+            
+
+                <br><br>
+                <hr>
+                <br><br>
+                <div class="row">
                     <div class="col-md-6">
                         <canvas id="categoryProductChart"></canvas>
                     </div>
                 </div>
-
                 <br><br>
-                <hr>
+                
+                <br>
+                <br><br>
                 <!-- Product Stock Chart -->
                 <div class="row"  style="    margin: 50px 0 80px 0;padding: 0 0 50px;">
 
@@ -383,10 +472,7 @@
 
                 </div>
 <hr>
-<br>
-                <div class="col-md-12">
-                    <canvas id="productStockChart"></canvas>
-                </div>
+
 
 
 
@@ -621,49 +707,7 @@ const orderStatusChart = new Chart(orderStatusCtx, {
 
 
 
-    // Product Stock Chart
-const productStockCtx = document.getElementById('productStockChart').getContext('2d');
-const productStockChart = new Chart(productStockCtx, {
-    type: 'bar',
-    data: {
-        labels: {!! json_encode(array_keys($productsStockCounts)) !!}, // Product names
-        datasets: [{
-            label: 'Product Stock',
-            data: {!! json_encode(array_values($productsStockCounts)) !!}, // Stock counts
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Stock Quantity'
-                }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Product Name'
-                }
-            }
-        },
-        responsive: true,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Product Stock Levels'
-            }
-        }
-    }
-});
+
 
 
 

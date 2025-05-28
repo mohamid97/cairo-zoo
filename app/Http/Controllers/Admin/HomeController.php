@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Brand;
+use App\Models\Admin\CashierOrder;
 use App\Models\Admin\Category;
 use App\Models\Admin\Cms;
 use App\Models\Admin\Coupon;
@@ -49,18 +50,17 @@ class HomeController extends Controller
         ->orderBy('created_at', 'desc')
         ->take(10)
         ->get();
-        // $latest_cards = Card::with(['user' , 'items.product'])->latest()->take(10)->get();
-        //         // Calculate total price for each card
-        //         foreach ($latest_cards  as $card) {
-        //             $card->total_price = $card->items->sum(function ($item) {
-        //                 return $item->product->price * $item->quantity;
-        //             });
-        //         }
+
+        $latest_cahier_orders = CashierOrder::with('user', 'items')
+        ->orderBy('created_at', 'desc')
+        ->take(10)
+        ->get();
 
 
-        $lowest_stock = Product::where('stock' , '<' , 10)->take(10)->get();
 
-                $possibleStatuses = ['pending', 'finshed', 'canceled', 'procced', 'on-way' , ''];
+        $lowest_stock = Product::with(['category' , 'brand'])->where('stock' , '<' , 10)->take(10)->get();
+
+                $possibleStatuses = ['pending', 'finshed', 'canceled', 'procced', 'on-way' , 'retrieval'];
                 // Order Status Counts
                 $orderStatusCounts = Order::selectRaw('status, count(*) as count')
                     ->groupBy('status')
@@ -101,14 +101,14 @@ class HomeController extends Controller
                     $currentMonth = Carbon::now()->month;
 
                     // Get sales data for each month up to the current month
-                    // $monthlySales = Order::where('status', 'finshed')
-                    //     ->whereYear('created_at', Carbon::now()->year)
-                    //     ->selectRaw('MONTH(created_at) as month, SUM(total_price) as total_sales')
-                    //     ->groupBy('month')
-                    //     ->orderBy('month')
-                    //     ->get()
-                    //     ->pluck('total_sales', 'month')
-                    //     ->toArray();
+                    $monthlySales = Order::where('status', 'finshed')
+                        ->whereYear('created_at', Carbon::now()->year)
+                        ->selectRaw('MONTH(created_at) as month, SUM(total_price_after_discount) as total_sales')
+                        ->groupBy('month')
+                        ->orderBy('month')
+                        ->get()
+                        ->pluck('total_sales', 'month')
+                        ->toArray();
 
                     // Fill in any missing months with zero sales
                     $salesData = [];
@@ -117,6 +117,8 @@ class HomeController extends Controller
                     }
         $totalPoints = Points::sum('points'); // Sums up all points
 
+
+     
         return view('admin.home' , [
             'users'           => $users,
             'messages'        => $messages,
@@ -135,6 +137,7 @@ class HomeController extends Controller
             // 'offers'          => $offers,
             'brands'          => $brands,
             'latest_orders'   =>$latest_orders,
+            'latest_cahier_orders'=>$latest_cahier_orders,
             // 'latest_cards'    =>$latest_cards,
            'orderStatusCounts' => $orderStatusCounts,
            'productsStockCounts' =>  $productsStockCounts,

@@ -734,6 +734,11 @@ return [
     'slider_setting'=> 'Slider Setting',
     'system_data' => 'System Data',
     'brands_categories' => 'Brands & Categories',
+    'monthly_report'=>'Monthly Report',
+    'guest'=>'Guest',
+    'no_orders'=>'No latest orders available.',
+    'latest_cahier_orders'=>'Latest Cahier Orders'
+
 
     
 
