@@ -22,11 +22,11 @@ use App\Models\Admin\Stock;
 class CashierController extends Controller
 {
     use ResponseTrait;
-    
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        
+
         if (auth()->attempt($credentials)) {
 
             $user = auth()->user();
@@ -37,15 +37,15 @@ class CashierController extends Controller
             return $this->res(true, __('main.login_success') ,200, ['token' => $token,'user' => $user]);
         }
 
-        return $this->res(false, __('main.invalid_credentials'), 401);        
+        return $this->res(false, __('main.invalid_credentials'), 401);
     }
 
-    
+
 
     // logout cashier
     public function logout(Request $request)
     {
-        auth()->logout();
+        $request->user()->currentAccessToken()->delete();
         $this->res(true, __('main.logout_success'), 200);
     }
 
@@ -58,7 +58,7 @@ class CashierController extends Controller
         }
 
         return $this->res(true, __('main.cashier_info'), 200, ['user'=>new UsersResource($user)]);
-      
+
     }
 
 
@@ -81,18 +81,18 @@ class CashierController extends Controller
 
     public function StoreOrder(StoreOrderRequest $request)
     {
-    
+
         try{
             $user = $request->user();
             if ($request->has('coupon_code')) {
-            
+
                 if( ($coupon = $this->check_coupon($request->coupon_code)) == false){
                     return $this->res(false, __('main.invalid_coupon_or_limit_code'), 400);
 
                 }
             }
 
-          
+
 
             if(!$this->ckeck_stocks($request->products)){
                 return $this->res(false , __('main.not_enough_stock'), 404);
@@ -104,7 +104,7 @@ class CashierController extends Controller
                 'user_id' => $user->id,
                 'coupon_code' => $request->input('coupon_code'),
             ]);
-     
+
             $total_before_discount = 0;
             $total_after_discount = 0;
             foreach ($products as $product) {
@@ -116,7 +116,7 @@ class CashierController extends Controller
                 $price_after_discount = $price_before_discount - $discount_value;
                 $total_price_before_discount = ceil($product['quantity'] * $price_before_discount);
                 $total_price_after_discount = ceil($product['quantity'] * $price_after_discount);
-    
+
                 $order_info = $productModel->deductStock( $product['quantity']);
                 $this->casheir_order_info($cahier_order->id , $productModel->id , $order_info);
 
@@ -132,16 +132,16 @@ class CashierController extends Controller
                     'discount_amount'=> $discount_type === 'amount' ? $discount_value : null,
 
                 ]);
-            
+
                 $productModel->stock -= $product['quantity'];
                 $productModel->save();
                 $total_before_discount += $total_price_before_discount;
                 $total_after_discount += $total_price_after_discount;
             }
-            
+
             $cahier_order->total_amount_before_discount  = $total_before_discount;
             // if coupon is applied
-            if (isset($coupon)) {   
+            if (isset($coupon)) {
                 $cahier_order->coupon_code = $coupon->code;
                 $cahier_order->coupon_discount = $coupon->type == 'percentage' ? ceil($total_after_discount * $coupon->discount_value) / 100 : ceil($coupon->discount_value);
                 $total_after_discount -= $cahier_order->coupon_discount;
@@ -153,7 +153,7 @@ class CashierController extends Controller
             $cahier_order->total_amount_after_discount  = $total_after_discount;
             $cahier_order->total_discount = ceil($total_before_discount - $total_after_discount);
             $cahier_order->save();
-    
+
             DB::commit();
             return $this->res(true, __('main.order_submitted_successfully'), 200, ['cahier_order' => new OrderResource($cahier_order)]);
 
@@ -165,7 +165,7 @@ class CashierController extends Controller
         }
 
 
-        
+
 
 
     }
@@ -235,9 +235,9 @@ class CashierController extends Controller
         $request->validate([
             'coupon_code' => 'required|string',
         ]);
- 
+
         $coupon = Coupon::where('code', $request->input('coupon_code'))->where('is_active' , 1)->whereDate('start_date', '<=', Carbon::now())
-        ->whereDate('end_date', '>=', Carbon::now())->first();        
+        ->whereDate('end_date', '>=', Carbon::now())->first();
         if (!$coupon) {
             return $this->res(false, __('main.invalid_coupon_code'), 400);
         }
@@ -248,7 +248,7 @@ class CashierController extends Controller
     }
 
 
-    // get cashier orders 
+    // get cashier orders
     public function cashier_orders(Request $request)
     {
         $user = $request->user();
@@ -279,7 +279,7 @@ class CashierController extends Controller
         ]);
 
 
-        
+
 
 
 
@@ -311,7 +311,7 @@ class CashierController extends Controller
         if ($order->status == 'retrieval') {
             return $this->res(false, __('main.order_already_retrieval'), 404);
         }
-        
+
 
         // Return product quantities to stock
         foreach ($order->items as $item) {
@@ -323,7 +323,7 @@ class CashierController extends Controller
 
             $product->stock += $item->quantity;
             $product->save();
-            $infos = CahierOrderInfo::where('order_id' , $request->order_id)->get(); 
+            $infos = CahierOrderInfo::where('order_id' , $request->order_id)->get();
             foreach($infos as $info){
                 $stock = Stock::where('product_id' , $info->product_id)->where('cost_price' , $info->cost_price)->where('sales_price' , $info->sales_price)->first();
                 if($stock){
@@ -337,13 +337,13 @@ class CashierController extends Controller
                         'sales_price'=>$info->sales_price
                     ]);
                 }
-                
+
 
 
             } // end foreach
 
 
-            
+
 
 
         }
@@ -368,7 +368,7 @@ class CashierController extends Controller
 
 
 
-    
+
 
 
 }
