@@ -139,6 +139,7 @@ svg {
                             <th>{{ __('main.num_propducts') }}</th>
                             <th>{{ __('main.quantity_products') }}</th>
                             <th>{{ __('main.status') }}</th>
+                            <th>{{ __('main.date') }}</th>
                             <th>{{ __('main.action') }}</th>
                         </tr>
                     </thead>
@@ -184,7 +185,7 @@ svg {
                                 {{$order->items->sum('quantity')}}
                             </td>
                             <td>{{$order->status}} </td>
-
+<td>{{$order->created_at->format('d M Y, H:i') }}</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center gap-2">
 

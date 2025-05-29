@@ -155,8 +155,8 @@
                     <div class="info-box mb-3">
                         <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-truck"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">{{ __('main.orders') }}</span>
-                            <span class="info-box-number">{{ $orders }}</span>
+                            <span class="info-box-text">{{ __('main.online_orders') }}</span>
+                            <span class="info-box-number">{{ $completedOrders }}</span>
                         </div>
                     </div>
                 </div>
@@ -165,10 +165,10 @@
 
                 <div class="col-12 col-sm-6 col-md-3">
                     <div class="info-box mb-3">
-                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cash-register"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">{{ __('main.complete_orders') }}</span>
-                            <span class="info-box-number">{{ $completedOrders }}</span>
+                            <span class="info-box-text">{{ __('main.cashier_orders') }}</span>
+                            <span class="info-box-number">{{  $completedCashierOrders }}</span>
                         </div>
                     </div>
                 </div>
@@ -440,7 +440,7 @@
                     </div>
 
                    <div class="col-md-6">
-                        <canvas id="orderChart"></canvas>
+                        <canvas id="orderCashierChart"></canvas>
                     </div>
 
 
@@ -452,22 +452,23 @@
                 <hr>
                 <br><br>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <canvas id="categoryProductChart"></canvas>
                     </div>
                 </div>
                 <br><br>
-                
+                <hr>
                 <br>
                 <br><br>
                 <!-- Product Stock Chart -->
-                <div class="row"  style="    margin: 50px 0 80px 0;padding: 0 0 50px;">
+                <div class="row"  style="margin: 50px 0 80px 0;padding: 0 0 50px;">
+
 
                     <div class="col-md-6">
-                        <canvas id="orderUserStatusChart"></canvas>
+                        <canvas id="salesLineChart"></canvas>
                     </div>
                     <div class="col-md-6">
-                        <canvas id="salesLineChart"></canvas>
+                        <canvas id="salesCashierLineChart"></canvas>
                     </div>
 
                 </div>
@@ -552,9 +553,27 @@
     });
 
 
+    salesCashierLineChart
 
 
+ var salesCashierData = @json($cashierSalesData);
 
+    var ctx = document.getElementById('salesCashierLineChart').getContext('2d');
+    var salesCashierLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: displayedMonths,
+            datasets: [{
+                label: 'Cahiers Monthly Sales',
+                data: salesCashierData,
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: options
+    });
 
 
         // Category Product Count Chart
@@ -564,7 +583,7 @@ const categoryProductChart = new Chart(categoryProductCtx, {
     data: {
         labels: {!! json_encode(array_keys($categoryProductCounts)) !!}, // Category names
         datasets: [{
-            label: 'Number of Products',
+            label: 'Number of Products In Each Category',
             data: {!! json_encode(array_values($categoryProductCounts)) !!}, // Product counts
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -663,44 +682,71 @@ const orderStatusChart = new Chart(orderStatusCtx, {
 
 
 
-            // Data for the chart
-     var orderData = {
-        labels: ['Users with Orders', 'Users without Orders'],
-        datasets: [{
-            data: [{{ $usersWithOrders }}, {{ $usersWithoutOrders }}], // Replace these variables with your actual data
-            backgroundColor: ['#36A2EB', '#FF6384'],
-            hoverBackgroundColor: ['#36A2EB', '#FF6384']
-        }]
-    };
 
-    // Options for the chart
-    var options = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top'
+
+
+const orderCashierStatusCtx = document.getElementById('orderCashierChart').getContext('2d');
+const orderCashierStatusChart = new Chart(orderCashierStatusCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode(array_keys($orderCashierStatusCounts)) !!}, // All statuses
+        datasets: [{
+            label: 'Cashier Orders by Status',
+            data: {!! json_encode(array_values($orderCashierStatusCounts)) !!}, // Corresponding counts
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Number of Orders'
+                }
             },
-            tooltip: {
-                callbacks: {
-                    label: function(tooltipItem) {
-                        var total = tooltipItem.dataset.data.reduce((a, b) => a + b, 0);
-                        var value = tooltipItem.raw;
-                        var percentage = ((value / total) * 100).toFixed(2);
-                        return tooltipItem.label + ': ' + percentage + '%';
-                    }
+            x: {
+                title: {
+                    display: true,
+                    text: 'Cashier Order Status'
                 }
             }
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Orders by Status'
+            }
         }
-    };
+    }
+});
 
-    // Create the chart
-    var ctx = document.getElementById('orderUserStatusChart').getContext('2d');
-    var orderUserStatusChart = new Chart(ctx, {
-        type: 'doughnut', // Use 'pie' for a pie chart
-        data: orderData,
-        options: options
-    });
+
+
+
+
+
+
+
 
 
 

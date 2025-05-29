@@ -40,8 +40,10 @@
                                 <input type="text" name="product_name" value="{{ request('product_name') }}" class="form-control" placeholder="@lang('main.product_name')">
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">@lang('main.filter')</button>
-                                <a href="{{ route('admin.cards.index') }}" class="btn btn-secondary">@lang('main.reset')</a>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> {{ __('main.search') }}</button>
+                                                    <a href="{{ route('admin.cards.index') }}" class="btn btn-primary ml-2">
+                     <i class="fas fa-sync-alt mr-1"></i> {{ __('main.reset') }}
+                 </a>
                             </div>
                         </div>
                     </form>
@@ -74,12 +76,12 @@
                                 <td>
                                     <a href="{{ route('admin.cards.delete', ['id' => $cart->id]) }}">
                                         <button class="btn btn-sm btn-danger">
-                                            <i class="nav-icon fas fa-trash"></i> @lang('main.remove')
+                                            <i class="nav-icon fas fa-trash"></i> 
                                         </button>
                                     </a>
                                     <a href="{{ route('admin.cards.show_details', ['id' => $cart->id]) }}">
                                         <button class="btn btn-sm btn-primary">
-                                            <i class="nav-icon fas fa-eye"></i> @lang('main.show')
+                                            <i class="nav-icon fas fa-eye"></i> 
                                         </button>
                                     </a>
                                 </td>

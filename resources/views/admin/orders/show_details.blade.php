@@ -9,6 +9,11 @@
     .badge-status {
         font-size: 90%;
     }
+        .product-img {
+        max-width: 80px;
+        max-height: 80px;
+        object-fit: contain;
+    }
 </style>
 @endsection
 
@@ -61,6 +66,14 @@
                                 @lang('main.' . $order->payment_status)
                             </span>
                         </li>
+
+                        <li class="list-group-item">
+                            <strong>@lang('main.date'):</strong>
+           
+                              {{$order->created_at->format('d M Y, H:i') }}
+                           
+                        </li>
+                       
                     </ul>
                 </div>
 
@@ -90,22 +103,35 @@
             <!-- Order Items -->
             <h5 class="info-title mb-3">@lang('main.items')</h5>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center">
+                <table class="table table-striped table-bordered table-hover text-center">
                     <thead class="thead-info">
                         <tr>
                             <th>@lang('main.product')</th>
+                            <th>@lang('main.price_before_discount')</th>
                             <th>@lang('main.quantity')</th>
-                            <th>@lang('main.sales_price')</th>
-                            <th>@lang('main.discount')</th>
+                            <th>@lang('main.price_after_discount')</th>
+                            <th>@lang('main.discount_amount')</th>
                             <th>@lang('main.total')</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($order->items as $item)
                         <tr>
-                            <td>{{ $item->product_name }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @if($item->product && $item->product->image)
+                                    <img src="{{ asset('uploads/images/products/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="product-img mr-3">
+                                    @endif
+                                    <div>
+                                        <strong>{{ $item->product->name ?? $item->product_name  }}</strong><br>
+                                        <small>{{ $item->product->sku ?? 'N/A' }}</small>
+                                    </div>
+                                </div>
+
+                                </td>
+                            <td>{{ ceil(number_format($item->sales_price, 2)  / $item->quantity) }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->sales_price, 2) }}</td>
+                            <td>{{ ceil(number_format($item->price, 2)  / $item->quantity) }}</td>
                             <td>{{ number_format($item->discount, 2) }}</td>
                             <td>{{ number_format($item->price, 2) }}</td>
                         </tr>
@@ -113,6 +139,20 @@
                     </tbody>
                 </table>
             </div>
+
+
+                                    <div class="row mt-3">
+                            <div class="col-md-12 text-right">
+                                <a href="{{ route('admin.orders.index') }}" class="btn btn-default">
+                                    <i class="fas fa-arrow-left"></i> {{ __('main.back_to_orders') }}
+                                </a>
+                                <button class="btn btn-primary" onclick="window.print()">
+                                    <i class="fas fa-print"></i> {{ __('main.print_invoice') }}
+                                </button>
+                            </div>
+                        </div>
+
+
 
         </div>
     </div>

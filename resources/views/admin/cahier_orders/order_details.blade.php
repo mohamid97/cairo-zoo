@@ -72,10 +72,33 @@
                             </div>
                             <div class="col-md-6">
                                 <h4><i class="fas fa-receipt"></i> {{ __('main.order_summary') }}</h4>
-                                <p class="mb-1"><span class="info-label">{{ __('main.order_date') }}:</span> {{ $order->created_at->format('Y-m-d H:i') }}</p>
+                                <p class="mb-1"><span class="info-label">{{ __('main.order_date') }}:</span> {{ $order->created_at->format('d M Y, H:i') }}</p>
                                 <p class="mb-1"><span class="info-label">{{ __('main.total_items') }}:</span> {{ $order->items->count() }}</p>
                                 <p class="mb-1"><span class="info-label">{{ __('main.total_quantity') }}:</span> {{ $order->items->sum('quantity') }}</p>
-                                <p class="mb-1 text-primary"><span class="info-label">{{ __('main.status') }}:</span>  {{ $order->status }}</p>
+                                <p class="mb-1 text-primary"><span class="info-label">{{ __('main.status') }}:</span>  
+                                
+                                                            @php
+                                                                $status = $order->status; // or whatever your variable is
+                                                            @endphp
+
+                                                            @switch($status)
+                                                                @case('finshed')
+                                                                    <span class="badge badge-success">{{ __('main.finished') }}</span>
+                                                                    @break
+
+                                                                @case('canceled')
+                                                                    <span class="badge badge-danger">{{ __('main.canceled') }}</span>
+                                                                    @break
+
+                                                                @case('retrieval')
+                                                                    <span class="badge badge-warning">{{ __('main.retrieval') }}</span>
+                                                                    @break
+
+                                                                @default
+                                                                    <span class="badge badge-secondary">{{ __('main.unknown') }}</span>
+                                                            @endswitch
+
+                                </p>
 
                             </div>
                         </div>
@@ -147,9 +170,10 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>{{ __('main.product') }}</th>
-                                                    <th>{{ __('main.price') }}</th>
+                                                    <th>{{ __('main.price_before_discount') }}</th>
                                                     <th>{{ __('main.quantity') }}</th>
-                                                    <th>{{ __('main.discount') }}</th>
+                                                    <th>{{ __('main.price_after_discount') }}</th>
+                                                    <th>{{ __('main.discount_amount') }}</th>
                                                     <th>{{ __('main.total') }}</th>
                                                 </tr>
                                             </thead>
@@ -160,7 +184,7 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             @if($item->product && $item->product->image)
-                                                            <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="product-img mr-3">
+                                                            <img src="{{ asset('uploads/images/products/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="product-img mr-3">
                                                             @endif
                                                             <div>
                                                                 <strong>{{ $item->product->name ?? __('main.deleted_product') }}</strong><br>
@@ -171,6 +195,7 @@
                                                     <td>{{ number_format($item->price_before_discount, 2) }}</td>
                                                     <td>{{ $item->quantity }}</td>
                                                     <td>{{ number_format($item->price_after_discount, 2) }}</td>
+                                                    <td>{{ number_format($item->discount_amount, 2) }}</td>
                                                     <td>{{ number_format($item->total_price_after_discount, 2) }}</td>
                                                 </tr>
                                                 @endforeach

@@ -56,7 +56,7 @@
     width: 45px;">
             </div>
             <div class="info">
-                <a href="#" class="d-block">CanGrow Dashboard</a>
+                <a href="{{route('admin.index')}}" class="d-block">CanGrow Dashboard</a>
             </div>
         </div>
 

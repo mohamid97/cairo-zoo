@@ -42,7 +42,7 @@ class HomeController extends Controller
         $coupons     = Coupon::where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->count();
         $latest_messages = Message::latest()->take(5)->get();
         $cards = Card::count();
-        $orders = Order::count();
+        $completedCashierOrders = CashierOrder::where('status', 'finshed')->count();
         $completedOrders = Order::where('status', 'finshed')->count();
         // $offers = Offers::count();
         // Fetch the latest 10 orders along with related user and order items
@@ -60,6 +60,9 @@ class HomeController extends Controller
 
         $lowest_stock = Product::with(['category' , 'brand'])->where('stock' , '<' , 10)->take(10)->get();
 
+
+
+
                 $possibleStatuses = ['pending', 'finshed', 'canceled', 'procced', 'on-way' , 'retrieval'];
                 // Order Status Counts
                 $orderStatusCounts = Order::selectRaw('status, count(*) as count')
@@ -74,6 +77,35 @@ class HomeController extends Controller
                     }
                         // Ensure keys are sorted by the possible statuses
                     $orderStatusCounts = array_replace(array_flip($possibleStatuses), $orderStatusCounts);
+
+
+
+
+
+
+                $possibleCahierStatuses = ['finshed', 'canceled', 'retrieval'];
+                // Order Status Counts
+                $orderCashierStatusCounts = CashierOrder::selectRaw('status, count(*) as count')
+                    ->groupBy('status')
+                    ->pluck('count', 'status')
+                    ->toArray();
+                                        // Fill missing statuses with zero
+                    foreach ($possibleCahierStatuses as $status) {
+                        if (!array_key_exists($status, $orderCashierStatusCounts)) {
+                            $orderCashierStatusCounts[$status] = 0;
+                        }
+                    }
+                        // Ensure keys are sorted by the possible statuses
+                    $orderCashierStatusCounts = array_replace(array_flip($possibleCahierStatuses), $orderCashierStatusCounts);
+
+
+
+
+
+                   
+
+
+
                     $productsStockCounts = Product::with('translations')
                     ->select('id', 'stock')
                     ->get()
@@ -83,6 +115,12 @@ class HomeController extends Controller
                         return [$translatedName => $product->stock];
                     })
                     ->toArray();
+
+
+
+
+
+
 
                     $categoryProductCounts = Category::with('translations')
                     ->withCount('products') // Count related products
@@ -94,9 +132,15 @@ class HomeController extends Controller
                     })
                     ->toArray();
 
+
+
+
+
                     //check
                     $usersWithOrders = User::has('orders')->where('type' , '!=' , 'admin')->count();
                     $usersWithoutOrders = User::doesntHave('orders')->where('type' , '!=' , 'admin')->count();
+
+
 
                     $currentMonth = Carbon::now()->month;
 
@@ -115,6 +159,26 @@ class HomeController extends Controller
                     for ($i = 1; $i <= $currentMonth; $i++) {
                         $salesData[] = $monthlySales[$i] ?? 0;
                     }
+
+
+
+                    $monthlyCashierSales = CashierOrder::where('status', 'finshed')
+                        ->whereYear('created_at', Carbon::now()->year)
+                        ->selectRaw('MONTH(created_at) as month, SUM(total_amount_after_discount) as total_sales')
+                        ->groupBy('month')
+                        ->orderBy('month')
+                        ->get()
+                        ->pluck('total_sales', 'month')
+                        ->toArray();
+
+                    // Fill in any missing months with zero sales
+                    $cashierSalesData = [];
+                    for ($i = 1; $i <= $currentMonth; $i++) {
+                        $cashierSalesData[] = $monthlyCashierSales[$i] ?? 0;
+                    }
+
+
+
         $totalPoints = Points::sum('points'); // Sums up all points
 
 
@@ -131,7 +195,7 @@ class HomeController extends Controller
             'media_group'     =>$media_group,
             'sliders'         => $sliders,
             'cards'           => $cards,
-            'orders'          => $orders,
+            'completedCashierOrders'          => $completedCashierOrders,
             'coupons'         => $coupons,
             'completedOrders' => $completedOrders,
             // 'offers'          => $offers,
@@ -140,11 +204,13 @@ class HomeController extends Controller
             'latest_cahier_orders'=>$latest_cahier_orders,
             // 'latest_cards'    =>$latest_cards,
            'orderStatusCounts' => $orderStatusCounts,
+           'orderCashierStatusCounts'=>$orderCashierStatusCounts,
            'productsStockCounts' =>  $productsStockCounts,
            'categoryProductCounts'=>$categoryProductCounts,
            'usersWithOrders'=>$usersWithOrders,
            'usersWithoutOrders'=>$usersWithoutOrders,
            'salesData'=>$salesData,
+           'cashierSalesData'=>$cashierSalesData,
            'currentMonth'=>$currentMonth,
            'lowest_stock'=> $lowest_stock,
            'totalPoints'=>$totalPoints

@@ -56,9 +56,9 @@ class OrderController extends Controller
 
         // Sort by ascending or descending order
         if ($request->has('sort') && in_array($request->sort, ['asc', 'desc'])) {
-            $query->orderBy('created_at', $request->sort);
+            $query->orderBy('id', $request->sort);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('id', 'desc');
         }
 
         $orders = $query->paginate(20);
@@ -88,23 +88,43 @@ class OrderController extends Controller
      {
 
          try{
-             $order = Order::findOrFail($id);
+
              $request->validate([
                  'status' => 'required|in:pending,procced,on-way,finshed,canceled',
                  'payment_status' => 'required|in:paid,unpaid',
              ]);
+
+            $order = Order::with(['items'])->findOrFail($id);
+             if($order->status == 'canceled'){
+                Alert::error('error' , __('main.order_already_cancled'));
+                return redirect()->back();
+             }
+
+            if($order->status == 'finshed'){
+                Alert::error('error' , __('main.order_already_finshed'));
+                return redirect()->back();
+             }
+
+             
              $order->status = $request->status;
              if($request->status == 'finshed'){
                 $this->add_points($order->total_after_price , $order->user , $order);
              }
+
+             if($request->status = 'canceled'){
+                $this->return_items($id , $order->items);
+             }
              $order->payment_status = $request->payment_status;
              $order->save();
-             Alert::success('Success', 'Order status updated successfully.');
+             Alert::success('Success', __('main.order_status_updated'));
              return redirect()->route('admin.orders.index');
          }catch (\Exception $e){
-             Alert::success('error', 'Error Happened Tell Programmer To Solve Problem.');
+             Alert::success('error', __('main.programer_error'));
              return redirect()->route('admin.orders.index');
          }
+
+
+         
 
      }
 
@@ -129,23 +149,53 @@ class OrderController extends Controller
         try{
             DB::beginTransaction();
             $order = Order::with(['user' , 'items' , 'address'])->findOrFail($id);
-            if ($order->payment_status != 'paid') {
-               Alert::error('error' , __('main.order_not_paid'));
+            if ($order->status == 'canceled') {
+               Alert::error('error' , __('main.order_already_cancled'));
                return redirect()->route('admin.orders.index');
 
             }
 
-            foreach ($order->items as $item) {
+            if ($order->status != 'finish') {
+               Alert::error('error' , __('main.order_not_finished_to_retrieval'));
+               return redirect()->route('admin.orders.index');
+
+            }
+
+
+            if(!$this->return_items($id , $order->items)){
+                return redirect()->route('admin.orders.index');
+            }
+
+            $order->update(['status' => 'retrieval']);
+            $this->remove_points($order , $order->user);
+            Alert::success('success' , __('main.main.order_retrieved_successfully'));
+            DB::commit();
+
+        }catch(\Exception $e){
+            DB::rollBack();
+            dd($e->getMessage() , $e->getLine());
+            Alert::error('error' , __('main.programer_error'));
+
+        }
+
+
+
+     }
+
+
+     private function return_items($order_id , $items){
+            foreach ($items as $item) {
                 $product = Product::find($item->product_id);
                 if (!$product) {
-                    Alert('error' , __('main.product_mot_found'));
-                    return redirect()->route('admin.orders.index');
+                    Alert('error' , __('main.product_not_found'));
+                    return false;
+                    
 
                 }
 
                 $product->stock += $item->quantity;
                 $product->save();
-                $infos = OrderInfo::where('order_id' , $id)->get(); 
+                $infos = OrderInfo::where('order_id' , $order_id)->get(); 
                 foreach($infos as $info){
                     $stock = Stock::where('product_id' , $info->product_id)->where('cost_price' , $info->cost_price)->where('sales_price' , $info->sales_price)->first();
                     if($stock){
@@ -171,20 +221,7 @@ class OrderController extends Controller
             } // end foreach for items
 
 
-            $order->update(['status' => 'retrieval']);
-            $this->remove_points($order , $order->user);
-            Alert::success('success' , __('main.main.order_retrieved_successfully'));
-            DB::commit();
-
-        }catch(\Exception $e){
-            DB::rollBack();
-            dd($e->getMessage() , $e->getLine());
-            Alert::error('error' , __('main.programer_error'));
-
-        }
-
-
-
+            return true;
      }
 
 

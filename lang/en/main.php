@@ -737,7 +737,19 @@ return [
     'monthly_report'=>'Monthly Report',
     'guest'=>'Guest',
     'no_orders'=>'No latest orders available.',
-    'latest_cahier_orders'=>'Latest Cahier Orders'
+    'latest_cahier_orders'=>'Latest Cahier Orders',
+    'online_ordes'=>'Online Order',
+    'online_orders'=>'Online Orders',
+    'unknown'=>'Unknown',
+    'price_before_discount'=>'Price Before Discount',
+    'price_after_discount'=>'Price After Discount',
+    'order_status_updated'=>'Order status updated successfully.',
+    'order_already_cancled'=>'Order Already Canceled',
+    'order_already_finshed'=>'Order Already Finshed',
+    'carful_update_order'=>'You Can Not Update ( Canceled Or Finished ) Order ',
+    'order_not_finished_to_retrieval'=> 'You Can not retrieval Before Finihed',
+    'no_cart_found'=>'No Card Founded'
+
 
 
     

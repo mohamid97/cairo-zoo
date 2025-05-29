@@ -39,7 +39,7 @@ class CardController extends Controller
         }
 
         // Pagination
-        $carts = $query->paginate(10); // Paginate 10 items per page
+        $carts = $query->paginate(20); 
 
         return view('admin.cards.index', compact('carts'));
     }
@@ -56,15 +56,15 @@ class CardController extends Controller
             // If the card exists, delete it
             if ($card) {
                 $card->delete();
-                Alert::success('Success', 'Deleted Successfully ! !');
+                Alert::success('Success', __('mian.cart_deleted'));
                 return redirect()->route('admin.cards.index');
             }
-            Alert::error('error', 'No Card Founded');
+            Alert::error('error', __('main.no_cart_found'));
             // If card does not exist, return with an error message
             return redirect()->back();
 
         } catch (\Exception $e) {
-            Alert::error('error', 'Tell The Programmer To solve Error');
+            Alert::error('error', __('main.programer_error'));
             // Redirect back with an error message
             return redirect()->back();
         }
@@ -79,14 +79,14 @@ class CardController extends Controller
             $cart = Card::with(['user', 'items.product'])->findOrFail($id);
 
             // Calculate total price and total quantity
-            $total_price = $cart->items->sum(function ($item) {
-                return $item->product->price * $item->quantity;
-            });
+            // $total_price = $cart->items->sum(function ($item) {
+            //     return $item->product->price * $item->quantity;
+            // });
 
             $total_quantity = $cart->items->sum('quantity');
 
             // Pass the data to the view
-            return view('admin.cards.show_details', compact('cart', 'total_price', 'total_quantity'));
+            return view('admin.cards.show_details', compact('cart', 'total_quantity'));
 
         } catch (\Exception $e) {
             dd($e->getMessage() , $e->getLine());

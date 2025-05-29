@@ -9,6 +9,7 @@
 
 <section class="content">
     <div class="container-fluid">
+        <p class="badge badge-danger text-center w-100"> {{__('main.carful_update_order')}}</p>
         <div class="card card-info">
             <div class="card-header">
                 <h3 class="card-title">@lang('main.status')</h3>

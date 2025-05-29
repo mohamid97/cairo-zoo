@@ -148,14 +148,14 @@
                                         <a href="{{ route('admin.products.edit', ['id' => $pro->id]) }}">
                                             <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-edit"></i></button>
                                         </a>
-                                        <a href="{{ route('admin.products.files', ['id' => $pro->id]) }}">
+                                        {{-- <a href="{{ route('admin.products.files', ['id' => $pro->id]) }}">
                                             <button class="btn btn-sm btn-success"><i class="fas fa-file"></i></button>
                                         </a>
 
                                         <a href="{{ route('admin.products.props', ['id' => $pro->id]) }}">
                                             <button class="btn btn-sm btn-success"><i class="fas fa-cog"></i>
                                             </button>
-                                        </a>
+                                        </a> --}}
 
 
                                         <a href="{{ route('admin.products.show_stock_movement', ['id' => $pro->id]) }}">
@@ -170,9 +170,6 @@
                                                 <i class="fas fa-images"></i>
                                             </button>
                                         </a>
-
-
-
 
 
 

@@ -32,31 +32,26 @@
 
     <section class="content">
         <div class="container-fluid">
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">@lang('main.all_orders')</h3>
-                </div>
 
-                <div class="card-body">
-                    <!-- Search and Filter Form -->
+
                     <form action="{{ route('admin.orders.index') }}" method="GET">
                         <div class="row mb-3">
-                            <div class="col-md-2">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" name="product" class="form-control" value="{{ request()->product }}" placeholder="@lang('main.search_by_product')">
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3 mb-3">
                                 <input type="text" name="user" class="form-control" value="{{ request()->user }}" placeholder="@lang('main.search_by_user')">
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3 mb-3">
                                 <input type="date" name="from_date" class="form-control" value="{{ request()->from_date }}" placeholder="@lang('main.from_date')">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md3">
                                 <input type="date" name="to_date" class="form-control" value="{{ request()->to_date }}" placeholder="@lang('main.to_date')">
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3 mb-3">
                                 <select name="status" class="form-control">
                                     <option value="">@lang('main.all_status')</option>
                                     <option value="pending" {{ request()->status == 'pending' ? 'selected' : '' }}>@lang('main.pending')</option>
@@ -67,18 +62,32 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-3 mb-3">
                                 <select name="sort" class="form-control">
                                     <option value="desc" {{ request()->sort == 'desc' ? 'selected' : '' }}>@lang('main.descending')</option>
                                     <option value="asc" {{ request()->sort == 'asc' ? 'selected' : '' }}>@lang('main.ascending')</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-3 mb-3">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-search nav-icon"></i> @lang('main.search')</button>
+                                                    <a href="{{ route('admin.orders.index') }}" class="btn btn-primary ml-2">
+                     <i class="fas fa-sync-alt mr-1"></i> {{ __('main.reset') }}
+                 </a>
                             </div>
                         </div>
                     </form>
+
+
+                    
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">@lang('main.all_orders')</h3>
+                </div>
+
+                <div class="card-body">
+                    <!-- Search and Filter Form -->
+
 
                     <!-- Orders Table -->
                     <div class="table-responsive">
@@ -93,6 +102,8 @@
             <th>@lang('main.status')</th>
             <th>@lang('main.coupon')</th>
             <th>@lang('main.payment_status')</th>
+            <th>@lang('main.date')</th>
+
             <th>@lang('main.action')</th>
         </tr>
     </thead>
@@ -129,6 +140,7 @@
                         <span class="badge badge-danger">@lang('main.unpaid')</span>
                     @endif
                 </td>
+                <td>{{$order->created_at->format('d M Y, H:i') }}</td>
                 <td class="d-flex" style="gap: 5px">
 {{--                    <a href="{{ route('admin.orders.delete', $order->id) }}" class="btn btn-sm btn-danger" title="@lang('main.remove')">--}}
 {{--                        <i class="fas fa-trash"></i>--}}

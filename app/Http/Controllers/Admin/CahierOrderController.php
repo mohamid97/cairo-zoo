@@ -62,7 +62,6 @@ class CahierOrderController extends Controller
 
 
 
-
          $cahier_orders = $cahier_orders->paginate(20);
         return view('admin.cahier_orders.index' ,
         [
