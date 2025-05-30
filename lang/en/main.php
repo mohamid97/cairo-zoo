@@ -748,7 +748,26 @@ return [
     'order_already_finshed'=>'Order Already Finshed',
     'carful_update_order'=>'You Can Not Update ( Canceled Or Finished ) Order ',
     'order_not_finished_to_retrieval'=> 'You Can not retrieval Before Finihed',
-    'no_cart_found'=>'No Card Founded'
+    'no_cart_found'=>'No Card Founded',
+    'ship_setting_updated'=>'Shipments Settings Updated Successfully !',
+    'monthly_statistics'=>'Monthly Statistics for ',
+    'gross_profit'=>'Gross Profit',
+    'shipment_revenu'=>'Shipemnt Revenu',
+    'cost'=>'Cost Price',
+    'summary'=>'Summary',
+    'total_revenu'=>'Total Revenue',
+    'variable_expenses'=>'Variable Expenses ',
+    'fixed_expenses'=>'Fixed Expenses',
+    'net_profit'=>'Net Profit',
+    'print_report'=>'Print Report',
+    'download_pdf'=>'Download PDF',
+    'export_excel'=>'Export Excel',
+    'printed_at'=>'Printed At',
+    'revenu'=>'Revenu',
+    'generated_on'=>'Generated On ',
+    'total_profit'=>'Total Profit'
+
+
 
 
 

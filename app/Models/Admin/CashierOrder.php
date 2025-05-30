@@ -29,4 +29,8 @@ class CashierOrder extends Model
         return $this->hasMany(CashierOrderDetail::class  , 'order_id');
     }
 
+    public function order_info(){
+        return $this->hasMany(CahierOrderInfo::class , 'order_id');
+    }
+
 }

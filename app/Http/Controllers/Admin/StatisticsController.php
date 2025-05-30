@@ -18,6 +18,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -189,184 +190,208 @@ class StatisticsController extends Controller
     }
 
 
-    // monthly statistics
+
+
+    private function get_monthly_data($date){
+        $date = $date ? Carbon::parse($date) : now();
+        $year = $date->year;
+        $month = $date->month;
+
+
+        // Fetch orders with optimized queries
+        $onlineOrders = Order::with('order_info')
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('status', 'finshed') 
+            ->get();
+
+        $cashierOrders = CashierOrder::with('order_info')
+            ->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)
+            ->where('status', 'finshed')
+            ->get();
+
+                    // Calculate metrics
+        $onlineRevenue = $onlineOrders->sum('total_price_after_discount');
+
+        $onlineShipment = $onlineOrders->sum('shipment_price');
+        $onlineCost = $onlineOrders->sum(fn($order) => 
+            $order->order_info->sum(fn($info) => $info->cost_price * $info->qty)
+        );
+        $onlineProfit = $onlineRevenue - $onlineCost;
+
+        $cashierRevenue = $cashierOrders->sum('total_amount_after_discount');
+        $cashierCost = $cashierOrders->sum(fn($order) => 
+            $order->order_info->sum(fn($info) => $info->cost_price * $info->qty)
+        );
+        $cashierProfit = $cashierRevenue - $cashierCost;
+
+
+
+    // Expenses
+    $totalVariableExpenses = ExpenseAmount::whereHas('expense', fn($q) => $q->where('type', 'variable'))
+        ->whereYear('date', $year)
+        ->whereMonth('date', $month)
+        ->sum('amount');
+
+    $totalFixedExpenses = Expense::where('type', 'fixed')
+        ->with(['expenseAmounts' => fn($q) => $q->whereYear('date', $year)->whereMonth('date', $month)])
+        ->with('latestAmount')
+        ->get()
+        ->sum(fn($expense) => optional($expense->expenseAmounts->first() ?? $expense->latestAmount)->amount ?? 0);
+
+
+        return [
+            'date' => $date,
+            'online' => [
+                'revenue' => $onlineRevenue,
+                'shipment' => $onlineShipment,
+                'cost' => $onlineCost,
+                'profit' => $onlineProfit,
+            ],
+            'cashier' => [
+                'revenue' => $cashierRevenue,
+                'cost' => $cashierCost,
+                'profit' => $cashierProfit,
+            ],
+            'total_revenue' => $onlineRevenue + $cashierRevenue,
+            'total_variable_expenses' => $totalVariableExpenses,
+            'total_fixed_expenses' => $totalFixedExpenses,
+            'net_profit' => ($onlineProfit + $cashierProfit + $onlineShipment) - 
+                        ($totalVariableExpenses + $totalFixedExpenses)
+        ] ;
+
+
+        
+    }
+        
     public function monthly_report(Request $request)
     {
         $request->validate([
             'date' => 'nullable|date',
         ]);
 
-        // if no date is provided, use the current month
-        if (!$request->date) {
-            $date = now();
-        } else {
-            $date = $request->date;
-        }
-
-
-
-
-
-        $year = date('Y', strtotime($date));
-        $month = date('m', strtotime($date));
-
-        //dd($year , $month);
-
-        $onlineOrders = Order::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
-            ->selectRaw('
-                SUM(CASE WHEN status = "finshed" THEN shipment_price ELSE 0 END) as total_shipment_complete,
-                SUM(CASE WHEN status = "finshed" THEN total_price_after_discount ELSE 0 END) as completed_revenue
-            ')
-            ->first();
-
-
-        $cashierOrders = CashierOrder::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
-            ->selectRaw('
-                SUM(CASE WHEN status = "finshed" THEN total_amount_after_discount ELSE 0 END) as completed_revenue
-            ')
-            ->first();
-
-
-            $combinedStats = [
-                'total_revenue' => ($onlineOrders->completed_revenue ?? 0) + ($cashierOrders->completed_revenue ?? 0),
-            ];
-
-
-
-            $totalVariableExpenses = ExpenseAmount::whereHas('expense', function ($query) {
-                    $query->where('type', 'variable');
-                })
-                ->whereYear('date', $year)
-                ->whereMonth('date', $month)
-                ->sum('amount');
-
-
-            $totalFixedExpenses = Expense::where('type', 'fixed')
-                ->with(['expenseAmounts' => function ($query) use ($year, $month) {
-                    $query->whereYear('date', $year)
-                        ->whereMonth('date', $month);
-                }])
-                ->with('latestAmount')
-                ->get()
-                ->sum(function ($expense) {
-                    if ($expense->expenseAmounts->isNotEmpty()) {
-                        return $expense->expenseAmounts->first()->amount;  // amount for this month
-                    }
-                    return optional($expense->latestAmount)->amount ?? 0; // fallback latest amount
-                });
-
-
-
-
-
-
-            return view('admin.statistics.monthly_statistics', [
-                'online_orders' => $onlineOrders,
-                'cashier_orders' => $cashierOrders,
-                'combined_stats' => $combinedStats,
-                'total_variable_expenses' => $totalVariableExpenses,
-                'total_fixed_expenses' => $totalFixedExpenses,
-                'date' => $date,
-
-
-            ]);
-
-
-
-
-        }
+        return view('admin.statistics.monthly_statistics', $this->get_monthly_data($request->date));
+    } // end monthly report
 
 
 
     public function export(Request $request)
     {
+    $request->validate([
+        'date' => 'nullable|date',
+        'type'=>'required'
+    ]);
         $type = $request->type;
-        $date = $request->date ?? now();
-
-        $year = date('Y', strtotime($date));
-        $month = date('m', strtotime($date));
-
-        $onlineOrders = Order::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
-            ->selectRaw('
-            SUM(CASE WHEN status = "finshed" THEN shipment_price ELSE 0 END) as total_shipment_complete,
-            SUM(CASE WHEN status = "finshed" THEN total_price_after_discount ELSE 0 END) as completed_revenue
-        ')
-            ->first();
-
-        $cashierOrders = CashierOrder::whereMonth('created_at', $month)
-            ->whereYear('created_at', $year)
-            ->selectRaw('
-            SUM(CASE WHEN status = "finshed" THEN total_amount_after_discount ELSE 0 END) as completed_revenue
-        ')
-            ->first();
-
-        $totalVariableExpenses = ExpenseAmount::whereHas('expense', function ($query) {
-            $query->where('type', 'variable');
-        })
-            ->whereYear('date', $year)
-            ->whereMonth('date', $month)
-            ->sum('amount');
-
-        $totalFixedExpenses = Expense::where('type', 'fixed')
-            ->with(['expenseAmounts' => function ($query) use ($year, $month) {
-                $query->whereYear('date', $year)
-                    ->whereMonth('date', $month);
-            }])
-            ->with('latestAmount')
-            ->get()
-            ->sum(function ($expense) {
-                if ($expense->expenseAmounts->isNotEmpty()) {
-                    return $expense->expenseAmounts->first()->amount;
-                }
-                return optional($expense->latestAmount)->amount ?? 0;
-            });
-
-        $data = [
-            'date' => $date,
-            'online_orders' => $onlineOrders,
-            'cashier_orders' => $cashierOrders,
-            'total_variable_expenses' => $totalVariableExpenses,
-            'total_fixed_expenses' => $totalFixedExpenses,
-            'total_revenue' => ($onlineOrders->completed_revenue ?? 0) + ($cashierOrders->completed_revenue ?? 0),
-        ];
 
         if ($type === 'pdf') {
-            $pdf = Pdf::loadView('admin.statistics.export_pdf', compact('data'));
+            $pdf = Pdf::loadView('admin.statistics.export_pdf', $this->get_monthly_data($request->date));
             return $pdf->download('monthly-report.pdf');
         } elseif ($type === 'excel') {
-            // Create new Spreadsheet
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
 
-            // Set headers
-            $sheet->setCellValue('A1', 'Category');
-            $sheet->setCellValue('B1', 'Amount');
+                $data = $this->get_monthly_data($request->date);
+                // Create new Spreadsheet
+                $spreadsheet = new Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+                $spreadsheet->getProperties()
+                ->setCreator(config('app.name'))
+                ->setTitle('Monthly Statistics Report - '.$request->date??now()->format('F Y'))
+                ->setSubject('Monthly Financial Report');
+                $sheet->setCellValue('A1', 'Monthly Statistics Report - '.$request->date??now()->format('F Y'));
+                $sheet->mergeCells('A1:B1');
+                $sheet->setCellValue('A2', 'Generated on: '.now()->format('Y-m-d H:i'));
+                $sheet->mergeCells('A2:B2');
 
-            // Add data rows
-            $rows = [
-                ['Date', $data['date']],
-                ['Online Orders Revenue', $data['online_orders']->completed_revenue ?? 0],
-                ['Cashier Orders Revenue', $data['cashier_orders']->completed_revenue ?? 0],
-                ['Total Revenue', $data['total_revenue']],
+                $sheet->getStyle('A1:B1')->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'size' => 16,
+                        'color' => ['rgb' => '000000']
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ]
+                ]);
+                
+                $sheet->getStyle('A2:B2')->applyFromArray([
+                    'font' => [
+                        'italic' => true,
+                        'color' => ['rgb' => '666666']
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ]
+                ]);
+
+
+
+                $sheet->setCellValue('A4', 'Online Orders');
+                $sheet->getStyle('A4')->getFont()->setBold(true)->setSize(14);
+                $sheet->fromArray([
+                    ['Revenue', $data['online']['revenue']],
+                    ['Shipment Revenue',  $data['online']['shipment']],
+                    ['Cost', $data['online']['cost']],
+                    ['Gross Profit', $data['online']['profit']]
+                ], null, 'A5');
+
+
+
+
+                $sheet->setCellValue('A10', 'Cashier Orders');
+                $sheet->getStyle('A10')->getFont()->setBold(true)->setSize(14);
+                $sheet->fromArray([
+                    ['Revenue', $data['cashier']['revenue']],
+                    ['Cost', $data['cashier']['cost']],
+                    ['Gross Profit', $data['cashier']['profit']]
+                ], null, 'A11');
+
+
+
+
+            $sheet->setCellValue('A15', 'Summary');
+            $sheet->getStyle('A15')->getFont()->setBold(true)->setSize(14);
+            $sheet->fromArray([
+                ['Total Profit', $data['online']['profit'] + $data['cashier']['profit']],
+                ['Total Shipment', $data['online']['shipment']],
                 ['Variable Expenses', $data['total_variable_expenses']],
                 ['Fixed Expenses', $data['total_fixed_expenses']],
-                ['Net Profit', $data['total_revenue'] - $data['total_variable_expenses'] - $data['total_fixed_expenses']],
-            ];
+                ['Net Profit', $data['net_profit']]
+            ], null, 'A16');
 
-            $sheet->fromArray($rows, null, 'A2');
 
-            // Style the header
-            $sheet->getStyle('A1:B1')->getFont()->setBold(true);
 
-            // Auto-size columns
-            $sheet->getColumnDimension('A')->setAutoSize(true);
-            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getStyle('B5:B20')
+            ->getNumberFormat()
+            ->setFormatCode('#,##0.00');
 
-            // Create and return the file
+
+            $profitRows = [8, 13, 19]; // Adjust based on your actual row numbers
+            foreach ($profitRows as $row) {
+                $sheet->getStyle('A'.$row.':B'.$row)
+                    ->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'color' => ['rgb' => '008000']
+                        ]
+                    ]);
+            }
+
+            $sheet->getStyle('A16:B16')
+            ->applyFromArray([
+                'font' => [
+                    'bold' => true
+                ]
+            ]);
+
+            $sheet->getColumnDimension('A')->setWidth(25);
+            $sheet->getColumnDimension('B')->setWidth(15);
+
+            $sheet->getStyle('A4:B'.($sheet->getHighestRow()))
+            ->getBorders()
+            ->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             $writer = new Xlsx($spreadsheet);
+            $filename = 'monthly_report_'.$request->date??now()->format('Y_m').'.xlsx';
 
             $response = new StreamedResponse(
                 function () use ($writer) {
@@ -375,7 +400,7 @@ class StatisticsController extends Controller
             );
 
             $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            $response->headers->set('Content-Disposition', 'attachment;filename="monthly-report.xlsx"');
+            $response->headers->set('Content-Disposition', 'attachment;filename="'.$filename.'"');
             $response->headers->set('Cache-Control', 'max-age=0');
 
             return $response;
@@ -389,4 +414,4 @@ class StatisticsController extends Controller
 
 
 
-    }
+    } // end expoert monthly report

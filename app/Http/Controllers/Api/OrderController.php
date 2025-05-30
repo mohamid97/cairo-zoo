@@ -93,7 +93,8 @@ class OrderController extends Controller
 
             }
 
-            $ship_details = $this->get_shipment_price($request->shipment_way ?? 'delivery' , $request->zone_id , $request->city_id , ceil($totalAfterPrice));
+            $ship_details = $this->get_shipment_price('delivery' , $request->zone_id , $request->city_id , ceil($totalAfterPrice));
+        
 
             $order = Order::create([
                 'user_id' => $user->id,

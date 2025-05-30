@@ -30,7 +30,7 @@ class ShimpmentsController extends Controller
 
     public function update(Request $request){
 
-        
+       
         $request->validate([
             'is_free'=>'required|in:paid,free',
             'min_to_free'=>'nullable|numeric'
@@ -45,7 +45,7 @@ class ShimpmentsController extends Controller
                 ]);
 
                 DB::commit();
-                Alert::success('Success', 'Updated Successfully ! !');
+                Alert::success('Success', __('main.ship_setting_updated'));
                 return redirect()->route('admin.shimpments.index');
 
          }catch(\Exception $e){

@@ -9,8 +9,8 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Shimpments</li>
+                        <li class="breadcrumb-item"><a href="#">{{__('main.home')}}</a></li>
+                        <li class="breadcrumb-item active">{{__('main.Shimpments')}}</li>
                     </ol>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                             <div class="form-group" >
                                 <label>{{__('main.type')}}</label>
                                 <select type="text" name="is_free" class="form-control" id="type">
-                                    <option value="paid" {{($shimp && $shimp->is_free )== 'paid' ?'selected':''}}>{{__('main.paid')}}</option>
-                                    <option value="free" {{($shimp && $shimp->is_free) == 'free' ?'selected':''}}>{{__('main.free')}}</option>
+                                    <option value="paid" {{($shimp && $shimp->is_free ) === 'paid' ? 'selected':''}}>{{__('main.paid')}}</option>
+                                    <option value="free" {{($shimp && $shimp->is_free) === 'free' ?'selected':''}}>{{__('main.free')}}</option>
                                 </select>
                                 @error('is_free')
                                 <div class="text-danger">{{ $errors->first('is_free') }}</div>

@@ -111,7 +111,7 @@ class OrderController extends Controller
                 $this->add_points($order->total_after_price , $order->user , $order);
              }
 
-             if($request->status = 'canceled'){
+             if($request->status == 'canceled'){
                 $this->return_items($id , $order->items);
              }
              $order->payment_status = $request->payment_status;

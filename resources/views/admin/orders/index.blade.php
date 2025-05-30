@@ -164,7 +164,7 @@
 
             <!-- Collapsible row -->
             <tr>
-                <td colspan="9" class="hiddenRow">
+                <td colspan="10" class="hiddenRow">
                     <div class="collapse" id="items-{{ $order->id }}">
                         <table class="table table-sm table-bordered" style="background: #17a2b8;
     color: #FFF;">
