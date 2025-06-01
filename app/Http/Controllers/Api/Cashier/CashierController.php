@@ -46,7 +46,7 @@ class CashierController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        $this->res(true, __('main.logout_success'), 200);
+        return $this->res(true, __('main.logout_success'), 200);
     }
 
     // get cashier info
