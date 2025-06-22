@@ -32,6 +32,7 @@ class FeaturedProductsResource extends JsonResource
             'image_path'  =>asset('uploads/images/gallery'),
             'stock'       =>$this->product->stock,
             'sales_price'       =>$this->product->sales_price,
+            'price'=> ceil(($this->product->getBestDiscount()) ? $this->product->sales_price - $this->product->getBestDiscount()['value'] ?? 0 : $this->product->sales_price),
             'discount'    => $this->product->getBestDiscount(),
             'stock'   =>$this->product->stock,
             'des'         =>$this->product->des,

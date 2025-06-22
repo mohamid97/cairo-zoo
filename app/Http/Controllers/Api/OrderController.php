@@ -401,7 +401,8 @@ class OrderController extends Controller
 
     public function get_user_orders(Request $request){
         $user = $request->user();
-        $orders = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->paginate(15); // Paginate with 10 items per page;
+        //order by created_at in descending order at last
+        $orders = Order::with(['items' , 'address' ,'address' ,'user'])->where('user_id' , $user->id)->orderBy('created_at', 'desc')->paginate(15); // Paginate with 10 items per page;
         // Return the created order with its details
         return $this->res(true , __('main.all_user_order') , 200 ,  ['orders' => OrderAuthResource::collection( $orders ) ,
            'pagination' => [

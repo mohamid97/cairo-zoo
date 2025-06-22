@@ -23,8 +23,12 @@ class ItemOrderResource extends JsonResource
             'discount'=>$this->discount,
             'price'=>$this->price,
             'quantity'=>$this->quantity,
-            'product_gallery'=>new OrderProductGalleryReource(Product::find($this->product_id))
+            'file_path'=>asset('uploads/images/products'),
+            'thumbinal'=> isset($this->product) ? $this->product->thumbinal : null,
+            'image'=> isset($this->product) ? $this->product->image : null,
+            // 'product_gallery'=>new OrderProductGalleryReource(Product::find($this->product_id))
         ];
+        
     }
     
 }

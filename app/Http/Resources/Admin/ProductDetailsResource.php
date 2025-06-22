@@ -29,6 +29,7 @@ class ProductDetailsResource extends JsonResource
         return [
             'id'=>$this->id,
             'sales_price'    =>$this->sales_price,
+            'price'=> ceil(($this->getBestDiscount()) ? $this->sales_price - $this->getBestDiscount()['value'] ?? 0 : $this->sales_price),
             'category' =>isset($this->category_id) ? new CategoryDetailsResource($this->category): null,
             'taste'=>isset($this->taste_id) ? new TasteReource($this->taste): null,
             'name'     =>$this->name,

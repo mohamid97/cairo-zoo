@@ -86,15 +86,18 @@ class ProductController extends Controller
             if ($request->hasFile('thumbinal')) {
                 $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
             }
+
+          
             $product = Product::create([
                 'weight' => $request->weight,
                 'length' => $request->length,
                 'height' => $request->height,
                 'width'  => $request->width,
                 'status' => $request->status ?? 'pending',
-                'brand_id' => $request->brand,
+                'brand_id' => $request->brand_id,
                 'sales_price' => $request->sales_price,
                 'video' => $request->video,
+                'category_id'=>$request->category_id,
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? null,
                 'thumbinal' => $imageData['thumbinal'] ?? null,
@@ -172,14 +175,15 @@ class ProductController extends Controller
                 'height' => $request->height,
                 'width'  => $request->width,
                 'status' => $request->status,
-                'brand_id' => $request->brand,
+                'brand_id' => $request->brand_id,
                 'sales_price' => $request->sales_price,
                 'video' => $request->video,
                 'sku' => $request->sku,
                 'image' => $imageData['image'] ?? $product->image,
                 'thumbinal' => $imageData['thumbinal'] ?? $product->thumbinal,
                 'barcode'=>$request->barcode,
-                'taste_id'=>$request->taste_id
+                'taste_id'=>$request->taste_id,
+                'category_id'=>$request->category_id,
 
             ]);
             foreach ($this->langs as $lang) {
