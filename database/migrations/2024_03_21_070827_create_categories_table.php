@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('parent_id')->nullable();
             $table->string('photo')->nullable();
             $table->string('thumbinal')->nullable();
+            $table->integer('sort')->default(0);
             $table->string('star')->nullable();
             $table->softDeletes();
             $table->timestamps();

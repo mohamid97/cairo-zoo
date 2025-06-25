@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('zone');
             $table->string('city');
             $table->integer('points_used')->default(0);
+            $table->text('location')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

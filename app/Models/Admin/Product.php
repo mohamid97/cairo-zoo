@@ -12,6 +12,7 @@ use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class Product extends Model implements TranslatableContract
 {
@@ -231,6 +232,19 @@ class Product extends Model implements TranslatableContract
 
 
     }
+
+
+
+
+    protected static function booted()
+    {
+        static::addGlobalScope('inStock', function (Builder $builder) {
+            $builder->where('stock', '>', 0);
+        });
+    }
+
+
+
 
 
 

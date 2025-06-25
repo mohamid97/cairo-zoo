@@ -26,7 +26,7 @@ class ProductController extends Controller
     //
     public function index(Request $request)
     {
-        $query = Product::with('brand');
+        $query = Product::withoutGlobalScope('inStock')->with('brand');
 
         // Search by name
         if ($request->filled('search')) {
@@ -136,7 +136,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['relatedProducts', 'translations'])->findOrFail($id);
+        $product = Product::with(['relatedProducts', 'translations'])->withoutGlobalScope('inStock')->findOrFail($id);
 
         $categories = Category::all();
         $brands = Brand::all();
@@ -159,7 +159,7 @@ class ProductController extends Controller
       
         try {
             DB::beginTransaction();
-            $product = Product::findOrFail($id);
+            $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
             $imageData = [];
             if ($request->hasFile('image')) {
                 $imageData['image'] = $this->upload_image($request->file('image'));
@@ -294,7 +294,7 @@ class ProductController extends Controller
 
 
     public function add_stock(){
-        return view('admin.products.add_stock' , ['products'=>Product::all()]);
+        return view('admin.products.add_stock' , ['products'=>Product::withoutGlobalScope('inStock')->get()]);
     }
 
     public function store_stock(Request $request){
@@ -309,7 +309,7 @@ class ProductController extends Controller
 
         try{
             DB::beginTransaction();
-            $product = Product::findOrFail($request->product_id);
+            $product = Product::withoutGlobalScope('inStock')->findOrFail($request->product_id);
             $product->update(['sales_price'=>$request->sales_price , 'stock'=> $product->stock + $request->quantity ]);
             $product->stocks()->create([
                 'quantity'    => $request->quantity,

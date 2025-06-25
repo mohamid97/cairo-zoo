@@ -38,7 +38,8 @@ class StoreOrderGuestRequest extends FormRequest
             'products.*.id'=> 'required|exists:products,id',
             'products.*.quantity'=> 'required|integer|min:1',
             'zone_id'=>'required|integer|exists:shimpment_zones,id',
-            'city_id'=>'required|integer|exists:cities,id'
+            'city_id'=>'required|integer|exists:cities,id',
+            'location'=>'nullable|max:50000'
 
         ];
     }

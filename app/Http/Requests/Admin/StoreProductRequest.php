@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests\Admin;
-
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
@@ -24,6 +24,7 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
 
+         $productId = $this->route('id');
         return [
             'name.*'=>'required|string|max:255',
             'slug.*'=>'required|string|max:255',
@@ -45,7 +46,12 @@ class StoreProductRequest extends FormRequest
             'length' => 'nullable|numeric|min:1',
             'status' => 'nullable|in:published,pending',
             'related_products.*' => 'nullable|exists:products,id',
-            'barcode' => 'required|string|max:255',
+            'barcode' => [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('products', 'barcode')->ignore($productId),
+        ],
         ];
 
 

@@ -450,6 +450,7 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('/soft_delete/{id}' , [CategoryController::class , 'soft_delete'])->name('admin.category.soft_delete');
         Route::get('/restore/{id}' , [CategoryController::class , 'restore'])->name('admin.category.restore');
         Route::get('/destroy/{id}' , [CategoryController::class , 'destroy'])->name('admin.category.destroy');
+        Route::post('/update-order', [CategoryController::class, 'updateOrder'])->name('admin.category.updateOrder');
     });
 
 

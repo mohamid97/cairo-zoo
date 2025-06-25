@@ -34,7 +34,7 @@ class CategoryController extends Controller
         }
 
         // Paginate the results
-        $categories = $categoriesQuery->paginate(10); // 10 items per page
+        $categories = $categoriesQuery->orderBy('sort')->paginate(10); // 10 items per page
         return view('admin.category.index', [
             'categories' => $categories,
             'langs' => $this->langs,
@@ -42,6 +42,20 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function updateOrder(Request $request)
+    {
+        try {
+            $order = $request->input('order');
+            
+            foreach ($order as $item) {
+                Category::where('id', $item['id'])->update(['sort' => $item['order']]);
+            }
+            
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 
     public function create()
     {

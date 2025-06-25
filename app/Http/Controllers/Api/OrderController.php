@@ -113,7 +113,8 @@ class OrderController extends Controller
                 'zone'=>$ship_details['zone_name'] ?? 'N/A',
                 'city'=>$ship_details['city_name'] ?? 'N/A',
                 'points_used' => $request->points ?? 0,
-                'pounds_used' => (isset($pounds)) ? $pounds : 0
+                'pounds_used' => (isset($pounds)) ? $pounds : 0,
+                'location'=>$request->location
 
 
             ]);
@@ -350,7 +351,8 @@ class OrderController extends Controller
                     'coupon_discount' =>(isset($coupon)) ? ceil($couponDiscount) : null,
                     'discount_type' => (isset($coupon)) ? $coupon->type : null,
                     'zone' => $ship_details['zone_name'] ?? 'N/A',
-                    'city' => $ship_details['city_name'] ?? 'N/A'
+                    'city' => $ship_details['city_name'] ?? 'N/A',
+                    'location'=>$request->location
                 ]);
 
 

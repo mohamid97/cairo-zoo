@@ -19,7 +19,7 @@ class CategoryController extends Controller
     {
         $categories = Category::whereHas('translations', function ($query) {
             $query->where('locale', '=', app()->getLocale());
-        })->orderBy('updated_at' , 'desc')->paginate(15);
+        })->orderBy('sort')->paginate(15);
 
         return $this->res(true, 'All Categories', 200, [
             'categories' => CategoryResource::collection($categories),
@@ -42,7 +42,7 @@ class CategoryController extends Controller
     {
         $categories = Category::whereHas('translations', function ($query) {
             $query->where('locale', '=', app()->getLocale());
-        })->orderBy('updated_at' , 'desc')->get();
+        })->orderBy('sort')->get();
         return  $this->res(true ,'All Categories ' , 200 ,CategoryResource::collection($categories));
 
     }
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     public function get_details(Request $request){
 
 
-        $category_details = Category::whereHas('translations', function ($query) use($request) {
+        $category_details = Category::orderBy('sort')->whereHas('translations', function ($query) use($request) {
             $query->where('locale', '=', app()->getLocale())->where('slug' , $request->slug);
         })->first();
 
@@ -69,7 +69,7 @@ class CategoryController extends Controller
 
     // return categories with products
     public function categories_with_products(){
-        $categories = Category::with('products')->get();
+        $categories = Category::orderBy('sort')->with('products')->get();
         return $this->res(true , 'Categories with products' , 200 , CategoryResource::collection($categories));
 
     }
@@ -77,14 +77,14 @@ class CategoryController extends Controller
 
     // get parent categories
     public function get_parent_categories(){
-        $categories = Category::where('parent_id' , null)->get();
+        $categories = Category::orderBy('sort')->where('parent_id' , null)->get();
         return $this->res(true , 'Parent Categories' , 200 , CategoryResource::collection($categories));
 
     }
 
     // get child categories
     public function get_sub_categories(){
-        $categories = Category::where('parent_id' , '!=' , null)->get();
+        $categories = Category::orderBy('sort')->where('parent_id' , '!=' , null)->get();
         return $this->res(true , 'Child Categories' , 200 , CategoryResource::collection($categories));
 
     }
@@ -92,7 +92,7 @@ class CategoryController extends Controller
 
     // get parent categories with child categories with unlimtied depth
     public function get_parent_categories_with_child(){
-        $categories = Category::where('parent_id' , null)->with('children')->get();
+        $categories = Category::orderBy('sort')->where('parent_id' , null)->with('children')->get();
         return $this->res(true , 'Parent Categories with child categories' , 200 , ParentChildCategoryResource::collection($categories));
 
     }
