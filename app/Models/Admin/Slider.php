@@ -14,4 +14,5 @@ class Slider extends Model implements TranslatableContract
     public $translatedAttributes = ['name' , 'alt_image' , 'title_image' ,'small_des' , 'des'];
     public $translationForeignKey = 'slider_id';
     public $translationModel = 'App\Models\Admin\SliderTranslation';
+    
 }

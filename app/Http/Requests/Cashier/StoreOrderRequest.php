@@ -14,7 +14,7 @@ class StoreOrderRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolp
      */
     public function authorize()
     {
@@ -42,7 +42,7 @@ class StoreOrderRequest extends FormRequest
         throw new HttpResponseException(
           $this->res(false, 'Validation errors', 422, ['errors' => $validator->errors()])
         );
-          
-        
+
+
     }
 }
