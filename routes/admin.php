@@ -472,6 +472,9 @@ Route::middleware(['checkIfAdmin' , 'DashboardLang'])->prefix('admin')->group(fu
         Route::get('add_stock' , [ProductController::class , 'add_stock'])->name('admin.products.add_stock');
         Route::post('store_stock' , [ProductController::class , 'store_stock'])->name('admin.products.store_stock');
         Route::get('show_stock_movement/{id}' , [ProductController::class , 'stock_movement'])->name('admin.products.show_stock_movement');
+        Route::get('/edit/stock_movement/{id}' , [ProductController::class , 'edit_movement'])->name('admin.products.stock_movement.edit');
+        Route::post('update_stock' , [ProductController::class , 'update_movement'])->name('admin.products.update_stock');
+        Route::get('/stock/destroy/{id}' , [ProductController::class , 'delete_movement'])->name('admin.products.stock_delete');
 
         // start gallary
         Route::get('/gallery/{id}' , [ProductController::class , 'gallery'])->name('admin.products.gallery');

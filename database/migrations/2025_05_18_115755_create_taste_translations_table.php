@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('locale')->index();
             $table->unique(['taste_id', 'locale']);
             $table->text('name');
-            $table->text('slug');
+            $table->text('slug')->nullable();
             $table->string('des')->nullable();
             $table->foreign('taste_id')->references('id')->on('tastes')->onDelete('cascade');
             $table->timestamps();

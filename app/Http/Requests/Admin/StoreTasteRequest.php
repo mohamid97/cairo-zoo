@@ -25,8 +25,8 @@ class StoreTasteRequest extends FormRequest
     {
         return [
             'name.*'=>'required|string|max:255',
-            'slug.*'=>'required|string|max:255',
-            'des.*'=>'required|string|max:6000',
+            'slug.*'=>'nullable|string|max:255',
+            'des.*'=>'nullable|string|max:6000',
             'image'=>'nullable|image|mimes:jpeg,png,jpg,gif,webp',
         ];
 

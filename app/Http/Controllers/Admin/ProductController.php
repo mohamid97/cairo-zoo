@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Admin\ProductProp;
+use App\Models\Admin\Stock;
 use App\Models\Admin\Taste;
 class ProductController extends Controller
 {
@@ -329,6 +330,38 @@ class ProductController extends Controller
 
     }
 
+    public function update_movement(Request $request){
+        try{
+            DB::beginTransaction();
+            $stock = Stock::with('product')->findOrFail($request->stock_id);
+            
+            $stock->product->update(['stock'=> $stock->product->stock - $stock->quantity ]);
+            $stock->update([
+                'quantity'    => $request->quantity,
+            ]);
+            $stock->product->update(['stock'=> $stock->product->stock + $request->quantity ]);
+            DB::commit();
+            Alert::success('Success', __('main.product_stock_added'));
+            return redirect()->back();
+
+        }catch(\Exception $e){
+            //dd($e->getLine() , $e->getMessage());
+            DB::rollBack();
+            Alert::error('error', __('main.programer_error'));
+            return redirect()->back();
+        }
+    }
+
+    public function delete_movement($id){
+        $stock = Stock::with('product')->findOrFail($id);
+        $stock->product->update(['stock' => $stock->product->stock - $stock->quantity]);
+        $stock->delete();
+        Alert::success('Success', __('main.stock_deleted'));
+        return redirect()->back();
+
+
+    }
+
     public  function files($id){
 
         return view('admin.products.show_files' , ['product'=>Product::with('files')->findOrFail($id)]);
@@ -475,6 +508,10 @@ class ProductController extends Controller
     public function stock_movement($id){
         $product = Product::with('stocks')->findOrFail($id);
         return view('admin.products.stock_movement' , ['product'=>$product]);
+    }
+
+    public function edit_movement($id){
+        return view('admin.products.edit_stock_movement' , ['stock_movemnt'=> Stock::with('product')->findOrFail($id)]);
     }
 
 

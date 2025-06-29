@@ -765,7 +765,10 @@ return [
     'printed_at'=>'Printed At',
     'revenu'=>'Revenu',
     'generated_on'=>'Generated On ',
-    'total_profit'=>'Total Profit'
+    'total_profit'=>'Total Profit',
+    'update_stock'=>'Update Stock',
+    'delete_stock_warning'=>'Are you sure you want to delete this Stock? This will delete all data related to them',
+    'stock_deleted'=>'Stock Deleted Successfully',
 
 
 

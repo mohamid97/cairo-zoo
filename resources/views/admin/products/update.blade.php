@@ -340,11 +340,13 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="related-products">{{ __('main.related_products') }}</label>
-                                    <select name="related_products[]" id="related-products" class="form-control select2" multiple="multiple">
+                                    <select name="related_products[]" id="related-products" class="form-control select2-search" multiple>
+                                        <option value="0">{{ __('main.select_related_products') }}</option>
                                         @foreach($products as $productItem)
                                             <option value="{{ $productItem->id }}"
                                                 {{ in_array($productItem->id, old('related_products', $product->relatedProducts->pluck('id')->toArray())) ? 'selected' : '' }}>
                                                 {{ $productItem->name }}
+                                                @if($productItem->sku) ({{ $productItem->sku }}) @endif
                                             </option>
                                         @endforeach
                                     </select>
@@ -352,6 +354,7 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
 
 
                                 <div class="form-group col-md-6">
@@ -457,4 +460,35 @@
             });
 
     </script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2-search').select2({
+                placeholder: "{{ __('main.search_product') }}",
+                allowClear: true,
+                minimumInputLength: 2,
+                width: '100%'
+            });
+        });
+    </script>
+
+
+
+@endsection
+@section('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border: 1px solid #ced4da;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-selection__choice  {
+           background-color: #353941 !important;
+        }
+    </style>
 @endsection

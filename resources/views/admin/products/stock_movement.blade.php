@@ -49,6 +49,7 @@
                             <th>{{ __('main.quantity') }}</th>
                             <th>{{ __('main.cost_price') }}</th>
                             <th>{{ __('main.sales_price') }}</th>
+                            <th>{{ __('main.action') }}</th>
 
                         </tr>
                         </thead>
@@ -59,6 +60,16 @@
                                 <td>{{ $stock->quantity }}</td>
                                 <td>{{ $stock->cost_price }}</td>
                                 <td>{{ $stock->sales_price }}</td>
+                                <td class="d-flex align-items-center justify-content-center gap-2">
+                                    <a href="{{ route('admin.products.stock_movement.edit', ['id' => $stock->id]) }}">
+                                        <button class="btn btn-sm btn-info"><i class="nav-icon fas fa-edit"></i></button>
+                                    </a>
+
+                                        <button class="btn btn-sm btn-danger" onclick="showDeleteStockModal({{ $stock->id }})">
+                                            <i class="nav-icon fas fa-trash"></i>
+                                        </button>
+                                </td>
+
                             </tr>
                         @empty
                             <tr>
@@ -78,5 +89,44 @@
 
 
 
+
+        <div class="modal fade" id="confirmDeleteStockModal" tabindex="-1" role="dialog" aria-labelledby="confirmStockDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border-danger">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmStockDeleteLabel">{{ __('main.confirm_delete') }}</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ __('main.delete_stock_warning') ?? 'Are you sure you want to delete this stock? All related data will be removed.' }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('main.cancel') }}</button>
+                    <a id="confirmDeleteStockBtn" href="#" class="btn btn-danger">{{ __('main.confirm') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 @endsection
+
+
+
+@section('scripts')
+    <script>
+        function showDeleteStockModal(stockId) {
+               
+            const url = `{{ url('admin/products/stock/destroy') }}/${stockId}`;
+            document.getElementById('confirmDeleteStockBtn').setAttribute('href', url);
+            $('#confirmDeleteStockModal').modal('show');
+        }
+    </script>
+@endsection
+
+
 
