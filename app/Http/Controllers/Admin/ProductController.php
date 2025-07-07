@@ -52,7 +52,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $brands = Brand::all();
         // Paginate products
-        $products = $query->paginate(10); // Adjust number as needed
+        $products = $query->orderBy('id' , 'DESC')->paginate(10); // Adjust number as needed
 
         return view('admin.products.index', [
             'langs' => $this->langs,
@@ -88,7 +88,7 @@ class ProductController extends Controller
                 $imageData['thumbinal'] = $this->upload_image($request->file('thumbinal'));
             }
 
-          
+
             $product = Product::create([
                 'weight' => $request->weight,
                 'length' => $request->length,
@@ -149,7 +149,7 @@ class ProductController extends Controller
             'brands' => $brands,
             'products' => $products,
             'product' => $product,
-            'tastes'=>Taste::all() 
+            'tastes'=>Taste::all()
         ]);
     }
 
@@ -157,7 +157,7 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request , $id)
     {
 
-      
+
         try {
             DB::beginTransaction();
             $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
@@ -334,7 +334,7 @@ class ProductController extends Controller
         try{
             DB::beginTransaction();
             $stock = Stock::with('product')->findOrFail($request->stock_id);
-            
+
             $stock->product->update(['stock'=> $stock->product->stock - $stock->quantity ]);
             $stock->update([
                 'quantity'    => $request->quantity,
@@ -479,7 +479,7 @@ class ProductController extends Controller
 
 
     public  function destroy($id){
-        $product = Product::withTrashed()->findOrFail($id);
+        $product = Product::withTrashed()->withoutGlobalScope('inStock')->findOrFail($id);
         $product->forceDelete(); // Permanently deletes the product
         Alert::success('Success', 'Product deleted successfully.');
         return redirect()->back();

@@ -294,7 +294,7 @@
                         <div class="border p-3">
                             <div class="form-group">
                                 <label for="weight">{{ __('main.weight') }} (GRAM)</label>
-                                <input type="number" name="weight" class="form-control" id="weight"
+                                <input type="number" step="0.00001" name="weight" class="form-control" id="weight"
                                        placeholder="{{ __('main.enter_weight') }}"
                                        value="{{ $product->weight ?? old('weight') }}">
                                 @error('weight')
