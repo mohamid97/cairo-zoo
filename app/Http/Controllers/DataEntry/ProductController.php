@@ -29,7 +29,7 @@ class ProductController extends Controller
     //
     public function index(Request $request)
     {
-        $query = Product::with('brand');
+        $query = Product::withoutGlobalScope('inStock')->with('brand');
 
         // Search by name
         if ($request->filled('search')) {
@@ -71,7 +71,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('data_entry.products.add' , ['tastes'=>Taste::all() , 'categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::all()]);
+        return view('data_entry.products.add' , ['tastes'=>Taste::all() , 'categories' => $categories , 'langs'=> $this->langs , 'brands'=> Brand::all() , 'products'=>Product::withoutGlobalScope('inStock')->get()]);
 
     }
 
@@ -140,7 +140,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::with(['relatedProducts', 'translations'])->findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->with(['relatedProducts', 'translations'])->findOrFail($id);
 
         $categories = Category::all();
         $brands = Brand::all();
@@ -162,7 +162,7 @@ class ProductController extends Controller
 
         try {
             DB::beginTransaction();
-            $product = Product::findOrFail($id);
+            $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
             $imageData = [];
             if ($request->hasFile('image')) {
                 $imageData['image'] = $this->upload_image($request->file('image'));
@@ -243,7 +243,7 @@ class ProductController extends Controller
 
     public function store_gallery(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
 
         // Validate multiple images
         $request->validate([
@@ -303,7 +303,7 @@ class ProductController extends Controller
 
     public  function files($id){
 
-        return view('data_entry.products.show_files' , ['product'=>Product::with('files')->findOrFail($id)]);
+        return view('data_entry.products.show_files' , ['product'=>Product::withoutGlobalScope('inStock')->with('files')->findOrFail($id)]);
 
     }
 
@@ -372,7 +372,7 @@ class ProductController extends Controller
 
 
     public  function props($id){
-        return view('data_entry.products.props' , ['product'=>Product::with('props')->findOrFail($id) , 'langs' =>$this->langs]);
+        return view('data_entry.products.props' , ['product'=>Product::withoutGlobalScope('inStock')->with('props')->findOrFail($id) , 'langs' =>$this->langs]);
 
    }
 
@@ -422,7 +422,7 @@ class ProductController extends Controller
 
 
     public  function destroy($id){
-        $product = Product::withTrashed()->findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->withTrashed()->findOrFail($id);
         $product->forceDelete(); // Permanently deletes the product
         LoggerHelper::logAction('delete', $product, $product->toArray());
 
@@ -432,7 +432,7 @@ class ProductController extends Controller
     }
 
     public function restore($id){
-        $product = Product::withTrashed()->findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->withTrashed()->findOrFail($id);
         if ($product->trashed()) {
 
             $product->restore(); // Restores the soft-deleted product
@@ -444,7 +444,7 @@ class ProductController extends Controller
     }
 
     public  function soft_delete($id){
-        $product = Product::findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
         $product->delete(); // Soft deletes the product
         Alert::error('Success', 'Soft Deleted Successfully !.');
         return redirect()->back();

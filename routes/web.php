@@ -10,6 +10,10 @@ use GuzzleHttp\Client;
 use function PHPSTORM_META\map;
 use GuzzleHttp\Exception\RequestException;
 
+
+Route::get('/upload/excel' , [\App\Http\Controllers\UploadExcel::class , 'index']);
+Route::post('upload/data' , [\App\Http\Controllers\UploadExcel::class , 'upload'])->name('excel.upload');
+
 Route::get('paymob' , function(){
 
     // $response = Http::withHeaders([

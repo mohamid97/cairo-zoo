@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('data_entry.index') }}">{{ __('main.home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="#">{{ __('main.home') }}</a></li>
                         <li class="breadcrumb-item active">{{ __('main.blog') }}</li>
                     </ol>
                 </div>
@@ -84,8 +84,8 @@
                                 <a href="{{ asset('uploads/images/cms/'. $blog->image) }}" target="_blank">
                                         <img class="img-circle" src="{{ asset('uploads/images/cms/'. $blog->image) }}" width="40px" height="40px" alt="{{ __('main.user_avatar') }}">
                                     </a>
-                                    
-                              
+
+
                                 </td>
                                 <td>{{ $blog->translate(app()->getLocale())->name }}</td>
                                 <td>{{ $blog->translate(app()->getLocale())->slug }}</td>
