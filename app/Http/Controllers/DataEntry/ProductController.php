@@ -31,13 +31,15 @@ class ProductController extends Controller
     {
         $query = Product::withoutGlobalScope('inStock')->with('brand');
 
+
         // Search by name
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->whereHas('translations', function($q) use ($searchTerm) {
+            $query->where('sku' , 'LIKE', '%' . $searchTerm . '%')->orWhere('barcode' ,'LIKE', '%' . $searchTerm . '%')->OrwhereHas('translations', function($q) use ($searchTerm) {
                 $q->where('name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
+
 
         if ($request->filled('brand_id')) {
             $query->where('brand_id', $request->input('brand_id'));

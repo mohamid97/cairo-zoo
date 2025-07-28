@@ -32,7 +32,7 @@ class HomeController extends Controller
         $users      = User::where('type' ,'!=' , 'admin')->count();
         $messages   = Message::count();
         $categories = Category::count();
-        $products   = Product::count();
+        $products   = Product::withoutGlobalScope('inStock')->count();
         $services   = Service::count();
         $blogs       = Cms::count();
         $langs       = Lang::count();
@@ -102,7 +102,7 @@ class HomeController extends Controller
 
 
 
-                   
+
 
 
 
@@ -182,7 +182,7 @@ class HomeController extends Controller
         $totalPoints = Points::sum('points'); // Sums up all points
 
 
-     
+
         return view('admin.home' , [
             'users'           => $users,
             'messages'        => $messages,

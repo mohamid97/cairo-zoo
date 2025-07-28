@@ -32,7 +32,7 @@ class ProductController extends Controller
         // Search by name
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->whereHas('translations', function($q) use ($searchTerm) {
+            $query->where('sku' , 'LIKE', '%' . $searchTerm . '%')->orWhere('barcode' ,'LIKE', '%' . $searchTerm . '%')->OrwhereHas('translations', function($q) use ($searchTerm) {
                 $q->where('name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
