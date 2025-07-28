@@ -17,6 +17,17 @@ class ProductController extends Controller
     public function paginate( Request $request){
 
         $query = Product::query();
+        if($request->has('product_name')){
+
+            $query->where('sku' , 'LIKE', '%' . $request->product_name . '%')
+                ->OrWhere('barcode' , 'LIKE', '%' . $request->product_name . '%' )
+                ->OrwhereHas('translations', function($q) use ($request) {
+                    $q->where('name', 'LIKE', '%' . $request->product_name . '%');
+                });
+
+        }
+
+
         if ($request->has('category_slug')) {
 
             $query->whereHas('category', function($q) use ($request) {
