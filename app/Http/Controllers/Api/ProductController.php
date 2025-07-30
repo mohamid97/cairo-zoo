@@ -18,12 +18,11 @@ class ProductController extends Controller
 
         $query = Product::query();
         if($request->has('product_name')){
-
             $query->where('sku' , 'LIKE', '%' . $request->product_name . '%')
                 ->OrWhere('barcode' , 'LIKE', '%' . $request->product_name . '%' )
-                ->OrwhereHas('translations', function($q) use ($request) {
-                    $q->where('name', 'LIKE', '%' . $request->product_name . '%');
-                });
+            ->OrwhereHas('translations', function($q) use ($request) {
+                $q->where('name', 'LIKE', '%' . $request->product_name . '%');
+            });
 
         }
 

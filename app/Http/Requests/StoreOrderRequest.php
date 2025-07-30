@@ -30,7 +30,7 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'payment_method' => 'required|in:cash,paymob,else',
-            'shipment_way' => 'required|string|in:store,delivery', 
+            'shipment_way' => 'required|string|in:store,delivery',
             'address' => 'required|string|max:60000',
             'first_name'=>'required|string|max:255',
             'last_name'=>'required|string|max:255',
@@ -38,8 +38,8 @@ class StoreOrderRequest extends FormRequest
             'zone_id'=>'required|integer|exists:shimpment_zones,id',
             'city_id'=>'required|integer|exists:cities,id',
             'points'=>'nullable|integer|min:1|max:10000',
-             'location'=>'nullable|max:50000'
-            
+            'location'=>'nullable|max:50000'
+
 
         ];
     }
@@ -51,7 +51,7 @@ class StoreOrderRequest extends FormRequest
             throw new HttpResponseException(
               $this->res(false, __('main.validation_failed'), 422, ['errors' => $validator->errors()])
             );
-              
-            
+
+
         }
 }

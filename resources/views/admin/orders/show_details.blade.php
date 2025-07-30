@@ -69,11 +69,11 @@
 
                         <li class="list-group-item">
                             <strong>@lang('main.date'):</strong>
-           
+
                               {{$order->created_at->format('d M Y, H:i') }}
-                           
+
                         </li>
-                       
+
                     </ul>
                 </div>
 
@@ -129,9 +129,9 @@
                                 </div>
 
                                 </td>
-                            <td>{{ ceil(number_format($item->sales_price, 2)  / $item->quantity) }}</td>
+                            <td>{{ number_format(ceil($item->sales_price / $item->quantity), 0) }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ ceil(number_format($item->price, 2)  / $item->quantity) }}</td>
+                            <td> {{ number_format(ceil($item->price / $item->quantity), 0) }}</td>
                             <td>{{ number_format($item->discount, 2) }}</td>
                             <td>{{ number_format($item->price, 2) }}</td>
                         </tr>
