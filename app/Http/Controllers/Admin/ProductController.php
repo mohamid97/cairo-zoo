@@ -333,7 +333,7 @@ class ProductController extends Controller
     public function update_movement(Request $request){
         try{
             DB::beginTransaction();
-            $stock = Stock::with('product')->findOrFail($request->stock_id);
+            $stock = Stock::with('product')->withoutGlobalScope('inStock')->findOrFail($request->stock_id);
 
             $stock->product->update(['stock'=> $stock->product->stock - $stock->quantity ]);
             $stock->update([
@@ -353,7 +353,7 @@ class ProductController extends Controller
     }
 
     public function delete_movement($id){
-        $stock = Stock::with('product')->findOrFail($id);
+        $stock = Stock::with('product')->withoutGlobalScope('inStock')->findOrFail($id);
         $stock->product->update(['stock' => $stock->product->stock - $stock->quantity]);
         $stock->delete();
         Alert::success('Success', __('main.stock_deleted'));
@@ -378,7 +378,7 @@ class ProductController extends Controller
         ]);
 
         // Retrieve the product by ID
-        $product = Product::findOrFail($id);
+        $product = Product::withoutGlobalScope('inStock')->findOrFail($id);
 
         // Handle file upload
         if ($request->hasFile('file')) {
@@ -506,12 +506,12 @@ class ProductController extends Controller
     }
 
     public function stock_movement($id){
-        $product = Product::with('stocks')->findOrFail($id);
+        $product = Product::with('stocks')->withoutGlobalScope('inStock')->findOrFail($id);
         return view('admin.products.stock_movement' , ['product'=>$product]);
     }
 
     public function edit_movement($id){
-        return view('admin.products.edit_stock_movement' , ['stock_movemnt'=> Stock::with('product')->findOrFail($id)]);
+        return view('admin.products.edit_stock_movement' , ['stock_movemnt'=> Stock::with('product')->withoutGlobalScope('inStock')->findOrFail($id)]);
     }
 
 

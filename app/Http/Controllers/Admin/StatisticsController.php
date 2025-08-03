@@ -95,34 +95,43 @@ class StatisticsController extends Controller
             SUM(CASE WHEN status = "retrieval" THEN 1 ELSE 0 END) as retrieval_orders,
             SUM(CASE WHEN status = "canceled" THEN 1 ELSE 0 END) as canceled_orders,
             SUM(CASE WHEN status = "finshed" THEN 1 ELSE 0 END) as finshed_orders
-        ')
-            ->first();
-
-        $orderIds = explode(',', $onlineOrders->order_ids);
-        $orders = Order::with(['items'])->whereIn('id', $orderIds)->where('status' , 'finshed')->get();
+        ')->first();
 
         $diff = 0;
-        foreach ($orders as $order){
-            foreach ($order->items as $item){
-                $product = $item->product;
-                $orderInfos = OrderInfo::where('order_id' , $order->id)->where('product_id' , $product->id)->get();
-                $item_sales_price = $item->sales_price / $item->quantity;
-                $price = $item->price / $item->quantity;
-                foreach ($orderInfos as $info){
-                    if($info->sales_price  < $item_sales_price){
-                        if($info->sales_price < $price){
-                            $diff += $info->qty * ($price - $info->sales_price);
+
+        if($onlineOrders->order_ids){
+
+            $orderIds = explode(',', $onlineOrders->order_ids);
+            $orders = Order::with(['items'])->whereIn('id', $orderIds)->where('status' , 'finshed')->get();
+
+
+            if($orders){
+                foreach ($orders as $order){
+                    foreach ($order->items as $item){
+                        $product = $item->product;
+                        $orderInfos = OrderInfo::where('order_id' , $order->id)->where('product_id' , $product->id)->get();
+                        $item_sales_price = $item->sales_price / $item->quantity;
+                        $price = $item->price / $item->quantity;
+                        foreach ($orderInfos as $info){
+                            if($info->sales_price  < $item_sales_price){
+                                if($info->sales_price < $price){
+                                    $diff += $info->qty * ($price - $info->sales_price);
+                                }
+
+                            }
                         }
 
                     }
-                }
 
+                }
             }
 
+
+
+
         }
-
-
         $onlineOrders->diff = $diff;
+
         // Cashier orders query
         $cashierOrders = CashierOrder::query()
             ->when($request->start_date || $request->end_date, function($query) use ($start, $end) {
@@ -144,33 +153,34 @@ class StatisticsController extends Controller
         ')
             ->first();
 
-
+        $cahierdiff = 0;
         if($cashierOrders->order_ids){
             $cashierOrderIds = explode(',', $cashierOrders->order_ids);
-            $cashierOrders = CashierOrder::with(['items'])->whereIn('id', $cashierOrderIds)->where('status' , 'finshed')->get();
-            $cahierdiff = 0;
-            foreach ($cashierOrders as $order){
-                foreach ($order->items as $item){
-                    $product = $item->product;
-                    $orderInfos = CahierOrderInfo::where('order_id' , $order->id)->where('product_id' , $product->id)->get();
-                    $item_sales_price = $item->sales_price / $item->quantity;
-                    $price = $item->price / $item->quantity;
-                    foreach ($orderInfos as $info){
-                        if($info->sales_price  < $item_sales_price){
-                            if($info->sales_price < $price){
-                                $cahierdiff += $info->qty * ($price - $info->sales_price);
+            $cashierOrdersFinished = CashierOrder::with(['items'])->whereIn('id', $cashierOrderIds)->where('status' , 'finshed')->get();
+
+            if($cashierOrdersFinished){
+                foreach ($cashierOrdersFinished as $order){
+                    foreach ($order->items as $item){
+                        $product = $item->product;
+                        $orderInfos = CahierOrderInfo::where('order_id' , $order->id)->where('product_id' , $product->id)->get();
+                        $item_sales_price = $item->sales_price / $item->quantity;
+                        $price = $item->price / $item->quantity;
+                        foreach ($orderInfos as $info){
+                            if($info->sales_price  < $item_sales_price){
+                                if($info->sales_price < $price){
+                                    $cahierdiff += $info->qty * ($price - $info->sales_price);
+                                }
                             }
-
                         }
-                    }
 
-                }
+                    } // end foreach of order items
 
-            }
+                } // loop for finished orders
 
-            $cashierOrders->diff =$cahierdiff;
+            } // check of has cashier order
+
         }
-
+        $cashierOrders->diff = $cahierdiff;
 
         $combinedStats = [
             'total_orders' => ($onlineOrders->total_orders ?? 0) + ($cashierOrders->total_orders ?? 0),
@@ -202,7 +212,7 @@ class StatisticsController extends Controller
         $onlineOrders = Order::with('order_info')
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
-            ->where('status', 'finshed') 
+            ->where('status', 'finshed')
             ->get();
 
         $cashierOrders = CashierOrder::with('order_info')
@@ -215,13 +225,13 @@ class StatisticsController extends Controller
         $onlineRevenue = $onlineOrders->sum('total_price_after_discount');
 
         $onlineShipment = $onlineOrders->sum('shipment_price');
-        $onlineCost = $onlineOrders->sum(fn($order) => 
+        $onlineCost = $onlineOrders->sum(fn($order) =>
             $order->order_info->sum(fn($info) => $info->cost_price * $info->qty)
         );
         $onlineProfit = $onlineRevenue - $onlineCost;
 
         $cashierRevenue = $cashierOrders->sum('total_amount_after_discount');
-        $cashierCost = $cashierOrders->sum(fn($order) => 
+        $cashierCost = $cashierOrders->sum(fn($order) =>
             $order->order_info->sum(fn($info) => $info->cost_price * $info->qty)
         );
         $cashierProfit = $cashierRevenue - $cashierCost;
@@ -257,14 +267,14 @@ class StatisticsController extends Controller
             'total_revenue' => $onlineRevenue + $cashierRevenue,
             'total_variable_expenses' => $totalVariableExpenses,
             'total_fixed_expenses' => $totalFixedExpenses,
-            'net_profit' => ($onlineProfit + $cashierProfit + $onlineShipment) - 
+            'net_profit' => ($onlineProfit + $cashierProfit + $onlineShipment) -
                         ($totalVariableExpenses + $totalFixedExpenses)
         ] ;
 
 
-        
+
     }
-        
+
     public function monthly_report(Request $request)
     {
         $request->validate([
@@ -312,7 +322,7 @@ class StatisticsController extends Controller
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     ]
                 ]);
-                
+
                 $sheet->getStyle('A2:B2')->applyFromArray([
                     'font' => [
                         'italic' => true,

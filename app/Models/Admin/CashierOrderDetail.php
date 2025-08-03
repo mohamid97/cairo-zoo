@@ -21,18 +21,18 @@ class CashierOrderDetail extends Model
         'discount_percentage',
         'discount_amount',
 
-   
+
     ];
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class)->withoutGlobalScope('inStock');
     }
 
     public function order()
     {
         return $this->belongsTo(CashierOrder::class, 'order_id');
     }
-    
+
 
 }
